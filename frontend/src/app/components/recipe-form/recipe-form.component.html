@@ -1,0 +1,138 @@
+<div class="page-header">
+  <h1>{{ isEdit ? 'Uredi recept' : 'Novi recept' }}</h1>
+  <a routerLink="/recipes" class="btn btn-outline">Odustani</a>
+</div>
+
+<div *ngIf="loading" class="state-msg"><div class="spinner"></div></div>
+<div *ngIf="error" class="state-msg error">{{ error }}</div>
+
+<form *ngIf="!loading" [formGroup]="form" (ngSubmit)="submit()" class="recipe-form">
+
+  <section class="form-section">
+    <h2>Osnovne informacije</h2>
+    <div class="form-grid">
+      <div class="field full">
+        <label>Naziv *</label>
+        <input type="text" formControlName="title" placeholder="Naziv recepta" />
+        <span class="field-error" *ngIf="fieldInvalid('title')">Naziv je obavezan</span>
+      </div>
+      <div class="field full">
+        <label>Opis</label>
+        <textarea formControlName="description" rows="3" placeholder="Kratki opis recepta..."></textarea>
+      </div>
+      <div class="field">
+        <label>Vrijeme pripreme (min)</label>
+        <input type="number" formControlName="preparation_time" min="1" placeholder="30" />
+      </div>
+      <div class="field">
+        <label>Broj obroka *</label>
+        <input type="number" formControlName="servings" min="1" placeholder="4" />
+        <span class="field-error" *ngIf="fieldInvalid('servings')">Unesite broj obroka</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <h2>Kategorije</h2>
+    <p class="field-hint">Odaberite postojeće ili upišite novu kategoriju i pritisnite Enter.</p>
+    <app-autocomplete
+      [options]="categoryNames"
+      [selected]="selectedCategoryNames"
+      [multi]="true"
+      placeholder="Pretraži ili dodaj kategoriju..."
+      (selectedChange)="onCategoriesChange($event)">
+    </app-autocomplete>
+  </section>
+
+  <section class="form-section">
+    <div class="section-header">
+      <h2>Sastojci *</h2>
+      <button type="button" class="btn btn-sm btn-outline" (click)="addIngredient()">+ Dodaj sastojak</button>
+    </div>
+    <p class="field-hint" *ngIf="ingredientsArray.length === 0">Dodajte barem jedan sastojak.</p>
+    <div formArrayName="ingredients" class="ingredient-rows">
+      <div *ngFor="let ctrl of ingredientsArray.controls; let i = index"
+           [formGroupName]="i" class="ingredient-row">
+        <div class="flex-2">
+          <app-autocomplete
+            [options]="ingredientNames"
+            [value]="asGroup(ctrl).get('ingredientName')?.value"
+            [multi]="false"
+            placeholder="Naziv sastojka..."
+            (valueChange)="onIngredientNameChange(i, $event)">
+          </app-autocomplete>
+        </div>
+        <input type="number" formControlName="quantity" placeholder="Količina"
+               min="0.001" step="0.1" class="flex-1 ing-input" />
+        <select formControlName="unit" class="flex-1 ing-input">
+          <option *ngFor="let u of units" [value]="u">{{ u }}</option>
+        </select>
+        <button type="button" class="btn-remove" (click)="removeIngredient(i)">&#x2715;</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <div class="section-header">
+      <h2>Koraci *</h2>
+      <button type="button" class="btn btn-sm btn-outline" (click)="addStep()">+ Dodaj korak</button>
+    </div>
+    <p class="field-hint" *ngIf="stepsArray.length === 0">Dodajte barem jedan korak.</p>
+    <div formArrayName="steps" class="step-rows">
+      <div *ngFor="let ctrl of stepsArray.controls; let i = index"
+           [formGroupName]="i" class="step-row">
+        <div class="step-num-badge">{{ i + 1 }}</div>
+        <div class="step-inputs">
+          <textarea formControlName="description" rows="2"
+            [placeholder]="'Opis koraka ' + (i+1) + '...'"></textarea>
+
+          <div class="step-ing-section" *ngIf="getRecipeIngredientNames().length > 0">
+            <small class="field-hint">Sastojci koji se koriste u ovom koraku:</small>
+            <app-autocomplete
+              [options]="getRecipeIngredientNames()"
+              [selected]="getStepIngredientNames(i)"
+              [multi]="true"
+              placeholder="Dodaj sastojak iz recepta..."
+              (selectedChange)="onStepIngredientsChange(i, $event)">
+            </app-autocomplete>
+          </div>
+
+          <!-- Image upload -->
+          <div class="step-image-section">
+            <div *ngIf="stepImagePreviews[i]" class="step-image-preview">
+              <img [src]="stepImagePreviews[i]" alt="Slika koraka" />
+              <button type="button" class="btn-remove-img" (click)="removeStepImage(i)">&#x2715;</button>
+            </div>
+            <label *ngIf="!stepImagePreviews[i]" class="image-upload-label">
+              <span class="upload-icon">&#x1F4F7;</span>
+              <span>Dodaj sliku</span>
+              <input type="file" accept="image/*" (change)="onStepImageSelected(i, $event)" hidden />
+            </label>
+          </div>
+        </div>
+        <button type="button" class="btn-remove" (click)="removeStep(i)">&#x2715;</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="form-section">
+    <h2>Izvor (neobavezno)</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label>Naziv izvora</label>
+        <input type="text" formControlName="sourceName" placeholder="Npr. Coolinarika" />
+      </div>
+      <div class="field">
+        <label>URL</label>
+        <input type="url" formControlName="sourceUrl" placeholder="https://..." />
+      </div>
+    </div>
+  </section>
+
+  <div class="form-footer">
+    <a routerLink="/recipes" class="btn btn-outline">Odustani</a>
+    <button type="submit" class="btn btn-primary" [disabled]="submitting">
+      {{ submitting ? 'Spremanje...' : (isEdit ? 'Spremi promjene' : 'Kreiraj recept') }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,63 @@
+<div class="page-header">
+  <h1>Sastojci</h1>
+  <button class="btn btn-primary" (click)="openCreate()">+ Novi sastojak</button>
+</div>
+
+<div class="filters">
+  <div class="search-box">
+    <span class="search-icon">&#x2315;</span>
+    <input type="text" placeholder="Pretraži sastojke..." [(ngModel)]="searchTerm" (input)="filter()" />
+  </div>
+</div>
+
+<!-- Create form -->
+<div *ngIf="showForm" class="inline-form">
+  <h3>Novi sastojak</h3>
+  <form [formGroup]="form" (ngSubmit)="create()">
+    <div class="form-grid">
+      <div class="field">
+        <label>Naziv *</label>
+        <input type="text" formControlName="name" placeholder="Naziv sastojka" />
+      </div>
+      <div class="field full">
+        <label>Opis</label>
+        <input type="text" formControlName="description" placeholder="Kratki opis..." />
+      </div>
+    </div>
+    <div class="form-row-actions">
+      <button type="button" class="btn btn-outline" (click)="showForm=false">Odustani</button>
+      <button type="submit" class="btn btn-primary" [disabled]="submitting">Spremi</button>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="loading" class="state-msg"><div class="spinner"></div></div>
+
+<div class="data-table">
+  <div class="table-header">
+    <span>Naziv</span>
+    <span>Opis</span>
+    <span>Akcije</span>
+  </div>
+  <div *ngFor="let ing of filtered" class="table-row">
+    <ng-container *ngIf="editingId !== ing.id">
+      <span class="col-name">{{ ing.name }}</span>
+      <span class="col-desc">{{ ing.description || '—' }}</span>
+      <span class="col-actions">
+        <button class="btn btn-sm btn-outline" (click)="startEdit(ing)">Uredi</button>
+        <button class="btn btn-sm btn-danger" (click)="delete(ing.id)">Obriši</button>
+      </span>
+    </ng-container>
+    <ng-container *ngIf="editingId === ing.id">
+      <form [formGroup]="form" (ngSubmit)="save(ing.id)" class="inline-edit-row">
+        <input type="text" formControlName="name" />
+        <input type="text" formControlName="description" />
+        <span class="col-actions">
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="submitting">Spremi</button>
+          <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Odustani</button>
+        </span>
+      </form>
+    </ng-container>
+  </div>
+  <div *ngIf="filtered.length === 0 && !loading" class="empty-row">Nema sastojaka.</div>
+</div>

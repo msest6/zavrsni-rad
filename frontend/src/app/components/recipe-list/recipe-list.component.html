@@ -1,0 +1,64 @@
+<div class="page-header">
+  <h1>Recepti</h1>
+  <a routerLink="/recipes/new" class="btn btn-primary">+ Novi recept</a>
+</div>
+
+<div class="filters">
+  <div class="search-box">
+    <span class="search-icon">&#x2315;</span>
+    <input
+      type="text"
+      placeholder="Pretraži recepte..."
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+    />
+  </div>
+  <div class="category-filters">
+    <button
+      class="cat-chip"
+      [class.active]="selectedCategories.size === 0"
+      (click)="clearCategories()">Sve</button>
+    <button
+      *ngFor="let cat of categories"
+      class="cat-chip"
+      [class.active]="selectedCategories.has(cat.id)"
+      (click)="onCategoryFilter(cat.id)">{{ cat.name }}</button>
+  </div>
+</div>
+
+<div *ngIf="loading" class="state-msg">
+  <div class="spinner"></div>
+  <p>Učitavanje...</p>
+</div>
+
+<div *ngIf="error" class="state-msg error">{{ error }}</div>
+
+<div *ngIf="!loading && filtered.length === 0 && !error" class="state-msg">
+  <p>Nema recepata koji odgovaraju pretrazi.</p>
+</div>
+
+<div class="recipe-grid">
+  <a
+    *ngFor="let recipe of filtered"
+    [routerLink]="['/recipes', recipe.id]"
+    class="recipe-card">
+    <div class="card-body">
+      <div class="card-categories">
+        <span *ngFor="let cat of recipe.categories" class="tag">{{ cat.name }}</span>
+      </div>
+      <h2>{{ recipe.title }}</h2>
+      <p class="card-desc">{{ recipe.description }}</p>
+      <div class="card-meta">
+        <span *ngIf="recipe.preparation_time">
+          &#x23F1; {{ recipe.preparation_time }} min
+        </span>
+        <span>&#x1F374; {{ recipe.servings }} obroka</span>
+        <span>&#x1F9EA; {{ recipe.ingredients?.length || 0 }} sastojaka</span>
+      </div>
+    </div>
+    <div class="card-actions">
+      <a [routerLink]="['/recipes', recipe.id, 'edit']" class="btn btn-sm btn-outline" (click)="$event.stopPropagation()">Uredi</a>
+      <button class="btn btn-sm btn-danger" (click)="delete(recipe.id, $event)">Obriši</button>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,33 @@
+package fer.hr.zavrsni_rad.controller;
+
+import fer.hr.zavrsni_rad.model.Media;
+import fer.hr.zavrsni_rad.service.MediaService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
+@RestController
+@RequestMapping("/api/media")
+public class MediaController {
+
+    private final MediaService mediaService;
+
+    public MediaController(MediaService mediaService) {
+        this.mediaService = mediaService;
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<Media> upload(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("stepId") Long stepId) throws IOException {
+        return ResponseEntity.ok(mediaService.upload(file, stepId));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) throws IOException {
+        mediaService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+}

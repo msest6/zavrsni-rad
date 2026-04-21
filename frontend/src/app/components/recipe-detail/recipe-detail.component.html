@@ -1,0 +1,89 @@
+<div *ngIf="loading" class="state-msg"><div class="spinner"></div><p>Učitavanje...</p></div>
+<div *ngIf="error" class="state-msg error">{{ error }}</div>
+
+<article *ngIf="recipe && !loading" class="recipe-detail">
+  <div class="detail-header">
+    <div class="detail-header-top">
+      <a routerLink="/recipes" class="back-link">&#x2190; Svi recepti</a>
+      <div class="detail-actions">
+        <a [routerLink]="['/recipes', recipe.id, 'edit']" class="btn btn-outline">Uredi</a>
+        <button class="btn btn-danger" (click)="delete()">Obriši</button>
+      </div>
+    </div>
+
+    <div class="detail-categories">
+      <span *ngFor="let cat of recipe.categories" class="tag">{{ cat.name }}</span>
+    </div>
+
+    <h1>{{ recipe.title }}</h1>
+    <p *ngIf="recipe.description" class="detail-desc">{{ recipe.description }}</p>
+
+    <div class="detail-meta-bar">
+      <div class="meta-item" *ngIf="recipe.preparation_time">
+        <span class="meta-icon">&#x23F1;</span>
+        <div>
+          <small>Priprema</small>
+          <strong>{{ recipe.preparation_time }} min</strong>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">&#x1F374;</span>
+        <div>
+          <small>Obroci</small>
+          <strong>{{ recipe.servings }}</strong>
+        </div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-icon">&#x1F9EA;</span>
+        <div>
+          <small>Sastojci</small>
+          <strong>{{ recipe.ingredients?.length || 0 }}</strong>
+        </div>
+      </div>
+      <div class="meta-item" *ngIf="recipe.source">
+        <span class="meta-icon">&#x1F4D6;</span>
+        <div>
+          <small>Izvor</small>
+          <strong>
+            <a *ngIf="recipe.source.url" [href]="recipe.source.url" target="_blank">{{ recipe.source.name }}</a>
+            <span *ngIf="!recipe.source.url">{{ recipe.source.name }}</span>
+          </strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <section class="ingredients-section">
+      <h2>Sastojci</h2>
+      <ul class="ingredient-list">
+        <li *ngFor="let ri of recipe.ingredients" class="ingredient-item">
+          <span class="ing-name">{{ ri.ingredient.name }}</span>
+          <span class="ing-amount">{{ ri.quantity }} {{ ri.unit.symbol }}</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="steps-section">
+      <h2>Postupak</h2>
+      <ol class="step-list">
+        <li *ngFor="let step of sortedSteps()" class="step-item">
+          <div class="step-number">{{ step.stepNumber }}</div>
+          <div class="step-content">
+            <p>{{ step.description }}</p>
+            <div *ngIf="step.ingredients && step.ingredients.length > 0" class="step-ingredients">
+              <span *ngFor="let ing of step.ingredients" class="tag tag-sm">{{ ing.name }}</span>
+            </div>
+            <div *ngIf="step.mediaList && step.mediaList.length > 0" class="step-media">
+              <img
+                *ngFor="let media of step.mediaList"
+                [src]="media.url"
+                [alt]="'Slika koraka ' + step.stepNumber"
+                class="step-img" />
+            </div>
+          </div>
+        </li>
+      </ol>
+    </section>
+  </div>
+</article>

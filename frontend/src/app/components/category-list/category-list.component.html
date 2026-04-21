@@ -1,0 +1,44 @@
+<div class="page-header">
+  <h1>Kategorije</h1>
+  <button class="btn btn-primary" (click)="openCreate()">+ Nova kategorija</button>
+</div>
+
+<div *ngIf="showForm" class="inline-form">
+  <h3>Nova kategorija</h3>
+  <form [formGroup]="form" (ngSubmit)="create()">
+    <div class="form-grid">
+      <div class="field">
+        <label>Naziv *</label>
+        <input type="text" formControlName="name" placeholder="Naziv kategorije" />
+      </div>
+    </div>
+    <div class="form-row-actions">
+      <button type="button" class="btn btn-outline" (click)="showForm=false">Odustani</button>
+      <button type="submit" class="btn btn-primary" [disabled]="submitting">Spremi</button>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="loading" class="state-msg"><div class="spinner"></div></div>
+
+<div class="cat-grid">
+  <div *ngFor="let cat of categories" class="cat-card">
+    <ng-container *ngIf="editingId !== cat.id">
+      <span class="cat-card-name">{{ cat.name }}</span>
+      <div class="cat-card-actions">
+        <button class="btn btn-sm btn-outline" (click)="startEdit(cat)">Uredi</button>
+        <button class="btn btn-sm btn-danger" (click)="delete(cat.id)">Obriši</button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="editingId === cat.id">
+      <form [formGroup]="form" (ngSubmit)="save(cat.id)" class="cat-edit-form">
+        <input type="text" formControlName="name" />
+        <div class="cat-card-actions">
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="submitting">Spremi</button>
+          <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Odustani</button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+  <div *ngIf="categories.length === 0 && !loading" class="empty-row">Nema kategorija.</div>
+</div>

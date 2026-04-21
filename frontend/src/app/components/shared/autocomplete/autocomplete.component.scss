@@ -1,0 +1,128 @@
+.ac-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ac-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.ac-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--green-light);
+  color: var(--green);
+  border: 1px solid rgba(61, 107, 79, 0.2);
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.ac-tag-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--green);
+  font-size: 0.75rem;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.ac-tag-remove:hover { opacity: 1; }
+
+.ac-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ac-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color 0.2s;
+}
+
+.ac-input:focus {
+  outline: none;
+  border-color: var(--brown-light);
+}
+
+.ac-add-btn {
+  white-space: nowrap;
+  padding: 0.45rem 0.9rem;
+  background: var(--cream-dark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--brown);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.ac-add-btn:hover {
+  background: var(--brown);
+  color: var(--white);
+  border-color: var(--brown);
+}
+
+.ac-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  z-index: 50;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.ac-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.55rem 0.9rem;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.ac-option:hover {
+  background: var(--cream);
+  color: var(--brown);
+}
+
+.ac-no-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}

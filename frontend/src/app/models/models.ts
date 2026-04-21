@@ -1,0 +1,94 @@
+export interface Category {
+  id: number;
+  name: string;
+}
+
+export interface Unit {
+  id: number;
+  name: string;
+  symbol: string;
+  dimension: string;
+}
+
+export interface Ingredient {
+  id: number;
+  name: string;
+  description?: string;
+}
+
+export interface Source {
+  id: number;
+  name: string;
+  url?: string;
+}
+
+export interface Media {
+  id: number;
+  type: 'image' | 'video';
+  url: string;
+}
+
+export interface RecipeIngredient {
+  id: number;
+  quantity: number;
+  unit: Unit;
+  ingredient: Ingredient;
+}
+
+export interface Step {
+  id: number;
+  stepNumber: number;
+  description: string;
+  ingredients?: Ingredient[];
+  mediaList?: Media[];
+}
+
+export interface Recipe {
+  id: number;
+  title: string;
+  description?: string;
+  preparation_time?: number;
+  servings: number;
+  created_at?: string;
+  updated_at?: string;
+  is_synced?: boolean;
+  is_deleted?: boolean;
+  ingredients: RecipeIngredient[];
+  steps: Step[];
+  categories?: Category[];
+  source?: Source;
+}
+
+// DTOs for requests
+export interface RecipeDTO {
+  title: string;
+  description?: string;
+  preparation_time?: number;
+  servings: number;
+  steps: StepDTO[];
+  ingredients: RecipeIngredientDTO[];
+  categoryIds?: number[];
+  sourceName?: string;
+  sourceUrl?: string;
+}
+
+export interface StepDTO {
+  stepNumber: number;
+  description: string;
+  ingredientIds?: number[];
+}
+
+export interface RecipeIngredientDTO {
+  ingredientId: number;
+  quantity: number;
+  unit: string;
+}
+
+export interface IngredientDTO {
+  name: string;
+  description?: string;
+}
+
+export interface CategoryDTO {
+  name: string;
+}

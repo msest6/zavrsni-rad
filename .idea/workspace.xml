@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/controller/CategoryController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/controller/IngredientController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/controller/RecipeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/CategoryDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/IngredientDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/RecipeDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/RecipeIngredientDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/SourceDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/StepDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Category.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Ingredient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Media.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Recipe.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/RecipeIngredient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Source.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Step.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Unit.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/UnitConversion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/CategoryRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/IngredientRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/RecipeRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/UnitConversionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/CategoryService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/IngredientService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="3CgXy6unvQlWolrK5va5jRfBxpw" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="" />
+      <created>1776808438074</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1776808438074</updated>
+      <workItem from="1776808439343" duration="207000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

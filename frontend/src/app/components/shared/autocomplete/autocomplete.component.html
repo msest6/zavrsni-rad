@@ -1,0 +1,47 @@
+<div class="ac-wrapper">
+  <!-- Selected tags (multi mode) -->
+  <div class="ac-tags" *ngIf="multi && selected.length > 0">
+    <span class="ac-tag" *ngFor="let item of selected">
+      {{ item }}
+      <button type="button" class="ac-tag-remove" (click)="removeSelected(item)">&#x2715;</button>
+    </span>
+  </div>
+
+  <!-- Input -->
+  <div class="ac-input-row">
+    <input
+      type="text"
+      class="ac-input"
+      [placeholder]="placeholder"
+      [(ngModel)]="inputText"
+      (input)="onInput()"
+      (focus)="onFocus()"
+      (keydown)="onKeydown($event)"
+      autocomplete="off"
+    />
+    <button
+      type="button"
+      class="ac-add-btn"
+      *ngIf="inputText.trim() && isNew()"
+      (click)="addNew()"
+      title="Dodaj novi unos">
+      + Dodaj "{{ inputText.trim() }}"
+    </button>
+  </div>
+
+  <!-- Dropdown -->
+  <div class="ac-dropdown" *ngIf="open && filtered.length > 0">
+    <button
+      type="button"
+      class="ac-option"
+      *ngFor="let opt of filtered"
+      (click)="select(opt)">
+      {{ opt }}
+    </button>
+  </div>
+
+  <!-- No results hint -->
+  <div class="ac-no-results" *ngIf="open && filtered.length === 0 && inputText.trim() && !isNew()">
+    Pritisnite Enter ili kliknite "+ Dodaj" za novi unos
+  </div>
+</div>
