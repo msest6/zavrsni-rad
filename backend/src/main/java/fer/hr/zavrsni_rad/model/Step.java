@@ -15,10 +15,11 @@ import java.util.Set;
 public class Step {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "step_id", nullable = false)
     private Long id;
-
+    @Column(nullable = false)
     private Integer stepNumber;
-
+    @Column(length = 1024, nullable = false)
     private String description;
 
     public Step() {}
@@ -30,7 +31,8 @@ public class Step {
     }
     @JsonBackReference("recipe-steps")
     @ManyToOne
-    @JoinColumn(name = "recipe_id")
+    @JoinColumn(name = "recipe_id",
+        foreignKey = @ForeignKey(name = "fk_step_recipe"))
     private Recipe recipe;
     @ManyToMany
     @JoinTable(

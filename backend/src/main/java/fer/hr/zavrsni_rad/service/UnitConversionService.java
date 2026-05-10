@@ -5,6 +5,7 @@ import fer.hr.zavrsni_rad.repository.UnitConversionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class UnitConversionService {
     public Double convert(Ingredient ingredient, Double quantity,
                           Unit fromUnit, Unit toUnit) {
 
-        if (fromUnit.getId().equals(toUnit.getId())) {
+        if (fromUnit.getSymbol().equals(toUnit.getSymbol())) {
             return quantity; // ista jedinica, nema konverzije
         }
 
@@ -50,7 +51,7 @@ public class UnitConversionService {
             if (inverse.isPresent()) {
                 UnitConversion inv = inverse.get();
                 // inverz: ako je 1 g = 0.1 žlice, onda 1 žlica = 10 g
-                double ratio = inv.getFromQuantity() / inv.getToQuantity();
+                double ratio = 1 / inv.getRatio();
                 return quantity * ratio;
             }
         }
@@ -58,7 +59,7 @@ public class UnitConversionService {
         if (conv.isPresent()) {
             UnitConversion c = conv.get();
             // ratio: npr. fromQty=1, toQty=10 → 1 žlica = 10 g
-            double ratio = c.getToQuantity() / c.getFromQuantity();
+            double ratio = c.getRatio();
             return quantity * ratio;
         }
 
@@ -66,5 +67,9 @@ public class UnitConversionService {
                 "Nema konverzije: " + fromUnit.getSymbol() + " → " + toUnit.getSymbol()
                         + " za sastojak: " + (ingredient != null ? ingredient.getName() : "generički")
         );
+    }
+    public List<UnitConversion> findAvailableConversions(Long fromUnitId, Long ingredientId) {
+        return conversionRepo.findByFromUnit_IdAndIngredientIsNullOrFromUnit_IdAndIngredient_Id(
+                fromUnitId, fromUnitId, ingredientId);
     }
 }

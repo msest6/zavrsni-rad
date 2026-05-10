@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Recipe, RecipeDTO } from '../models/models';
+import {Page, Recipe, RecipeDTO} from '../models/models';
 
 @Injectable({ providedIn: 'root' })
 export class RecipeService {
@@ -9,8 +9,17 @@ export class RecipeService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<Recipe[]> {
-    return this.http.get<Recipe[]>(this.url);
+  getAll(page = 0, size = 20): Observable<Page<Recipe>> {
+    return this.http.get<Page<Recipe>>(
+        `${this.url}?page=${page}&size=${size}`
+    );
+  }
+
+  getByCategories(categoryIds: number[], page = 0, size = 20): Observable<Page<Recipe>> {
+    const params = categoryIds.map(id => `categoryIds=${id}`).join('&');
+    return this.http.get<Page<Recipe>>(
+        `${this.url}/by-categories?${params}&page=${page}&size=${size}`
+    );
   }
 
   getById(id: number): Observable<Recipe> {

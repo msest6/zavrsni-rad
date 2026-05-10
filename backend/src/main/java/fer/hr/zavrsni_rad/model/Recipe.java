@@ -14,19 +14,29 @@ import java.util.Set;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "recipe_id")
     private Long id;
+    @Column(nullable = false)
     private String title;
+    @Column(length = 1024)
     private String description;
+    @Column(nullable = false)
     private Long preparation_time;
+    @Column(nullable = false)
+    private Long cooking_time;
     private int servings;
+    @Column(nullable = false)
     private LocalDateTime created_at;
+    @Column(nullable = false)
     private LocalDateTime updated_at;
-    private boolean is_synced;
-    private boolean is_deleted;
+    private String source_url;
+    @Column(nullable = false)
+    private Boolean is_deleted;
 
     @PrePersist
     protected void onCreate() {
         created_at = LocalDateTime.now();
+        updated_at = LocalDateTime.now();
     }
     @PreUpdate
     protected void onUpdate() {
@@ -45,7 +55,7 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "source_id")
-    private Source source;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Media> mediaList;
 }

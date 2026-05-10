@@ -3,8 +3,10 @@ package fer.hr.zavrsni_rad.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import fer.hr.zavrsni_rad.model.Media;
+import fer.hr.zavrsni_rad.model.Recipe;
 import fer.hr.zavrsni_rad.model.Step;
 import fer.hr.zavrsni_rad.repository.MediaRepository;
+import fer.hr.zavrsni_rad.repository.RecipeRepository;
 import fer.hr.zavrsni_rad.repository.StepRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,13 +20,16 @@ public class MediaService {
     private final Cloudinary cloudinary;
     private final MediaRepository mediaRepository;
     private final StepRepository stepRepository;
+    private final RecipeRepository recipeRepository;
 
     public MediaService(Cloudinary cloudinary,
                         MediaRepository mediaRepository,
-                        StepRepository stepRepository) {
+                        StepRepository stepRepository,
+                        RecipeRepository recipeRepository) {
         this.cloudinary = cloudinary;
         this.mediaRepository = mediaRepository;
         this.stepRepository = stepRepository;
+        this.recipeRepository = recipeRepository;
     }
 
     public Media upload(MultipartFile file, Long stepId) throws IOException {
@@ -69,5 +74,33 @@ public class MediaService {
         }
 
         mediaRepository.deleteById(id);
+    }
+
+    public Media uploadToRecipe(MultipartFile file, Long recipeId) throws IOException {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Recipe not found: " + recipeId));
+
+        String contentType = file.getContentType() != null ? file.getContentType() : "";
+        String mediaType = contentType.startsWith("video") ? "video" : "image";
+
+        // Upload na Cloudinary
+        Map uploadResult = cloudinary.uploader().upload(
+                file.getBytes(),
+                ObjectUtils.asMap(
+                        "folder", "recepti/koraci",
+                        "resource_type", mediaType
+                )
+        );
+
+        String url = (String) uploadResult.get("secure_url");
+        String publicId = (String) uploadResult.get("public_id");
+
+        Media media = new Media();
+        media.setUrl((String) uploadResult.get("secure_url"));
+        media.setPublicId((String) uploadResult.get("public_id"));
+        media.setType(file.getContentType());
+        media.setRecipe(recipe);
+
+        return mediaRepository.save(media);
     }
 }

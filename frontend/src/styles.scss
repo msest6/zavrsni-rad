@@ -810,3 +810,534 @@ body {
   object-fit: cover;
   border: 1px solid var(--border);
 }
+
+.btn-remove-placeholder {
+  width: 32px;
+  flex-shrink: 0;
+}
+
+.recipe-images-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-start;
+}
+.recipe-images-row .step-image-preview {
+  width: 90px;
+  height: 90px;
+}
+.recipe-images-row .step-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.recipe-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.recipe-gallery-img {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+/* ── Category popup ─────────────────────────────────────────────────────────── */
+
+.category-popup-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.cat-chip--more {
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  padding-inline: 14px;
+}
+
+.category-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 200;
+
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+  width: 260px;
+  max-height: 360px;
+  display: flex;
+  flex-direction: column;
+
+  animation: popup-in 0.18s ease;
+}
+
+@keyframes popup-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+/* Search unutar popup-a */
+.popup-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+
+.popup-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9rem;
+  color: var(--text, #1a202c);
+}
+
+.popup-search input::placeholder {
+  color: var(--text-muted, #a0aec0);
+}
+
+/* Lista kategorija */
+.popup-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 6px 0;
+}
+
+.popup-cat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 14px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text, #1a202c);
+  transition: background 0.12s;
+}
+
+.popup-cat-item:hover {
+  background: var(--hover, #f7fafc);
+}
+
+.popup-cat-item.active {
+  color: var(--primary, #38a169);
+  font-weight: 600;
+}
+
+.popup-cat-check {
+  width: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--primary, #38a169);
+  flex-shrink: 0;
+}
+
+.popup-cat-check.placeholder {
+  /* prazno — drži poravnanje */
+}
+
+.popup-empty {
+  padding: 16px 14px;
+  color: var(--text-muted, #a0aec0);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* Footer s "Očisti filtere" */
+.popup-footer {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border, #e2e8f0);
+}
+
+/* ── Auto-grow textarea za korake ───────────────────────────────────────────── */
+
+.step-textarea-autogrow {
+  width: 100%;
+  resize: none;           /* onemogući ručno povećanje */
+  overflow: hidden;       /* sakrij scrollbar */
+  min-height: 60px;       /* minimalna visina = ~2 retka */
+  box-sizing: border-box;
+  /* Ostale stilove (border, padding, font…) nasljeđuje od globalnog textarea */
+}
+
+/* ── Validacija količine ─────────────────────────────────────────────────────── */
+
+.field-error-border {
+  border-color: var(--danger, #e53e3e) !important;
+}
+
+.qty-error {
+  font-size: 0.75rem;
+  color: var(--danger, #e53e3e);
+  display: block;
+  margin-top: 2px;
+  grid-column: 2 / 3;   /* poravnaj ispod polja količine u grid retku */
+}
+
+/* ── Tablice mjernih jedinica ────────────────────────────────────────────────── */
+
+.unit-tables-toggle {
+  margin-top: 20px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #718096);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px 0;
+  text-decoration: underline dotted;
+}
+
+.btn-ghost:hover {
+  color: var(--text, #1a202c);
+}
+
+.unit-tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 14px;
+  animation: fade-in 0.2s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .unit-tables {
+    grid-template-columns: 1fr;
+  }
+}
+
+.unit-table-card {
+  background: var(--surface-alt, #f7fafc);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.unit-table-card h4 {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted, #718096);
+}
+
+.unit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.unit-table thead th {
+  text-align: left;
+  padding: 4px 8px 8px;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  color: var(--text-muted, #718096);
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.unit-table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid var(--border-light, #edf2f7);
+}
+
+.unit-table td {
+  padding: 6px 8px;
+  color: var(--text, #2d3748);
+}
+
+/* Konverzije */
+.unit-cell-from {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.unit-cell-arrow {
+  color: var(--text-muted, #a0aec0);
+  text-align: center;
+  padding-inline: 6px;
+}
+
+.unit-cell-to {
+  white-space: nowrap;
+}
+
+/* Simboli */
+.unit-symbol {
+  font-weight: 700;
+  font-family: monospace;
+  color: var(--primary, #38a169);
+  width: 48px;
+}
+
+.unit-name {
+  color: var(--text, #2d3748);
+}
+
+.unit-select {
+  border: 1px solid var(--border, #ddd);
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 0.9em;
+  background: transparent;
+  cursor: pointer;
+  margin-left: 4px;
+  color: inherit;
+}
+
+.unit-select:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Import modal styles
+   Dodajte ove stilove u vaš globalni CSS (styles.css / styles.scss)
+   ili u stylesheet recipe-form komponente.
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Import gumb u page-headeru ─────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-import {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: 1.5px dashed #6c5ecf;
+  border-radius: 8px;
+  background: #f5f3ff;
+  color: #4c3db5;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.btn-import:hover {
+  background: #ede9ff;
+  border-color: #4c3db5;
+}
+
+/* ── Modal backdrop ─────────────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* ── Modal box ──────────────────────────────────────────────────────────── */
+.modal-box {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+  width: 100%;
+  max-width: 480px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: modal-in 0.18s ease;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  .modal-box {
+    background: #1e1e1e;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  }
+  .btn-import {
+    background: #1e1a2e;
+    border-color: #7c6cf0;
+    color: #b5abf8;
+  }
+  .btn-import:hover {
+    background: #2a2440;
+  }
+}
+
+/* ── Modal header ────────────────────────────────────────────────────────── */
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.modal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.modal-title-row h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.modal-icon {
+  font-size: 1.3rem;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #888;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  line-height: 1;
+  transition: background 0.12s, color 0.12s;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.modal-close-btn:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* ── Supported sources ───────────────────────────────────────────────────── */
+.modal-sources {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.sources-label {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  font-size: 0.8rem;
+  color: #555;
+  background: #fafafa;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.source-badge.source-active {
+  border-color: #6c5ecf;
+  color: #4c3db5;
+  background: #f0eeff;
+  font-weight: 500;
+}
+
+/* ── Modal field ─────────────────────────────────────────────────────────── */
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.modal-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.modal-input:focus {
+  border-color: #6c5ecf;
+  box-shadow: 0 0 0 3px rgba(108, 94, 207, 0.15);
+}
+
+.modal-input:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* ── Loading row ─────────────────────────────────────────────────────────── */
+.modal-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #666;
+  padding: 0.25rem 0;
+}
+
+.spinner-sm {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e0e0e0;
+  border-top-color: #6c5ecf;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Modal footer ────────────────────────────────────────────────────────── */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+.unit-tables--stacked {
+  grid-template-columns: 1fr;
+}

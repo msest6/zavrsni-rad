@@ -15,10 +15,11 @@ import lombok.Setter;
 public class UnitConversion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "unitConversion_id", nullable = false)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ingredient_id", nullable = true)
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
     @ManyToOne
@@ -29,6 +30,6 @@ public class UnitConversion {
     @JoinColumn(name = "to_unit_id", nullable = false)
     private Unit toUnit;
 
-    private Double fromQuantity;
-    private Double toQuantity;
+    @Column(nullable = false)
+    private Double ratio;
 }

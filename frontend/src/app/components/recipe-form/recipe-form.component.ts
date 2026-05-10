@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -9,11 +9,25 @@ import { MediaService } from '../../services/media.service';
 import { Ingredient, Category, Recipe } from '../../models/models';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { forkJoin } from 'rxjs';
+import { UnitService } from '../../services/unit.service';
+import { ChangeDetectorRef } from '@angular/core';
+// ── NOVO: Import modal i servis ───────────────────────────────────────────────
+import { ImportRecipeModalComponent } from '../import-recipe-modal/import-recipe-modal.component';
+import { ImportedRecipe } from '../../services/import.service';
+import { ImportPdfModalComponent } from '../import-pdf-modal/import-pdf-modal.component';
 
 @Component({
   selector: 'app-recipe-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, AutocompleteComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterLink,
+    AutocompleteComponent,
+    ImportRecipeModalComponent,
+    ImportPdfModalComponent,
+  ],
   templateUrl: './recipe-form.component.html',
 })
 export class RecipeFormComponent implements OnInit {
@@ -27,24 +41,55 @@ export class RecipeFormComponent implements OnInit {
   categoryNames: string[] = [];
   selectedCategoryNames: string[] = [];
 
-  // Pending image files per step index (before save)
   stepImageFiles: (File | null)[] = [];
   stepImagePreviews: (string | null)[] = [];
+
+  recipeImageFiles: (File | null)[] = [];
+  recipeImagePreviews: (string | null)[] = [];
 
   loading = false;
   submitting = false;
   error = '';
 
-  units = ['g', 'kg', 'ml', 'l', 'kom', 'žlica', 'žličica', 'šalica', 'prstohvat'];
+  // ── NOVO: kontrola vidljivosti import modala ───────────────────────────────
+  showImportModal = false;
+
+  // ── Mjerne jedinice — hardkodirani redoslijed ──────────────────────────────
+  readonly UNITS: string[] = [
+    'g', 'dag', 'kg',
+    'ml', 'dcl', 'l',
+    'ž', 'žč', 'š',
+    'kom', 'prst', 'pak', 'koc', 'rež', 'list'
+  ];
+
+  // Redoslijed mora odgovarati UNITS; imena se popunjavaju iz baze
+  unitSymbolNames: { symbol: string; name: string }[] = [];
+
+  // ── Tablica konverzija — hardkodirana ─────────────────────────────────────
+  readonly CONVERSIONS: { from: string; to: string }[] = [
+    { from: '1000 g',  to: '1 kg'  },
+    { from: '10 g',    to: '1 dag' },
+    { from: '1000 ml', to: '1 l'   },
+    { from: '10 dcl',  to: '1 l'   },
+    { from: '1 ž',     to: '15 ml' },
+    { from: '1 ž',     to: '3 žč'  },
+    { from: '1 š',     to: '240 ml'},
+  ];
+
+  // Prikaz tablice konverzija (može se togglati)
+  showUnitTables = false;
+  showImportPdfModal = false;
 
   constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private recipeService: RecipeService,
-    private ingredientService: IngredientService,
-    private categoryService: CategoryService,
-    private mediaService: MediaService
+      private fb: FormBuilder,
+      private route: ActivatedRoute,
+      private router: Router,
+      private recipeService: RecipeService,
+      private ingredientService: IngredientService,
+      private categoryService: CategoryService,
+      private mediaService: MediaService,
+      private unitService: UnitService,
+      private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -53,18 +98,31 @@ export class RecipeFormComponent implements OnInit {
     forkJoin({
       ingredients: this.ingredientService.getAll(),
       categories: this.categoryService.getAll(),
-    }).subscribe(({ ingredients, categories }) => {
+      units: this.unitService.getAll(),
+    }).subscribe(({ ingredients, categories, units }) => {
       this.allIngredients = ingredients;
       this.allCategories = categories;
       this.ingredientNames = ingredients.map(i => i.name.toLowerCase());
       this.categoryNames = categories.map(c => c.name.toLowerCase());
+
+      this.unitSymbolNames = this.UNITS.map(symbol => {
+        const found = units.find((u: any) => u.symbol === symbol);
+        return { symbol, name: found?.name ?? symbol };
+      });
+
+      if (!this.isEdit) {
+        this.addIngredient();
+        this.addStep();
+      }
+
+      this.cdr.detectChanges();
     });
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEdit = true;
       this.recipeId = Number(id);
-      this.loading = true;
+      this.loading = false;
       this.recipeService.getById(this.recipeId).subscribe({
         next: (r) => { this.patchForm(r); this.loading = false; },
         error: () => { this.error = 'Greška pri učitavanju.'; this.loading = false; }
@@ -76,10 +134,10 @@ export class RecipeFormComponent implements OnInit {
     this.form = this.fb.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.maxLength(1000)]],
-      preparation_time: [null, [Validators.min(1)]],
+      preparation_time: [null, [Validators.required, Validators.min(1)]],
+      cooking_time: [null, [Validators.required, Validators.min(1)]],
       servings: [1, [Validators.required, Validators.min(1)]],
-      sourceName: [''],
-      sourceUrl: [''],
+      source_url: [''],
       ingredients: this.fb.array([], Validators.required),
       steps: this.fb.array([], Validators.required),
     });
@@ -90,24 +148,25 @@ export class RecipeFormComponent implements OnInit {
       title: recipe.title,
       description: recipe.description,
       preparation_time: recipe.preparation_time,
+      cooking_time: recipe.cooking_time,
       servings: recipe.servings,
-      sourceName: recipe.source?.name ?? '',
-      sourceUrl: recipe.source?.url ?? '',
+      source_url: recipe.source_url,
     });
 
     this.selectedCategoryNames = recipe.categories?.map(c => c.name.toLowerCase()) ?? [];
+    this.cdr.detectChanges();
 
     recipe.ingredients?.forEach(ri => {
       this.ingredientsArray.push(this.fb.group({
         ingredientName: [ri.ingredient.name.toLowerCase(), Validators.required],
-        quantity: [ri.quantity, [Validators.required, Validators.min(0.001)]],
+        quantityRaw: [String(ri.quantity), Validators.required],
         unit: [ri.unit.symbol, Validators.required],
       }));
     });
 
     const sorted = recipe.steps
-      ? [...recipe.steps].sort((a, b) => a.stepNumber - b.stepNumber)
-      : [];
+        ? [...recipe.steps].sort((a, b) => a.stepNumber - b.stepNumber)
+        : [];
 
     sorted.forEach(s => {
       this.stepsArray.push(this.fb.group({
@@ -116,11 +175,95 @@ export class RecipeFormComponent implements OnInit {
         ingredientNames: [s.ingredients?.map(i => i.name.toLowerCase()) ?? []],
       }));
       this.stepImageFiles.push(null);
-      // Show existing image if any
       const existing = s.mediaList && s.mediaList.length > 0 ? s.mediaList[0].url : null;
       this.stepImagePreviews.push(existing);
     });
+    this.recipeImagePreviews = recipe.mediaList?.map(m => m.url) ?? [];
+    this.recipeImageFiles = recipe.mediaList?.map(() => null) ?? [];
   }
+
+  // ── NOVO: Import modal handlers ────────────────────────────────────────────
+
+  openImportModal() {
+    this.showImportModal = true;
+    this.cdr.detectChanges();
+  }
+
+  closeImportModal() {
+    this.showImportModal = false;
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Poziva se kad modal emitira uvezeni recept.
+   * Resetira formu i popunjava je podacima iz importa.
+   */
+  onRecipeImported(imported: ImportedRecipe) {
+    this.showImportModal = false;
+
+    // Resetiraj arrays
+    this.ingredientsArray.clear();
+    this.stepsArray.clear();
+    this.stepImageFiles = [];
+    this.stepImagePreviews = [];
+
+    // Popuni osnovna polja
+    this.form.patchValue({
+      title: imported.title ?? '',
+      description: imported.description ?? '',
+      preparation_time: imported.preparation_time ?? null,
+      cooking_time: imported.cooking_time ?? null,
+      servings: imported.servings ?? 1,
+      source_url: imported.source_url ?? '',
+    });
+
+    // Kategorije
+    this.selectedCategoryNames = (imported.categories ?? []).map(c => c.toLowerCase());
+
+    // Dodaj nove kategorije u lokalnu listu ako ne postoje
+    this.selectedCategoryNames.forEach(name => {
+      if (!this.categoryNames.includes(name)) {
+        this.categoryNames.push(name);
+      }
+    });
+
+    // Sastojci
+    const validUnit = (unit: string): string => {
+      return this.UNITS.includes(unit) ? unit : 'kom';
+    };
+
+    imported.ingredients?.forEach(ing => {
+      const nameLower = (ing.name ?? '').toLowerCase();
+      this.ingredientsArray.push(this.fb.group({
+        ingredientName: [nameLower, Validators.required],
+        quantityRaw: [ing.quantity ?? '', Validators.required],
+        unit: [validUnit(ing.unit ?? 'kom'), Validators.required],
+      }));
+      // Dodaj novi sastojak u autocomplete listu
+      if (nameLower && !this.ingredientNames.includes(nameLower)) {
+        this.ingredientNames.push(nameLower);
+      }
+    });
+    // Dodaj prazni red za unos
+    this.addIngredient();
+
+    // Koraci
+    imported.steps?.forEach((step, i) => {
+      this.stepsArray.push(this.fb.group({
+        stepNumber: [step.stepNumber ?? (i + 1), Validators.required],
+        description: [step.description ?? '', Validators.required],
+        ingredientNames: [[]],
+      }));
+      this.stepImageFiles.push(null);
+      this.stepImagePreviews.push(null);
+    });
+    // Dodaj prazni korak za unos
+    this.addStep();
+
+    this.cdr.detectChanges();
+  }
+
+  // ── Getters & helpers ──────────────────────────────────────────────────────
 
   get ingredientsArray(): FormArray { return this.form.get('ingredients') as FormArray; }
   get stepsArray(): FormArray { return this.form.get('steps') as FormArray; }
@@ -131,7 +274,7 @@ export class RecipeFormComponent implements OnInit {
   addIngredient() {
     this.ingredientsArray.push(this.fb.group({
       ingredientName: ['', Validators.required],
-      quantity: [null, [Validators.required, Validators.min(0.001)]],
+      quantityRaw: ['', Validators.required],
       unit: ['g', Validators.required],
     }));
   }
@@ -140,6 +283,23 @@ export class RecipeFormComponent implements OnInit {
 
   onIngredientNameChange(i: number, name: string) {
     this.ingredientsArray.at(i).get('ingredientName')?.setValue(name.toLowerCase());
+  }
+
+  parseQuantity(raw: string): number | null {
+    if (!raw) return null;
+    const s = raw.trim();
+
+    const fractionMatch = s.match(/^(\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)$/);
+    if (fractionMatch) {
+      const num = parseFloat(fractionMatch[1].replace(',', '.'));
+      const den = parseFloat(fractionMatch[2].replace(',', '.'));
+      if (den === 0) return null;
+      return num / den;
+    }
+
+    const decimalStr = s.replace(',', '.');
+    const num = parseFloat(decimalStr);
+    return isNaN(num) ? null : num;
   }
 
   addStep() {
@@ -165,10 +325,7 @@ export class RecipeFormComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     if (!file) return;
-
     this.stepImageFiles[i] = file;
-
-    // Local preview
     const reader = new FileReader();
     reader.onload = (e) => {
       this.stepImagePreviews[i] = e.target?.result as string;
@@ -187,15 +344,22 @@ export class RecipeFormComponent implements OnInit {
 
   getRecipeIngredientNames(): string[] {
     return this.ingredientsArray.controls
-      .map(c => c.get('ingredientName')?.value)
-      .filter(n => !!n);
+        .map(c => c.get('ingredientName')?.value)
+        .filter(n => !!n);
   }
 
   onStepIngredientsChange(i: number, names: string[]) {
     this.stepsArray.at(i).get('ingredientNames')?.setValue(names);
   }
 
+  autoGrow(event: Event) {
+    const el = event.target as HTMLTextAreaElement;
+    el.style.height = 'auto';
+    el.style.height = el.scrollHeight + 'px';
+  }
+
   async submit() {
+    this.trimEmptyRows();
     if (this.form.invalid || this.ingredientsArray.length === 0 || this.stepsArray.length === 0) {
       this.form.markAllAsTouched();
       return;
@@ -207,47 +371,51 @@ export class RecipeFormComponent implements OnInit {
       const categoryIds = await this.resolveCategoryIds(this.selectedCategoryNames);
 
       const recipeIngredientNames = this.ingredientsArray.controls
-        .map(c => c.get('ingredientName')?.value as string);
+          .map(c => c.get('ingredientName')?.value as string);
       const resolvedIngredientIds = await this.resolveIngredientIds(recipeIngredientNames);
 
-      const ingredients = this.ingredientsArray.controls.map((ctrl, i) => ({
-        ingredientId: resolvedIngredientIds[i],
-        quantity: ctrl.get('quantity')?.value,
-        unit: ctrl.get('unit')?.value,
-      }));
+      const ingredients = this.ingredientsArray.controls.map((ctrl, i) => {
+        const raw = ctrl.get('quantityRaw')?.value ?? '';
+        const quantity = this.parseQuantity(raw) ?? 0;
+        return {
+          ingredientId: resolvedIngredientIds[i],
+          quantity,
+          unit: ctrl.get('unit')?.value,
+        };
+      });
 
       const steps = await Promise.all(
-        this.stepsArray.controls.map(async (ctrl) => {
-          const names: string[] = ctrl.get('ingredientNames')?.value ?? [];
-          const ids = await this.resolveIngredientIds(names);
-          return {
-            stepNumber: ctrl.get('stepNumber')?.value,
-            description: ctrl.get('description')?.value,
-            ingredientIds: ids,
-          };
-        })
+          this.stepsArray.controls.map(async (ctrl) => {
+            const names: string[] = ctrl.get('ingredientNames')?.value ?? [];
+            const ids = await this.resolveIngredientIds(names);
+            return {
+              stepNumber: ctrl.get('stepNumber')?.value,
+              description: ctrl.get('description')?.value,
+              ingredientIds: ids,
+            };
+          })
       );
 
       const dto = {
         title: this.form.get('title')?.value,
         description: this.form.get('description')?.value,
         preparation_time: this.form.get('preparation_time')?.value,
+        cooking_time: this.form.get('cooking_time')?.value,
         servings: this.form.get('servings')?.value,
-        sourceName: this.form.get('sourceName')?.value || null,
-        sourceUrl: this.form.get('sourceUrl')?.value || null,
+        source_url: this.form.get('source_url')?.value || null,
         categoryIds,
         ingredients,
-        steps,
+        steps: steps.map(s => ({ ...s, mediaList: [] })),
       };
 
       const obs = this.isEdit && this.recipeId
-        ? this.recipeService.update(this.recipeId, dto)
-        : this.recipeService.create(dto);
+          ? this.recipeService.update(this.recipeId, dto)
+          : this.recipeService.create(dto);
 
       obs.subscribe({
         next: async (savedRecipe) => {
-          // Upload slika za korake nakon što su koraci dobili ID-eve
           await this.uploadStepImages(savedRecipe);
+          await this.uploadRecipeImages(savedRecipe);
           this.router.navigate(['/recipes', savedRecipe.id]);
         },
         error: () => {
@@ -264,26 +432,17 @@ export class RecipeFormComponent implements OnInit {
 
   private async uploadStepImages(savedRecipe: Recipe) {
     const sortedSteps = savedRecipe.steps
-      ? [...savedRecipe.steps].sort((a, b) => a.stepNumber - b.stepNumber)
-      : [];
-
-    console.log('Saved steps:', sortedSteps);
-    console.log('Image files:', this.stepImageFiles);
+        ? [...savedRecipe.steps].sort((a, b) => a.stepNumber - b.stepNumber)
+        : [];
 
     for (let i = 0; i < this.stepImageFiles.length; i++) {
       const file = this.stepImageFiles[i];
       const step = sortedSteps[i];
-
-      console.log(`Korak ${i + 1}: stepId=${step?.id}, file=${file?.name}`);
-
       if (file && step) {
         try {
-          const result = await this.mediaService.upload(file, step.id).toPromise();
-          console.log(`Upload uspješan za korak ${i + 1}:`, result);
+          await this.mediaService.upload(file, step.id).toPromise();
         } catch (err: any) {
           console.error(`Greška pri uploadu slike za korak ${i + 1}:`, err);
-          console.error('Status:', err?.status);
-          console.error('Error body:', err?.error);
         }
       }
     }
@@ -328,8 +487,90 @@ export class RecipeFormComponent implements OnInit {
     return ids;
   }
 
-  fieldInvalid(name: string): boolean {
+  public fieldInvalid(name: string): boolean {
     const c = this.form.get(name);
-    return !!(c?.invalid && c?.touched);
+    return !!(c?.invalid && c?.['touched']);
+  }
+
+  public onIngredientFieldChange(i: number) {
+    const isLast = i === this.ingredientsArray.length - 1;
+    if (!isLast) return;
+    const ctrl = this.ingredientsArray.at(i);
+    const hasName = !!String(ctrl.get('ingredientName')?.value ?? '').trim();
+    const hasQty  = !!String(ctrl.get('quantityRaw')?.value ?? '').trim();
+    if (hasName || hasQty) this.addIngredient();
+  }
+
+  public onStepFieldChange(i: number) {
+    const isLast = i === this.stepsArray.length - 1;
+    if (!isLast) return;
+    const ctrl = this.stepsArray.at(i);
+    const hasDesc = !!String(ctrl.get('description')?.value ?? '').trim();
+    if (hasDesc) this.addStep();
+  }
+
+  private trimEmptyRows() {
+    while (this.ingredientsArray.length > 0) {
+      const last = this.ingredientsArray.at(this.ingredientsArray.length - 1);
+      const hasName = !!String(last.get('ingredientName')?.value ?? '').trim();
+      const hasQty  = !!String(last.get('quantityRaw')?.value ?? '').trim();
+      if (!hasName && !hasQty) {
+        this.ingredientsArray.removeAt(this.ingredientsArray.length - 1);
+      } else break;
+    }
+
+    while (this.stepsArray.length > 0) {
+      const last = this.stepsArray.at(this.stepsArray.length - 1);
+      const hasDesc = !!String(last.get('description')?.value ?? '').trim();
+      if (!hasDesc) {
+        this.stepsArray.removeAt(this.stepsArray.length - 1);
+        this.stepImageFiles.pop();
+        this.stepImagePreviews.pop();
+      } else break;
+    }
+  }
+
+  onRecipeImageSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    this.recipeImageFiles.push(file);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.recipeImagePreviews.push(e.target?.result as string);
+      this.cdr.detectChanges();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  removeRecipeImage(i: number) {
+    this.recipeImageFiles.splice(i, 1);
+    this.recipeImagePreviews.splice(i, 1);
+  }
+
+  private async uploadRecipeImages(savedRecipe: Recipe) {
+    for (const file of this.recipeImageFiles) {
+      if (!file) continue;
+      try {
+        await this.mediaService.uploadToRecipe(file, savedRecipe.id).toPromise();
+      } catch (err) {
+        console.error('Greška pri uploadu slike recepta:', err);
+      }
+    }
+  }
+
+  quantityInvalid(i: number): boolean {
+    const ctrl = this.ingredientsArray.at(i);
+    if (!ctrl?.['touched']) return false;
+    const raw = String(ctrl.get('quantityRaw')?.value ?? '').trim();
+    if (!raw) return true;
+    return this.parseQuantity(raw) === null;
+  }
+  openImportPdfModal()  { this.showImportPdfModal = true;  this.cdr.detectChanges(); }
+  closeImportPdfModal() { this.showImportPdfModal = false; this.cdr.detectChanges(); }
+
+  onRecipeImportedFromPdf(imported: ImportedRecipe) {
+    this.showImportPdfModal = false;
+    this.onRecipeImported(imported);
   }
 }

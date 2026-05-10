@@ -1,64 +1,141 @@
 <div class="page-header">
-  <h1>Recepti</h1>
-  <a routerLink="/recipes/new" class="btn btn-primary">+ Novi recept</a>
+    <h1>Recepti</h1>
+    <a routerLink="/recipes/new" class="btn btn-primary">+ Novi recept</a>
 </div>
 
 <div class="filters">
-  <div class="search-box">
-    <span class="search-icon">&#x2315;</span>
-    <input
-      type="text"
-      placeholder="Pretraži recepte..."
-      [(ngModel)]="searchTerm"
-      (input)="onSearch()"
-    />
-  </div>
-  <div class="category-filters">
-    <button
-      class="cat-chip"
-      [class.active]="selectedCategories.size === 0"
-      (click)="clearCategories()">Sve</button>
-    <button
-      *ngFor="let cat of categories"
-      class="cat-chip"
-      [class.active]="selectedCategories.has(cat.id)"
-      (click)="onCategoryFilter(cat.id)">{{ cat.name }}</button>
-  </div>
+    <div class="search-box">
+        <span class="search-icon">&#x2315;</span>
+        <input
+                type="text"
+                placeholder="Pretraži recepte..."
+                [(ngModel)]="searchTerm"
+                (input)="onSearch()"
+        />
+    </div>
+
+    <div class="category-filters">
+
+        <!-- "Sve" chip -->
+        <button
+                class="cat-chip"
+                [class.active]="selectedCategories.size === 0"
+                (click)="clearCategories()">
+            Sve
+        </button>
+
+        <!-- Hardkodirane pinned kategorije -->
+        <ng-container *ngFor="let cat of pinnedCategories">
+            <button
+                    class="cat-chip"
+                    [class.active]="selectedCategories.has(cat.id)"
+                    (click)="onCategoryFilter(cat.id)">
+                {{ cat.name }}
+            </button>
+        </ng-container>
+
+        <!-- "..." gumb + popup -->
+        <div class="category-popup-wrapper">
+            <button
+                    class="cat-chip cat-chip--more"
+                    [class.active]="showCategoryPopup"
+                    (click)="toggleCategoryPopup(); $event.stopPropagation()">
+                &hellip;
+            </button>
+
+            <div class="category-popup" *ngIf="showCategoryPopup" (click)="$event.stopPropagation()">
+                <div class="popup-search">
+                    <span class="search-icon">&#x2315;</span>
+                    <input
+                            type="text"
+                            placeholder="Pretraži kategorije..."
+                            [(ngModel)]="categorySearch"
+                            autofocus
+                    />
+                </div>
+
+                <div class="popup-list">
+                    <ng-container *ngIf="popupCategories.length > 0; else noResults">
+                        <button
+                                *ngFor="let cat of popupCategories"
+                                class="popup-cat-item"
+                                [class.active]="selectedCategories.has(cat.id)"
+                                (click)="onCategoryFilterFromPopup(cat.id)">
+                            <span class="popup-cat-check" *ngIf="selectedCategories.has(cat.id)">✓</span>
+                            <span class="popup-cat-check placeholder" *ngIf="!selectedCategories.has(cat.id)"></span>
+                            {{ cat.name }}
+                        </button>
+                    </ng-container>
+                    <ng-template #noResults>
+                        <p class="popup-empty">Nema kategorija za "{{ categorySearch }}"</p>
+                    </ng-template>
+                </div>
+
+                <div class="popup-footer" *ngIf="selectedCategories.size > 0">
+                    <button class="btn btn-sm btn-outline" (click)="clearCategories(); closeCategoryPopup()">
+                        Očisti filtere
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <div *ngIf="loading" class="state-msg">
-  <div class="spinner"></div>
-  <p>Učitavanje...</p>
+    <div class="spinner"></div>
+    <p>Učitavanje...</p>
 </div>
 
 <div *ngIf="error" class="state-msg error">{{ error }}</div>
 
-<div *ngIf="!loading && filtered.length === 0 && !error" class="state-msg">
-  <p>Nema recepata koji odgovaraju pretrazi.</p>
+<div *ngIf="!loading && !error && recipes.length === 0" class="state-msg empty-state">
+    <p>🍽️ Još nema recepata.</p>
+    <p>Kreirajte svoj prvi recept klikom na zeleni gumb!</p>
+    <a routerLink="/recipes/new" class="btn btn-primary">+ Novi recept</a>
+</div>
+
+<div *ngIf="!loading && !error && recipes.length > 0 && filtered.length === 0" class="state-msg">
+    <p>Nema recepata koji odgovaraju pretrazi.</p>
 </div>
 
 <div class="recipe-grid">
-  <a
-    *ngFor="let recipe of filtered"
-    [routerLink]="['/recipes', recipe.id]"
-    class="recipe-card">
-    <div class="card-body">
-      <div class="card-categories">
-        <span *ngFor="let cat of recipe.categories" class="tag">{{ cat.name }}</span>
-      </div>
-      <h2>{{ recipe.title }}</h2>
-      <p class="card-desc">{{ recipe.description }}</p>
-      <div class="card-meta">
+    <a
+            *ngFor="let recipe of filtered"
+            [routerLink]="['/recipes', recipe.id]"
+            class="recipe-card">
+        <div class="card-body">
+            <div class="card-categories">
+                <span *ngFor="let cat of recipe.categories" class="tag">{{ cat.name }}</span>
+            </div>
+            <h2>{{ recipe.title }}</h2>
+            <p class="card-desc">{{ recipe.description }}</p>
+            <div class="card-meta">
         <span *ngIf="recipe.preparation_time">
           &#x23F1; {{ recipe.preparation_time }} min
         </span>
-        <span>&#x1F374; {{ recipe.servings }} obroka</span>
-        <span>&#x1F9EA; {{ recipe.ingredients?.length || 0 }} sastojaka</span>
-      </div>
-    </div>
-    <div class="card-actions">
-      <a [routerLink]="['/recipes', recipe.id, 'edit']" class="btn btn-sm btn-outline" (click)="$event.stopPropagation()">Uredi</a>
-      <button class="btn btn-sm btn-danger" (click)="delete(recipe.id, $event)">Obriši</button>
-    </div>
-  </a>
+                <span *ngIf="recipe.cooking_time">
+          &#x23F1; {{ recipe.cooking_time }} min
+        </span>
+                <span>&#x1F374; {{ recipe.servings }} obroka</span>
+                <span>&#x1F9EA; {{ recipe.ingredients?.length || 0 }} sastojaka</span>
+            </div>
+        </div>
+        <div class="card-actions">
+            <a [routerLink]="['/recipes', recipe.id, 'edit']"
+               class="btn btn-sm btn-outline"
+               (click)="$event.stopPropagation()">Uredi</a>
+            <button class="btn btn-sm btn-danger"
+                    (click)="delete(recipe.id, $event)">Obriši</button>
+        </div>
+    </a>
+</div>
+
+<div class="load-more-container" *ngIf="hasMore && !loading">
+    <button class="btn btn-outline" (click)="loadMore()" [disabled]="isLoadingMore">
+    <span *ngIf="isLoadingMore">
+      <span class="spinner spinner-sm"></span> Učitavanje...
+    </span>
+        <span *ngIf="!isLoadingMore">Prikaži više</span>
+    </button>
 </div>

@@ -19,10 +19,6 @@
         <label>Naziv *</label>
         <input type="text" formControlName="name" placeholder="Naziv sastojka" />
       </div>
-      <div class="field full">
-        <label>Opis</label>
-        <input type="text" formControlName="description" placeholder="Kratki opis..." />
-      </div>
     </div>
     <div class="form-row-actions">
       <button type="button" class="btn btn-outline" (click)="showForm=false">Odustani</button>
@@ -36,13 +32,12 @@
 <div class="data-table">
   <div class="table-header">
     <span>Naziv</span>
-    <span>Opis</span>
+      <span> </span>
     <span>Akcije</span>
   </div>
   <div *ngFor="let ing of filtered" class="table-row">
     <ng-container *ngIf="editingId !== ing.id">
       <span class="col-name">{{ ing.name }}</span>
-      <span class="col-desc">{{ ing.description || '—' }}</span>
       <span class="col-actions">
         <button class="btn btn-sm btn-outline" (click)="startEdit(ing)">Uredi</button>
         <button class="btn btn-sm btn-danger" (click)="delete(ing.id)">Obriši</button>

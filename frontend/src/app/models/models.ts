@@ -16,12 +16,6 @@ export interface Ingredient {
   description?: string;
 }
 
-export interface Source {
-  id: number;
-  name: string;
-  url?: string;
-}
-
 export interface Media {
   id: number;
   type: 'image' | 'video';
@@ -56,7 +50,9 @@ export interface Recipe {
   ingredients: RecipeIngredient[];
   steps: Step[];
   categories?: Category[];
-  source?: Source;
+  source_url?: string;
+  cooking_time?: number;
+  mediaList?: Media[];
 }
 
 // DTOs for requests
@@ -64,12 +60,12 @@ export interface RecipeDTO {
   title: string;
   description?: string;
   preparation_time?: number;
+  cooking_time?: number;
   servings: number;
   steps: StepDTO[];
   ingredients: RecipeIngredientDTO[];
   categoryIds?: number[];
-  sourceName?: string;
-  sourceUrl?: string;
+  source_url?: string;
 }
 
 export interface StepDTO {
@@ -91,4 +87,13 @@ export interface IngredientDTO {
 
 export interface CategoryDTO {
   name: string;
+}
+
+export interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+  last: boolean;
 }

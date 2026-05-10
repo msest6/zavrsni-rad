@@ -1,66 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/controller/CategoryController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/controller/IngredientController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/controller/RecipeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/CategoryDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/IngredientDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/RecipeDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/RecipeIngredientDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/SourceDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/dto/StepDTO.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Category.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Ingredient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Media.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Recipe.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/RecipeIngredient.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Source.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Step.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/Unit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/model/UnitConversion.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/CategoryRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/IngredientRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/RecipeRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/repository/UnitConversionRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/CategoryService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/IngredientService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/MediaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/MediaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/RecipeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/RecipeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/RecipeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/RecipeDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/SourceDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/StepDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/StepDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Ingredient.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Ingredient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Media.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Media.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Recipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Recipe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/RecipeIngredient.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/RecipeIngredient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Source.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Step.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Unit.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Unit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/UnitConversion.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/UnitConversion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/CategoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/CategoryRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/IngredientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/IngredientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/RecipeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/RecipeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/UnitConversionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/UnitConversionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/IngredientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/IngredientService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/MediaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/MediaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/ZavrsniRadApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/ZavrsniRadApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/config/CloudinaryConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/config/CloudinaryConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/MediaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/MediaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/RecipeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/RecipeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/CategoryDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/CategoryDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/IngredientDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/IngredientDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/RecipeDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/RecipeDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/RecipeIngredientDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/RecipeIngredientDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/SourceDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/StepDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/StepDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Category.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Ingredient.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Ingredient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Media.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Media.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Recipe.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Recipe.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/RecipeIngredient.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/RecipeIngredient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Source.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Step.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Step.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Unit.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Unit.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/UnitConversion.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/UnitConversion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/CategoryRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/CategoryRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/IngredientRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/IngredientRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/RecipeRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/RecipeRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/StepRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/StepRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitConversionRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitConversionRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/IngredientService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/IngredientService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/MediaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/MediaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/RecipeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/RecipeService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/UnitConversionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/UnitConversionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/com.chrome.devtools.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/com.chrome.devtools.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-DN4MXPGC.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-DN4MXPGC.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-H6P2IZSJ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-H6P2IZSJ.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-LCXWEOF5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-LCXWEOF5.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-LDOKW4HG.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-LDOKW4HG.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-RSS3ODKE.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-RSS3ODKE.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-WDMUDEB6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-WDMUDEB6.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-ZIPO5UAR.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/chunk-ZIPO5UAR.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/ingredient-list/ingredient-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/ingredient-list/ingredient-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/ingredient-list/ingredient-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/ingredient-list/ingredient-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-list/recipe-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-list/recipe-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-list/recipe-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-list/recipe-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/shared/navbar/navbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/models/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/models/models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/recipe.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/recipe.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="3CgXy6unvQlWolrK5va5jRfBxpw" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ZavrsniRadApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\ms\\Documents\\programiranje\\java\\zavrsni\\zavrsni-rad\\frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager">
+    <configuration name="ZavrsniRadApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="zavrsni-rad" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="fer.hr.zavrsni_rad.ZavrsniRadApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -70,6 +184,16 @@
       <option name="presentableId" value="Default" />
       <updated>1776808438074</updated>
       <workItem from="1776808439343" duration="207000" />
+      <workItem from="1776815805904" duration="164000" />
+      <workItem from="1777909437700" duration="4871000" />
+      <workItem from="1777914355400" duration="4831000" />
+      <workItem from="1777989427999" duration="11263000" />
+      <workItem from="1778152459753" duration="17205000" />
+      <workItem from="1778236666487" duration="6288000" />
+      <workItem from="1778276075745" duration="8000" />
+      <workItem from="1778328945442" duration="8018000" />
+      <workItem from="1778342083427" duration="1464000" />
+      <workItem from="1778412739284" duration="3602000" />
     </task>
     <servers />
   </component>

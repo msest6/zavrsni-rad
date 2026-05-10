@@ -14,9 +14,10 @@ import java.util.Set;
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ingredient_id", nullable = false)
     private Long id;
+    @Column(name = "ingredient_name", nullable = false, unique = true)
     private String name;
-    private String description;
     @JsonIgnore
     @ManyToMany(mappedBy = "ingredients")
     private Set<Step> steps;

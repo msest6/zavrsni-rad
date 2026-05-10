@@ -4,8 +4,13 @@ import fer.hr.zavrsni_rad.dto.RecipeDTO;
 import fer.hr.zavrsni_rad.model.*;
 import fer.hr.zavrsni_rad.repository.*;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,15 +23,18 @@ public class RecipeService {
     private final IngredientRepository ingredientRepository;
     private final CategoryRepository categoryRepository;
     private final UnitRepository unitRepository;
+    private final MediaService mediaService;
 
     public RecipeService(RecipeRepository repository,
                          IngredientRepository ingredientRepository,
                          CategoryRepository categoryRepository,
-                         UnitRepository unitRepository) {
+                         UnitRepository unitRepository,
+                         MediaService mediaService) {
         this.repository = repository;
         this.ingredientRepository = ingredientRepository;
         this.categoryRepository = categoryRepository;
         this.unitRepository = unitRepository;
+        this.mediaService = mediaService;
     }
 
     public Recipe create(RecipeDTO dto) {
@@ -34,6 +42,7 @@ public class RecipeService {
         recipe.setTitle(dto.getTitle());
         recipe.setDescription(dto.getDescription());
         recipe.setPreparation_time(dto.getPreparation_time());
+        recipe.setCooking_time(dto.getCooking_time());
         recipe.setServings(dto.getServings());
 
         Set<RecipeIngredient> ingredients = dto.getIngredients().stream()
@@ -66,6 +75,19 @@ public class RecipeService {
                                     .orElseThrow(() -> new RuntimeException("Ingredient not found: " + ingId)))
                             .collect(Collectors.toCollection(HashSet::new));
                     step.setIngredients(stepIngredients);
+
+                    Set<Media> mediaList = s.getMediaList().stream()
+                            .map(m -> {
+                                Media media = new Media();
+                                media.setPublicId(m.getPublicId());
+                                media.setType(m.getType());
+                                media.setUrl(m.getUrl());
+                                media.setStep(step);
+                                return media;
+                            })
+                            .collect(Collectors.toSet());
+                    step.setMediaList(mediaList);
+
                     return step;
                 })
                 .collect(Collectors.toCollection(HashSet::new));
@@ -76,20 +98,36 @@ public class RecipeService {
                         .orElseThrow(() -> new RuntimeException("Category not found: " + catId)))
                 .collect(Collectors.toCollection(HashSet::new));
         recipe.setCategories(categories);
-
-        if (dto.getSourceName() != null && !dto.getSourceName().isBlank()) {
-            Source source = new Source();
-            source.setName(dto.getSourceName());
-            source.setUrl(dto.getSourceUrl());
-            recipe.setSource(source);
-        }
-
+        recipe.setSource_url(dto.getSource_url());
+        recipe.setIs_deleted(false);
+        Set<Media> recipeMedia = dto.getMediaList() == null ? new HashSet<>() :
+                dto.getMediaList().stream()
+                        .map(m -> {
+                            Media media = new Media();
+                            media.setPublicId(m.getPublicId());
+                            media.setType(m.getType());
+                            media.setUrl(m.getUrl());
+                            media.setRecipe(recipe);   // make sure Media has this field
+                            return media;
+                        })
+                        .collect(Collectors.toSet());
+        recipe.setMediaList(recipeMedia);
         return repository.save(recipe);
     }
 
     @Transactional
-    public List<Recipe> getAll() {
-        return repository.findAllActive();
+    public Page<Recipe> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return repository.findAllActive(pageable);
+    }
+
+    @Transactional
+    public Page<Recipe> getByCategories(List<Long> categoryIds, int page, int size) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return getAll(page, size);
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return repository.findByCategoryIds(categoryIds, pageable);
     }
 
     @Transactional
@@ -106,30 +144,25 @@ public class RecipeService {
         recipe.setTitle(dto.getTitle());
         recipe.setDescription(dto.getDescription());
         recipe.setPreparation_time(dto.getPreparation_time());
+        recipe.setCooking_time(dto.getCooking_time());
         recipe.setServings(dto.getServings());
 
-        recipe.getIngredients().clear();
-        recipe.getIngredients().addAll(
-                dto.getIngredients().stream()
-                        .map(i -> {
-                            Ingredient ingredient = ingredientRepository.findById(i.getIngredientId())
-                                    .orElseThrow(() -> new RuntimeException("Ingredient not found"));
+        // Delete media from Cloudinary for removed steps
+        recipe.getSteps().forEach(step -> {
+            step.getMediaList().forEach(media -> {
+                try {
+                    mediaService.delete(media.getId());
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to delete media from Cloudinary: " + media.getId(), e);
+                }
+            });
+        });
 
-                            Unit unit = unitRepository.findBySymbol(i.getUnit())
-                                    .orElseThrow(() -> new RuntimeException("Unit not found: " + i.getUnit()));
-
-                            RecipeIngredient ri = new RecipeIngredient();
-                            ri.setRecipe(recipe);
-                            ri.setIngredient(ingredient);
-                            ri.setQuantity(i.getQuantity());
-                            ri.setUnit(unit);
-                            return ri;
-                        })
-                        .collect(Collectors.toCollection(HashSet::new))
-        );
-
+        // Clear steps and media
         recipe.getSteps().forEach(step -> step.getMediaList().clear());
         recipe.getSteps().clear();
+
+        // Add updated steps and media
         recipe.getSteps().addAll(
                 dto.getSteps().stream()
                         .map(s -> {
@@ -143,6 +176,19 @@ public class RecipeService {
                                             .orElseThrow(() -> new RuntimeException("Ingredient not found: " + ingId)))
                                     .collect(Collectors.toCollection(HashSet::new));
                             step.setIngredients(stepIngredients);
+
+                            Set<Media> mediaList = s.getMediaList().stream()
+                                    .map(m -> {
+                                        Media media = new Media();
+                                        media.setPublicId(m.getPublicId());
+                                        media.setType(m.getType());
+                                        media.setUrl(m.getUrl());
+                                        media.setStep(step);
+                                        return media;
+                                    })
+                                    .collect(Collectors.toSet());
+                            step.setMediaList(mediaList);
+
                             return step;
                         })
                         .collect(Collectors.toCollection(HashSet::new))
@@ -154,23 +200,36 @@ public class RecipeService {
                                 .orElseThrow(() -> new RuntimeException("Category not found: " + catId)))
                         .collect(Collectors.toCollection(HashSet::new))
         );
+        recipe.setSource_url(dto.getSource_url());
+        recipe.setIs_deleted(false);
+        recipe.getMediaList().forEach(media -> {
+            try {
+                mediaService.delete(media.getId());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to delete recipe media: " + media.getId(), e);
+            }
+        });
+        recipe.getMediaList().clear();
 
-        if (dto.getSourceName() != null && !dto.getSourceName().isBlank()) {
-            Source source = new Source();
-            source.setName(dto.getSourceName());
-            source.setUrl(dto.getSourceUrl());
-            recipe.setSource(source);
-        } else {
-            recipe.setSource(null);
-        }
-
+        Set<Media> recipeMedia = dto.getMediaList() == null ? new HashSet<>() :
+                dto.getMediaList().stream()
+                        .map(m -> {
+                            Media media = new Media();
+                            media.setPublicId(m.getPublicId());
+                            media.setType(m.getType());
+                            media.setUrl(m.getUrl());
+                            media.setRecipe(recipe);
+                            return media;
+                        })
+                        .collect(Collectors.toSet());
+        recipe.getMediaList().addAll(recipeMedia);
         return repository.save(recipe);
     }
 
     public void delete(Long id) {
         Recipe recipe = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Recipe not found"));
-        recipe.set_deleted(true);
+        recipe.setIs_deleted(true);
         repository.save(recipe);
     }
 }

@@ -30,4 +30,11 @@ public class MediaController {
         mediaService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/upload/recipe")
+    public ResponseEntity<Media> uploadToRecipe(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("recipeId") Long recipeId) throws IOException {
+        return ResponseEntity.ok(mediaService.uploadToRecipe(file, recipeId));
+    }
 }

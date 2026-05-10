@@ -19,4 +19,11 @@ export class MediaService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+  uploadToRecipe(file: File, recipeId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('recipeId', recipeId.toString());
+    return this.http.post(`/api/media/upload/recipe`, formData);
+  }
 }

@@ -30,7 +30,6 @@ export class IngredientListComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.maxLength(500)],
     });
     this.load();
   }
@@ -55,7 +54,7 @@ export class IngredientListComponent implements OnInit {
   startEdit(ing: Ingredient) {
     this.editingId = ing.id;
     this.showForm = false;
-    this.form.patchValue({ name: ing.name, description: ing.description ?? '' });
+    this.form.patchValue({ name: ing.name });
   }
 
   cancelEdit() { this.editingId = null; this.form.reset(); }

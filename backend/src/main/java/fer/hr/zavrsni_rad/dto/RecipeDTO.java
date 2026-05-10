@@ -20,6 +20,9 @@ public class RecipeDTO {
     private Long preparation_time;
 
     @Min(1)
+    private Long cooking_time;
+
+    @Min(1)
     private int servings;
 
     @NotEmpty
@@ -30,6 +33,9 @@ public class RecipeDTO {
 
     private List<Long> categoryIds;
 
-    private String sourceName;
-    private String sourceUrl;
+    private String source_url;
+
+    private Boolean is_deleted;
+
+    private List<MediaDTO> mediaList;
 }

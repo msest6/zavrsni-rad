@@ -11,10 +11,13 @@ import lombok.Setter;
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "media_id", nullable = false)
     private Long id;
+    @Column(nullable = false, unique = true)
     private String publicId;
-
+    @Column(nullable = false)
     private String type;
+    @Column(nullable = false)
     private String url;
     @JsonIgnore
     @ManyToOne

@@ -28,7 +28,6 @@ public class IngredientService {
     public Ingredient create(IngredientDTO dto) {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(dto.getName());
-        ingredient.setDescription(dto.getDescription());
         return ingredientRepository.save(ingredient);
     }
 
@@ -36,7 +35,6 @@ public class IngredientService {
         Ingredient ingredient = ingredientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ingredient not found"));
         ingredient.setName(dto.getName());
-        ingredient.setDescription(dto.getDescription());
         return ingredientRepository.save(ingredient);
     }
 

@@ -16,4 +16,6 @@ public class StepDTO {
     private String description;
 
     private List<Long> ingredientIds;
+
+    private List<MediaDTO> mediaList;
 }

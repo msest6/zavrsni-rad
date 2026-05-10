@@ -11,19 +11,17 @@ import lombok.Setter;
 public class RecipeIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "recipeIngredient_id")
     private Long id;
-
+    @Column(nullable = false)
     private Double quantity;
-
     @ManyToOne
     @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;
-
     @JsonBackReference("recipe-ingredients")
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
