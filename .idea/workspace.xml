@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="application properties added">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="db update in application prod properties">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application-prod.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +98,7 @@
       <workItem from="1778328945442" duration="8018000" />
       <workItem from="1778342083427" duration="1464000" />
       <workItem from="1778412739284" duration="4318000" />
-      <workItem from="1778527643811" duration="3010000" />
+      <workItem from="1778527643811" duration="3867000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -115,7 +114,14 @@
       <option name="presentableId" value="LOCAL−00002" />
       <updated>1778528437470</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL−00003" summary="db update in application prod properties">
+      <option name="closed" value="true" />
+      <created>1778530969238</created>
+      <option name="number" value="LOCAL−00003" />
+      <option name="presentableId" value="LOCAL−00003" />
+      <updated>1778530969238</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,6 +130,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="massive update" />
     <MESSAGE value="application properties added" />
-    <option name="LAST_COMMIT_MESSAGE" value="application properties added" />
+    <MESSAGE value="db update in application prod properties" />
+    <option name="LAST_COMMIT_MESSAGE" value="db update in application prod properties" />
   </component>
 </project>

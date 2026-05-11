@@ -1,0 +1,64 @@
+<div class="modal-backdrop" (click)="onBackdropClick($event)">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+
+        <!-- Header -->
+        <div class="modal-header">
+            <div class="modal-title-row">
+                <span class="modal-icon">&#x1F517;</span>
+                <h2 id="modal-title">Uvezi recept</h2>
+            </div>
+            <button class="modal-close-btn" type="button" (click)="close()" aria-label="Zatvori">
+                &#x2715;
+            </button>
+        </div>
+
+        <!-- Podržani servisi -->
+        <div class="modal-sources">
+            <span class="sources-label">Podržani servisi:</span>
+            <span class="source-badge" [class.source-active]="isValidCoolinarika()">
+        Coolinarika
+      </span>
+        </div>
+
+        <!-- URL unos -->
+        <div class="modal-field">
+            <label for="import-url" class="modal-label">URL recepta</label>
+            <input
+                    id="import-url"
+                    type="url"
+                    class="modal-input"
+                    [(ngModel)]="url"
+                    placeholder="https://www.coolinarika.com/recept/..."
+                    [disabled]="loading"
+                    (keydown.enter)="import()"
+                    autofocus
+            />
+            <span class="field-hint" *ngIf="!error">
+        Zalijepite link recepta s Coolinarike.
+      </span>
+            <span class="field-error" *ngIf="error">{{ error }}</span>
+        </div>
+
+        <!-- Učitavanje -->
+        <div class="modal-loading" *ngIf="loading">
+            <div class="spinner-sm"></div>
+            <span>Dohvaćam recept...</span>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline" (click)="close()" [disabled]="loading">
+                Odustani
+            </button>
+            <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="import()"
+                    [disabled]="loading || !url.trim()"
+            >
+                {{ loading ? 'Uvoz u tijeku...' : 'Uvezi recept' }}
+            </button>
+        </div>
+
+    </div>
+</div>
