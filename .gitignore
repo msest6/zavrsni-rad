@@ -34,5 +34,3 @@ build/
 
 ### cloudinary api keys ###
 .env
-
-application.properties
