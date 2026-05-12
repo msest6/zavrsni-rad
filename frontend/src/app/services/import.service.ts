@@ -85,7 +85,8 @@ function parseMinutes(text: string): number | null {
 
 @Injectable({ providedIn: 'root' })
 export class RecipeImportService {
-    private readonly PROXY = 'http://localhost:8080/api/proxy?url=';
+    //http://localhost:8080
+    private readonly PROXY = 'https://zavrsni-rad-7olg.onrender.com/api/proxy?url=';
 
     constructor(private http: HttpClient) {}
 
