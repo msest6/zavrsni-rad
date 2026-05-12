@@ -48,6 +48,7 @@ public class MediaService {
                         "resource_type", mediaType
                 )
         );
+        System.out.println("Cloudinary result: " + uploadResult);
 
         String url = (String) uploadResult.get("secure_url");
         String publicId = (String) uploadResult.get("public_id");

@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="backend requestMapping fixed">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="frontend recipe media fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/MediaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/MediaService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +109,7 @@
       <workItem from="1778610904044" duration="514000" />
       <workItem from="1778611427274" duration="494000" />
       <workItem from="1778612499617" duration="905000" />
-      <workItem from="1778613421052" duration="4436000" />
+      <workItem from="1778613421052" duration="4941000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -196,7 +195,14 @@
       <option name="presentableId" value="LOCAL−00012" />
       <updated>1778616795379</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL−00013" summary="frontend recipe media fix">
+      <option name="closed" value="true" />
+      <created>1778618380510</created>
+      <option name="number" value="LOCAL−00013" />
+      <option name="presentableId" value="LOCAL−00013" />
+      <updated>1778618380510</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,6 +221,7 @@
     <MESSAGE value="backend webConfig file fix" />
     <MESSAGE value="backend context path fix" />
     <MESSAGE value="backend requestMapping fixed" />
-    <option name="LAST_COMMIT_MESSAGE" value="backend requestMapping fixed" />
+    <MESSAGE value="frontend recipe media fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="frontend recipe media fix" />
   </component>
 </project>
