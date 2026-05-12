@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable, from, firstValueFrom} from 'rxjs';
+import { environment } from '../environments/environment';
 
 export interface ImportedRecipe {
     title: string;
@@ -85,8 +86,7 @@ function parseMinutes(text: string): number | null {
 
 @Injectable({ providedIn: 'root' })
 export class RecipeImportService {
-    //http://localhost:8080
-    private readonly PROXY = 'https://zavrsni-rad-7olg.onrender.com/api/proxy?url=';
+    private readonly PROXY = `${environment.apiUrl}/proxy?url=`;
 
     constructor(private http: HttpClient) {}
 

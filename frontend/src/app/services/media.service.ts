@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Media } from '../models/models';
+import {environment} from "../environments/environment";
 
 @Injectable({ providedIn: 'root' })
 export class MediaService {
-  private url = '/api/media';
+  private url = `${environment.apiUrl}/media`;
 
   constructor(private http: HttpClient) {}
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 export interface UnitConversionDto {
     id: number;
@@ -11,7 +12,7 @@ export interface UnitConversionDto {
 
 @Injectable({ providedIn: 'root' })
 export class UnitConversionService {
-    private base = '/api/unit-conversions';
+    private base = `${environment.apiUrl}/unit-conversions`;
 
     constructor(private http: HttpClient) {}
 
