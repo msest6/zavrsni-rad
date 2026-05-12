@@ -4,39 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="db update in application prod properties">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="frontend angular.json production fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application-dev.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/target/classes/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application-prod.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/com.chrome.devtools.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/com.chrome.devtools.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/category-list/category-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/category-list/category-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/environments/environment.prod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/category.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/category.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/ingredient.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/ingredient.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/recipe.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/recipe.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/unit-conversion.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/unit-conversion.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/unit.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/unit.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,31 +62,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.ZavrsniRadApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2026.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.ZavrsniRadApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\ms\\Documents\\programiranje\\java\\zavrsni\\zavrsni-rad\\frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\ms\Documents\programiranje\java\zavrsni\zavrsni-rad\frontend\src" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="ZavrsniRadApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="zavrsni-rad" />
@@ -130,6 +128,11 @@
       <workItem from="1778342083427" duration="1464000" />
       <workItem from="1778412739284" duration="4318000" />
       <workItem from="1778527643811" duration="3867000" />
+      <workItem from="1778609646363" duration="1247000" />
+      <workItem from="1778610904044" duration="514000" />
+      <workItem from="1778611427274" duration="494000" />
+      <workItem from="1778612499617" duration="905000" />
+      <workItem from="1778613421052" duration="1248000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -152,7 +155,42 @@
       <option name="presentableId" value="LOCAL−00003" />
       <updated>1778530969238</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL−00004" summary="frontend budget extension">
+      <option name="closed" value="true" />
+      <created>1778609936309</created>
+      <option name="number" value="LOCAL−00004" />
+      <option name="presentableId" value="LOCAL−00004" />
+      <updated>1778609936309</updated>
+    </task>
+    <task id="LOCAL−00005" summary="frontend deploy fix">
+      <option name="closed" value="true" />
+      <created>1778610072010</created>
+      <option name="number" value="LOCAL−00005" />
+      <option name="presentableId" value="LOCAL−00005" />
+      <updated>1778610072010</updated>
+    </task>
+    <task id="LOCAL−00006" summary="frontend to backend url fix">
+      <option name="closed" value="true" />
+      <created>1778613320791</created>
+      <option name="number" value="LOCAL−00006" />
+      <option name="presentableId" value="LOCAL−00006" />
+      <updated>1778613320791</updated>
+    </task>
+    <task id="LOCAL−00007" summary="frontend env files">
+      <option name="closed" value="true" />
+      <created>1778613910362</created>
+      <option name="number" value="LOCAL−00007" />
+      <option name="presentableId" value="LOCAL−00007" />
+      <updated>1778613910362</updated>
+    </task>
+    <task id="LOCAL−00008" summary="frontend angular.json production fix">
+      <option name="closed" value="true" />
+      <created>1778614278237</created>
+      <option name="number" value="LOCAL−00008" />
+      <option name="presentableId" value="LOCAL−00008" />
+      <updated>1778614278237</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -162,6 +200,11 @@
     <MESSAGE value="massive update" />
     <MESSAGE value="application properties added" />
     <MESSAGE value="db update in application prod properties" />
-    <option name="LAST_COMMIT_MESSAGE" value="db update in application prod properties" />
+    <MESSAGE value="frontend budget extension" />
+    <MESSAGE value="frontend deploy fix" />
+    <MESSAGE value="frontend to backend url fix" />
+    <MESSAGE value="frontend env files" />
+    <MESSAGE value="frontend angular.json production fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="frontend angular.json production fix" />
   </component>
 </project>
