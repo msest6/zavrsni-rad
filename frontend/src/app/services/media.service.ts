@@ -25,6 +25,6 @@ export class MediaService {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('recipeId', recipeId.toString());
-    return this.http.post(`/api/media/upload/recipe`, formData);
+    return this.http.post(`${this.url}/upload/recipe`, formData);
   }
 }

@@ -74,6 +74,7 @@ export class RecipeDetailComponent implements OnInit {
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+    setTimeout(() => {
     this.recipeService.getById(id).subscribe({
       next: (r) => {
         this.zone.run(() => {
@@ -96,7 +97,7 @@ export class RecipeDetailComponent implements OnInit {
         this.unitService.getAll().subscribe(units => {
           this.unitSymbolNames = this.UNITS.map(symbol => {
             const found = units.find((u: any) => u.symbol === symbol);
-            return { symbol, name: found?.name ?? symbol };
+            return {symbol, name: found?.name ?? symbol};
           });
           this.cdr.detectChanges();
         });
@@ -109,6 +110,7 @@ export class RecipeDetailComponent implements OnInit {
         });
       }
     });
+    }, 500);
   }
 
   /** Dohvaća konverzije za sastojak (generičke + specifične) */

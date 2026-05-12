@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="backend context path fix">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="backend requestMapping fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/CategoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/CategoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/IngredientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/IngredientController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/MediaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/MediaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/ProxyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/ProxyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/UnitController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/UnitController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/UnitConversionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/UnitConversionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +110,7 @@
       <workItem from="1778610904044" duration="514000" />
       <workItem from="1778611427274" duration="494000" />
       <workItem from="1778612499617" duration="905000" />
-      <workItem from="1778613421052" duration="3347000" />
+      <workItem from="1778613421052" duration="4436000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -193,7 +189,14 @@
       <option name="presentableId" value="LOCAL−00011" />
       <updated>1778616278996</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL−00012" summary="backend requestMapping fixed">
+      <option name="closed" value="true" />
+      <created>1778616795379</created>
+      <option name="number" value="LOCAL−00012" />
+      <option name="presentableId" value="LOCAL−00012" />
+      <updated>1778616795379</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -211,6 +214,7 @@
     <MESSAGE value="deploy fix commit" />
     <MESSAGE value="backend webConfig file fix" />
     <MESSAGE value="backend context path fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="backend context path fix" />
+    <MESSAGE value="backend requestMapping fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="backend requestMapping fixed" />
   </component>
 </project>
