@@ -8,8 +8,13 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/proxy")
-                .allowedOrigins("http://localhost:4200") // ← tvoj Angular dev URL
-                .allowedMethods("GET");
+        registry.addMapping("/**")
+                .allowedOrigins(
+                        "http://localhost:4200",
+                        "https://zavrsni-rad-frontend.onrender.com"
+                )
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }

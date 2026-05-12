@@ -4,32 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="frontend angular.json production fix">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="deploy fix commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application-dev.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/environments/environment.prod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/category.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/category.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/ingredient.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/ingredient.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/recipe.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/recipe.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/unit-conversion.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/unit-conversion.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/unit.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/unit.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/config/WebConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +109,7 @@
       <workItem from="1778610904044" duration="514000" />
       <workItem from="1778611427274" duration="494000" />
       <workItem from="1778612499617" duration="905000" />
-      <workItem from="1778613421052" duration="1248000" />
+      <workItem from="1778613421052" duration="2003000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -190,7 +167,14 @@
       <option name="presentableId" value="LOCAL−00008" />
       <updated>1778614278237</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL−00009" summary="deploy fix commit">
+      <option name="closed" value="true" />
+      <created>1778614710951</created>
+      <option name="number" value="LOCAL−00009" />
+      <option name="presentableId" value="LOCAL−00009" />
+      <updated>1778614710951</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -205,6 +189,7 @@
     <MESSAGE value="frontend to backend url fix" />
     <MESSAGE value="frontend env files" />
     <MESSAGE value="frontend angular.json production fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="frontend angular.json production fix" />
+    <MESSAGE value="deploy fix commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="deploy fix commit" />
   </component>
 </project>
