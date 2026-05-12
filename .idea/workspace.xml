@@ -6,6 +6,37 @@
   <component name="ChangeListManager">
     <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="db update in application prod properties">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application-dev.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application-dev.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/application-prod.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application-prod.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/com.chrome.devtools.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/com.chrome.devtools.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_common_http.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_core.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_forms.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_platform-browser.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/@angular_router.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/rxjs.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.angular/cache/21.2.7/recipe-app/vite/deps/zone__js.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/category-list/category-list.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/category-list/category-list.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +90,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Users\\ms\\Documents\\programiranje\\java\\zavrsni\\zavrsni-rad\\frontend\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2026.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

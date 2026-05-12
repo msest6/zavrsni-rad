@@ -22,23 +22,23 @@
 <div *ngIf="loading" class="state-msg"><div class="spinner"></div></div>
 
 <div class="cat-grid">
-  <div *ngFor="let cat of categories" class="cat-card">
-    <ng-container *ngIf="editingId !== cat.id">
-      <span class="cat-card-name">{{ cat.name }}</span>
-      <div class="cat-card-actions">
-        <button class="btn btn-sm btn-outline" (click)="startEdit(cat)">Uredi</button>
-        <button class="btn btn-sm btn-danger" (click)="delete(cat.id)">Obriši</button>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="editingId === cat.id">
-      <form [formGroup]="form" (ngSubmit)="save(cat.id)" class="cat-edit-form">
-        <input type="text" formControlName="name" />
-        <div class="cat-card-actions">
-          <button type="submit" class="btn btn-sm btn-primary" [disabled]="submitting">Spremi</button>
-          <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Odustani</button>
-        </div>
-      </form>
-    </ng-container>
-  </div>
-  <div *ngIf="categories.length === 0 && !loading" class="empty-row">Nema kategorija.</div>
+    <div *ngFor="let cat of categories" class="cat-card">
+        <ng-container *ngIf="editingId !== cat.id">
+            <span class="cat-card-name">{{ cat.name }}</span>
+            <div class="cat-card-actions">
+                <button class="btn btn-sm btn-outline" (click)="startEdit(cat)">Uredi</button>
+                <button class="btn btn-sm btn-danger" (click)="delete(cat.id)">Obriši</button>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="editingId === cat.id">
+            <form [formGroup]="form" (ngSubmit)="save(cat.id)" class="cat-edit-form">
+                <input type="text" formControlName="name" />
+                <div class="cat-card-actions">
+                    <button type="submit" class="btn btn-sm btn-primary" [disabled]="submitting">Spremi</button>
+                    <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Odustani</button>
+                </div>
+            </form>
+        </ng-container>
+    </div>
+    <div *ngIf="categories.length === 0 && !loading" class="empty-row">Nema kategorija.</div>
 </div>

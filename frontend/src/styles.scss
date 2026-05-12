@@ -648,34 +648,39 @@ body {
 .empty-row { padding: 1.5rem 1rem; color: var(--text-muted); font-size: 0.9rem; }
 
 /* ---- CATEGORIES GRID ---- */
-.cat-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.75rem;
-}
-
 .cat-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem 1.25rem;
   display: flex;
-  align-items: center;
+  flex-direction: column;       /* ime gore, gumbi dolje */
   justify-content: space-between;
-  gap: 0.5rem;
-  transition: box-shadow 0.2s;
+  align-items: flex-start;
+  gap: 12px;
+  /* ostatak tvojih stilova (padding, border, border-radius...) ostaje isti */
 }
 
-.cat-card:hover { box-shadow: var(--shadow-sm); }
-.cat-card-name { font-weight: 500; }
-.cat-card-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+.cat-card-name {
+  flex: 1;
+  word-break: break-word;       /* dugačka imena se lome, ne pušu van */
+  overflow-wrap: break-word;
+}
 
+.cat-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;               /* gumbi nikad ne skupljaju */
+  align-self: flex-end;         /* uvijek zalijepljeni uz dno kartice */
+  width: 100%;                  /* zauzmu punu širinu -> gumbi s desna */
+  justify-content: flex-end;
+}
+
+/* Edit forma treba isto */
 .cat-edit-form {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
   width: 100%;
 }
+
+.cat-card:hover { box-shadow: var(--shadow-sm); }
 
 .cat-edit-form input {
   width: 100%;
