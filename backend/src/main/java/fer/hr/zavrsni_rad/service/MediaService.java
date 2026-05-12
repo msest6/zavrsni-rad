@@ -48,7 +48,6 @@ public class MediaService {
                         "resource_type", mediaType
                 )
         );
-        System.out.println("Cloudinary result: " + uploadResult);
 
         String url = (String) uploadResult.get("secure_url");
         String publicId = (String) uploadResult.get("public_id");
@@ -57,7 +56,7 @@ public class MediaService {
         media.setType(mediaType);
         media.setUrl(url);
         media.setStep(step);
-        media.setPublicId(publicId); // trebaš dodati ovo polje u Media.java
+        media.setPublicId(publicId);
 
         return mediaRepository.save(media);
     }
@@ -66,12 +65,17 @@ public class MediaService {
         Media media = mediaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Media not found"));
 
-        // Obriši s Cloudinaryja
-        if (media.getPublicId() != null) {
-            cloudinary.uploader().destroy(
-                    media.getPublicId(),
-                    ObjectUtils.asMap("resource_type", media.getType())
-            );
+        if (media.getPublicId() != null && !media.getPublicId().isBlank()) {
+            try {
+                cloudinary.uploader().destroy(
+                        media.getPublicId(),
+                        ObjectUtils.asMap("resource_type",
+                                media.getType() != null && media.getType().startsWith("video")
+                                        ? "video" : "image")
+                );
+            } catch (Exception e) {
+                System.err.println("Cloudinary destroy failed for: " + media.getPublicId());
+            }
         }
 
         mediaRepository.deleteById(id);
