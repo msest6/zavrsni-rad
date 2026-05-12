@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/proxy")
+@RequestMapping("/proxy")
 public class ProxyController {
 
     private final RestTemplate restTemplate;

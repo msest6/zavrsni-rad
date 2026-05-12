@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/unit-conversions")
+@RequestMapping("/unit-conversions")
 @RequiredArgsConstructor
 public class UnitConversionController {
 
