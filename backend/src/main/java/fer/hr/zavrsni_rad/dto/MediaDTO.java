@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MediaDTO {
+    private Long id;
     private String publicId;
     private String type;
     private String url;

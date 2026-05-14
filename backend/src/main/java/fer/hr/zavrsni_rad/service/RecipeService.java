@@ -207,14 +207,14 @@ public class RecipeService {
         recipe.setSource_url(dto.getSource_url());
         recipe.setIs_deleted(false);
 
-        Set<String> keepPublicIds = dto.getMediaList() == null ? new HashSet<>() :
+        Set<Long> keepMediaIds = dto.getMediaList() == null ? new HashSet<>() :
                 dto.getMediaList().stream()
-                        .map(MediaDTO::getPublicId)
+                        .map(MediaDTO::getId)
                         .filter(Objects::nonNull)
                         .collect(Collectors.toSet());
 
         List<Media> mediaToDelete = new ArrayList<>(recipe.getMediaList());
-        mediaToDelete.removeIf(m -> keepPublicIds.contains(m.getPublicId()));
+        mediaToDelete.removeIf(m -> keepMediaIds.contains(m.getId()));
 
         for (Media media : mediaToDelete) {
             try {

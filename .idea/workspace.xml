@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="media cloudinary debug 2">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="media backend cloudinary fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/models/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/models/models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/MediaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/MediaDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +114,7 @@
       <workItem from="1778751582005" duration="1201000" />
       <workItem from="1778752792652" duration="407000" />
       <workItem from="1778753209685" duration="649000" />
-      <workItem from="1778753867946" duration="42000" />
+      <workItem from="1778753867946" duration="2329000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -223,7 +221,21 @@
       <option name="presentableId" value="LOCAL−00015" />
       <updated>1778620232181</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL−00016" summary="media cloudinary debug 2">
+      <option name="closed" value="true" />
+      <created>1778753933095</created>
+      <option name="number" value="LOCAL−00016" />
+      <option name="presentableId" value="LOCAL−00016" />
+      <updated>1778753933095</updated>
+    </task>
+    <task id="LOCAL−00017" summary="media backend cloudinary fix">
+      <option name="closed" value="true" />
+      <created>1778754857778</created>
+      <option name="number" value="LOCAL−00017" />
+      <option name="presentableId" value="LOCAL−00017" />
+      <updated>1778754857778</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,6 +257,7 @@
     <MESSAGE value="frontend recipe media fix" />
     <MESSAGE value="media cloudinary debug" />
     <MESSAGE value="media cloudinary debug 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="media cloudinary debug 2" />
+    <MESSAGE value="media backend cloudinary fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="media backend cloudinary fix" />
   </component>
 </project>
