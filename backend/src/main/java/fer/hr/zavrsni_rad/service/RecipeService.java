@@ -11,11 +11,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import fer.hr.zavrsni_rad.dto.MediaDTO;
+import fer.hr.zavrsni_rad.dto.StepDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -151,52 +155,54 @@ public class RecipeService {
         recipe.setCooking_time(dto.getCooking_time());
         recipe.setServings(dto.getServings());
 
-        // Delete media from Cloudinary for removed steps
-        recipe.getSteps().forEach(step -> {
-            step.getMediaList().forEach(media -> {
-                try {
-                    mediaService.delete(media.getId());
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to delete media from Cloudinary: " + media.getId(), e);
+        // Build lookup of existing steps by stepNumber
+        Map<Integer, Step> existingStepsByNumber = new HashMap<>();
+        for (Step step : recipe.getSteps()) {
+            existingStepsByNumber.put(step.getStepNumber(), step);
+        }
+
+        Set<Integer> newStepNumbers = dto.getSteps().stream()
+                .map(StepDTO::getStepNumber)
+                .collect(Collectors.toSet());
+
+        // Remove steps that are no longer in the DTO and delete their Cloudinary media
+        Iterator<Step> stepIt = recipe.getSteps().iterator();
+        while (stepIt.hasNext()) {
+            Step step = stepIt.next();
+            if (!newStepNumbers.contains(step.getStepNumber())) {
+                for (Media media : step.getMediaList()) {
+                    try {
+                        mediaService.deleteFromCloudinaryOnly(media.getPublicId(), media.getType());
+                    } catch (IOException e) {
+                        System.err.println("Failed to delete step media from Cloudinary: " + media.getPublicId());
+                    }
                 }
-            });
-        });
+                stepIt.remove();
+            }
+        }
 
-        // Clear steps and media
-        recipe.getSteps().forEach(step -> step.getMediaList().clear());
-        recipe.getSteps().clear();
+        // Update existing steps in place (preserves media) or add new ones
+        for (StepDTO s : dto.getSteps()) {
+            Set<Ingredient> stepIngredients = s.getIngredientIds() == null ? new HashSet<>() :
+                    s.getIngredientIds().stream()
+                            .map(ingId -> ingredientRepository.findById(ingId)
+                                    .orElseThrow(() -> new RuntimeException("Ingredient not found: " + ingId)))
+                            .collect(Collectors.toCollection(HashSet::new));
 
-        // Add updated steps and media
-        recipe.getSteps().addAll(
-                dto.getSteps().stream()
-                        .map(s -> {
-                            Step step = new Step();
-                            step.setStepNumber(s.getStepNumber());
-                            step.setDescription(s.getDescription());
-                            step.setRecipe(recipe);
-
-                            Set<Ingredient> stepIngredients = s.getIngredientIds().stream()
-                                    .map(ingId -> ingredientRepository.findById(ingId)
-                                            .orElseThrow(() -> new RuntimeException("Ingredient not found: " + ingId)))
-                                    .collect(Collectors.toCollection(HashSet::new));
-                            step.setIngredients(stepIngredients);
-
-                            Set<Media> mediaList = s.getMediaList().stream()
-                                    .map(m -> {
-                                        Media media = new Media();
-                                        media.setPublicId(m.getPublicId());
-                                        media.setType(m.getType());
-                                        media.setUrl(m.getUrl());
-                                        media.setStep(step);
-                                        return media;
-                                    })
-                                    .collect(Collectors.toSet());
-                            step.setMediaList(mediaList);
-
-                            return step;
-                        })
-                        .collect(Collectors.toCollection(HashSet::new))
-        );
+            Step existing = existingStepsByNumber.get(s.getStepNumber());
+            if (existing != null) {
+                existing.setDescription(s.getDescription());
+                existing.setIngredients(stepIngredients);
+            } else {
+                Step newStep = new Step();
+                newStep.setStepNumber(s.getStepNumber());
+                newStep.setDescription(s.getDescription());
+                newStep.setRecipe(recipe);
+                newStep.setIngredients(stepIngredients);
+                newStep.setMediaList(new HashSet<>());
+                recipe.getSteps().add(newStep);
+            }
+        }
 
         recipe.setCategories(
                 dto.getCategoryIds().stream()

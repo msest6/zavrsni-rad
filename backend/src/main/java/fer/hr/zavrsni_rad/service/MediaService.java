@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -35,6 +36,17 @@ public class MediaService {
     public Media upload(MultipartFile file, Long stepId) throws IOException {
         Step step = stepRepository.findById(stepId)
                 .orElseThrow(() -> new RuntimeException("Step not found: " + stepId));
+
+        // Delete existing step media before uploading replacement
+        List<Media> existing = mediaRepository.findByStepId(stepId);
+        for (Media old : existing) {
+            try {
+                deleteFromCloudinaryOnly(old.getPublicId(), old.getType());
+            } catch (IOException e) {
+                System.err.println("Cloudinary delete failed for old step media: " + old.getPublicId());
+            }
+            mediaRepository.delete(old);
+        }
 
         // Odredi tip (image ili video)
         String contentType = file.getContentType() != null ? file.getContentType() : "";

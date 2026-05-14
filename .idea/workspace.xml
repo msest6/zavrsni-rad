@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="media backend cloudinary fix">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/MediaDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/MediaDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" afterDir="false" />
-    </list>
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="media backend cloudinary fix 2" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +110,7 @@
       <workItem from="1778751582005" duration="1201000" />
       <workItem from="1778752792652" duration="407000" />
       <workItem from="1778753209685" duration="649000" />
-      <workItem from="1778753867946" duration="2329000" />
+      <workItem from="1778753867946" duration="2967000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -235,7 +231,14 @@
       <option name="presentableId" value="LOCAL−00017" />
       <updated>1778754857778</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL−00018" summary="media backend cloudinary fix 2">
+      <option name="closed" value="true" />
+      <created>1778756897012</created>
+      <option name="number" value="LOCAL−00018" />
+      <option name="presentableId" value="LOCAL−00018" />
+      <updated>1778756897012</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,6 +261,7 @@
     <MESSAGE value="media cloudinary debug" />
     <MESSAGE value="media cloudinary debug 2" />
     <MESSAGE value="media backend cloudinary fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="media backend cloudinary fix" />
+    <MESSAGE value="media backend cloudinary fix 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="media backend cloudinary fix 2" />
   </component>
 </project>
