@@ -18,8 +18,9 @@ export interface Ingredient {
 
 export interface Media {
   id: number;
-  type: 'image' | 'video';
+  type: 'image' | 'video' | string;
   url: string;
+  publicId?: string;
 }
 
 export interface RecipeIngredient {
@@ -66,6 +67,7 @@ export interface RecipeDTO {
   ingredients: RecipeIngredientDTO[];
   categoryIds?: number[];
   source_url?: string;
+  mediaList?: Media[];
 }
 
 export interface StepDTO {

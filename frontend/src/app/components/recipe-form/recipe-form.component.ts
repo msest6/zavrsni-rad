@@ -6,7 +6,7 @@ import { RecipeService } from '../../services/recipe.service';
 import { IngredientService } from '../../services/ingredient.service';
 import { CategoryService } from '../../services/category.service';
 import { MediaService } from '../../services/media.service';
-import { Ingredient, Category, Recipe } from '../../models/models';
+import {Ingredient, Category, Recipe, Media} from '../../models/models';
 import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.component';
 import { forkJoin } from 'rxjs';
 import { UnitService } from '../../services/unit.service';
@@ -46,6 +46,8 @@ export class RecipeFormComponent implements OnInit {
 
   recipeImageFiles: (File | null)[] = [];
   recipeImagePreviews: (string | null)[] = [];
+
+  private originalRecipe: Recipe | null = null;
 
   loading = false;
   submitting = false;
@@ -144,6 +146,7 @@ export class RecipeFormComponent implements OnInit {
   }
 
   patchForm(recipe: Recipe) {
+    this.originalRecipe = recipe;
     this.form.patchValue({
       title: recipe.title,
       description: recipe.description,
@@ -395,7 +398,18 @@ export class RecipeFormComponent implements OnInit {
             };
           })
       );
-
+      const existingMediaList = this.recipeImagePreviews
+          .map((preview, i) => {
+            if (this.recipeImageFiles[i] === null && preview) {
+              const previewUrl: string = preview;
+              const found = this.originalRecipe?.mediaList?.find(
+                  m => m.url === previewUrl
+              );
+              return found ?? null;
+            }
+            return null;
+          })
+          .filter((m): m is Media => m !== null);
       const dto = {
         title: this.form.get('title')?.value,
         description: this.form.get('description')?.value,
@@ -406,6 +420,7 @@ export class RecipeFormComponent implements OnInit {
         categoryIds,
         ingredients,
         steps: steps.map(s => ({ ...s, mediaList: [] })),
+        mediaList: existingMediaList,
       };
 
       const obs = this.isEdit && this.recipeId

@@ -98,7 +98,7 @@ export class RecipeImportService {
         const proxyUrl = `${this.PROXY}${encodeURIComponent(url)}`;
 
         const html = await firstValueFrom(
-            this.http.get(proxyUrl, { responseType: 'text' as const })
+            this.http.get(proxyUrl, { responseType: 'text' })
         );
 
         if (!html) throw new Error('Nije moguće dohvatiti stranicu.');
