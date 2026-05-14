@@ -61,6 +61,15 @@ public class MediaService {
         return mediaRepository.save(media);
     }
 
+    public void deleteFromCloudinaryOnly(String publicId, String type) throws IOException {
+        if (publicId == null || publicId.isBlank()) return;
+        cloudinary.uploader().destroy(
+                publicId,
+                ObjectUtils.asMap("resource_type",
+                        type != null && type.startsWith("video") ? "video" : "image")
+        );
+    }
+
     public void delete(Long id) throws IOException {
         Media media = mediaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Media not found"));

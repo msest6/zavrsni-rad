@@ -10,9 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import fer.hr.zavrsni_rad.dto.MediaDTO;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -202,27 +206,25 @@ public class RecipeService {
         );
         recipe.setSource_url(dto.getSource_url());
         recipe.setIs_deleted(false);
-        recipe.getMediaList().forEach(media -> {
-            try {
-                mediaService.delete(media.getId());
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to delete recipe media: " + media.getId(), e);
-            }
-        });
-        recipe.getMediaList().clear();
 
-        Set<Media> recipeMedia = dto.getMediaList() == null ? new HashSet<>() :
+        Set<String> keepPublicIds = dto.getMediaList() == null ? new HashSet<>() :
                 dto.getMediaList().stream()
-                        .map(m -> {
-                            Media media = new Media();
-                            media.setPublicId(m.getPublicId());
-                            media.setType(m.getType());
-                            media.setUrl(m.getUrl());
-                            media.setRecipe(recipe);
-                            return media;
-                        })
+                        .map(MediaDTO::getPublicId)
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toSet());
-        recipe.getMediaList().addAll(recipeMedia);
+
+        List<Media> mediaToDelete = new ArrayList<>(recipe.getMediaList());
+        mediaToDelete.removeIf(m -> keepPublicIds.contains(m.getPublicId()));
+
+        for (Media media : mediaToDelete) {
+            try {
+                mediaService.deleteFromCloudinaryOnly(media.getPublicId(), media.getType());
+            } catch (IOException e) {
+                System.err.println("Failed to delete recipe media from Cloudinary: " + media.getPublicId());
+            }
+            recipe.getMediaList().remove(media);
+        }
+
         return repository.save(recipe);
     }
 
