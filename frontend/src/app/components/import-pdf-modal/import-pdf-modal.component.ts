@@ -204,9 +204,16 @@ function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
         }
 
         if (l === 'yield' || l.startsWith('yield')) {
-            const val = lines[i].replace(/yield/i, '').trim() || lines[i + 1] || '';
-            const m = val.match(/\d+/);
-            if (m) servings = parseInt(m[0]);
+            // Pokušaj izvući broj iz istog retka (npr. "Yield 4" ili "Yield: 4 osobe")
+            const sameLineVal = lines[i].replace(/yield/i, '').trim();
+            const sameLineMatch = sameLineVal.match(/\d+/);
+            if (sameLineMatch) {
+                servings = parseInt(sameLineMatch[0]);
+            } else if (lines[i + 1]) {
+                // Vrijednost je na sljedećem retku: "4 osobe", "4 persons", "64" itd.
+                const nextMatch = lines[i + 1].match(/\d+/);
+                if (nextMatch) servings = parseInt(nextMatch[0]);
+            }
         }
     }
 
@@ -456,42 +463,74 @@ export class ImportPdfModalComponent {
      * FIX 5: Izvlači prvu dovoljno veliku rastersku sliku iz PDF-a
      * koristeći pdf.js operatore stranice. Vraća File objekt ili null.
      */
+    /**
+     * Traži prvu veliku rastersku sliku u PDF-u koristeći pdf.js operator list.
+     * Za svaku stranicu prolazi kroz draw operatore, traži paintImageXObject,
+     * zatim renderira SAMO tu stranicu na OffscreenCanvas i izvlači sliku
+     * iz njezinog bounding boxa — zaobilazi problem lazy-load dekodiranja JPEG-a.
+     *
+     * Ako nema slike veće od MIN_SIZE×MIN_SIZE, vraća null.
+     */
     private async extractFirstImageFromPdf(arrayBuffer: ArrayBuffer): Promise<File | null> {
+        const MIN_SIZE = 150; // px — preskoči ikonice i UI elemente
+
         try {
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
             for (let p = 1; p <= pdf.numPages; p++) {
                 const page = await pdf.getPage(p);
-                // Dohvati sve resurse stranice
-                const ops = await page.getOperatorList();
-                const commonObjs = (page as any).commonObjs;
-                const objs       = (page as any).objs;
+                const ops  = await page.getOperatorList();
 
-                // Traži OPS za prikaz slike (paintImageXObject = 85)
+                // Skupi sve pozicije slika na stranici (transform matrica u trenutku drawa)
+                // Operator paintImageXObject (85) uvijek dolazi nakon cm (save/transform)
+                // pa pratimo aktualni transform stack.
+                let hasBigImage = false;
                 for (let i = 0; i < ops.fnArray.length; i++) {
                     if (ops.fnArray[i] !== pdfjsLib.OPS.paintImageXObject) continue;
-
-                    const imgName = ops.argsArray[i][0] as string;
-
-                    // Pokušaj dohvatiti iz commonObjs ili objs
-                    let imgData: any = null;
-                    try {
-                        imgData = commonObjs.get(imgName);
-                    } catch {
-                        try { imgData = objs.get(imgName); } catch { /* nema */ }
-                    }
-
-                    if (!imgData || !imgData.data) continue;
-
-                    const { width, height, data, kind } = imgData;
-
-                    // Preskoči sličice (manje od 100×100)
-                    if (!width || !height || width < 100 || height < 100) continue;
-
-                    // Pretvori u PNG putem OffscreenCanvas
-                    const file = await this.imageDataToFile(data, width, height, kind, imgName);
-                    if (file) return file;
+                    // args: [name, w, h] — w i h su dimenzije u user space, ne pikselima
+                    // Za provjeru veličine koristimo viewport skalu
+                    hasBigImage = true;
+                    break;
                 }
+
+                if (!hasBigImage) continue;
+
+                // Renderiraj cijelu stranicu na OffscreenCanvas pa izvuci bbox slike.
+                // Koristimo 1:1 viewport skalu — dovoljno za prepoznavanje.
+                const viewport = page.getViewport({ scale: 1.5 });
+                const canvas   = new OffscreenCanvas(
+                    Math.round(viewport.width),
+                    Math.round(viewport.height)
+                );
+                const ctx = canvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
+
+                await page.render({ canvasContext: ctx as any, viewport }).promise;
+
+                // Tražimo najveći pravokutni blok koji nije bijel/siv (tj. slika, ne tekst pozadina).
+                // Jednostavniji pristup: isječemo gornji dio stranice gdje se slika tipično nalazi.
+                // Uzimamo gornju trećinu ako je stranica portretna, inače prvu četvrtinu.
+                const cw = canvas.width;
+                const ch = canvas.height;
+                const isPortrait = ch > cw;
+                const cropH = Math.round(isPortrait ? ch * 0.40 : ch * 0.55);
+
+                // Provjeri ima li boja u gornjem isječku (nije sve bijelo/sivo)
+                const imgDataCheck = ctx.getImageData(0, 0, cw, cropH);
+                if (!this.hasColorContent(imgDataCheck.data, cw, cropH)) {
+                    // Nema šarenih piksela — vjerojatno nema fotografije na ovoj stranici
+                    continue;
+                }
+
+                // Izvuci isječak kao File
+                const cropCanvas = new OffscreenCanvas(cw, cropH);
+                const cropCtx    = cropCanvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
+                cropCtx.drawImage(canvas, 0, 0, cw, cropH, 0, 0, cw, cropH);
+
+                // Provjeri minimalnu veličinu
+                if (cw < MIN_SIZE || cropH < MIN_SIZE) continue;
+
+                const blob = await cropCanvas.convertToBlob({ type: 'image/jpeg', quality: 0.88 });
+                return new File([blob], 'recipe-image.jpg', { type: 'image/jpeg' });
             }
         } catch (err) {
             console.warn('Ekstrakcija slike iz PDF-a nije uspjela:', err);
@@ -500,54 +539,27 @@ export class ImportPdfModalComponent {
     }
 
     /**
-     * Pretvara sirove piksele iz pdf.js u PNG File objekt.
-     * kind: 1 = grayscale, 2 = RGB, 3 = RGBA
+     * Vraća true ako pixel data sadrži dovoljno ne-bijelog/ne-sivog sadržaja
+     * da zaključimo da se radi o fotografiji, a ne praznoj pozadini.
      */
-    private async imageDataToFile(
-        data: Uint8ClampedArray | Uint8Array,
-        width: number,
-        height: number,
-        kind: number,
-        name: string
-    ): Promise<File | null> {
-        try {
-            // Uvijek radimo s čistim ArrayBuffer kako bi ImageData konstruktor bio zadovoljan
-            const rgbaBuffer = new ArrayBuffer(width * height * 4);
-            const rgba = new Uint8ClampedArray(rgbaBuffer);
+    private hasColorContent(data: Uint8ClampedArray, width: number, height: number): boolean {
+        const total     = width * height;
+        const sample    = Math.min(total, 5000); // nasumični uzorak
+        const step      = Math.max(1, Math.floor(total / sample));
+        let colorPixels = 0;
 
-            if (kind === 3) {
-                // Već RGBA — kopiraj
-                rgba.set(data.subarray(0, width * height * 4));
-            } else if (kind === 2) {
-                // RGB → RGBA
-                for (let i = 0; i < width * height; i++) {
-                    rgba[i * 4]     = data[i * 3];
-                    rgba[i * 4 + 1] = data[i * 3 + 1];
-                    rgba[i * 4 + 2] = data[i * 3 + 2];
-                    rgba[i * 4 + 3] = 255;
-                }
-            } else if (kind === 1) {
-                // Grayscale → RGBA
-                for (let i = 0; i < width * height; i++) {
-                    const v = data[i];
-                    rgba[i * 4] = rgba[i * 4 + 1] = rgba[i * 4 + 2] = v;
-                    rgba[i * 4 + 3] = 255;
-                }
-            } else {
-                return null;
-            }
-
-            const canvas = new OffscreenCanvas(width, height);
-            const ctx = canvas.getContext('2d')!;
-            // Eksplicitni cast na Uint8ClampedArray<ArrayBuffer> koji TypeScript zahtijeva
-            ctx.putImageData(new ImageData(rgba as unknown as Uint8ClampedArray<ArrayBuffer>, width, height), 0, 0);
-
-            const blob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
-            return new File([blob], `${name}.jpg`, { type: 'image/jpeg' });
-        } catch (err) {
-            console.warn('Pretvorba piksela u File nije uspjela:', err);
-            return null;
+        for (let i = 0; i < total; i += step) {
+            const r = data[i * 4];
+            const g = data[i * 4 + 1];
+            const b = data[i * 4 + 2];
+            // Piksel je "obojen" ako nije bijel (>240) ili siv (r≈g≈b i tamno)
+            const isWhite = r > 240 && g > 240 && b > 240;
+            const isGray  = Math.abs(r - g) < 15 && Math.abs(g - b) < 15;
+            if (!isWhite && !isGray) colorPixels++;
         }
+
+        // Barem 5% piksela mora biti obojena
+        return colorPixels / sample > 0.05;
     }
 
     private groupByLine(items: { str: string; transform: number[] }[]): string[] {

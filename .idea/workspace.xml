@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="pdf import fix">
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/import-pdf-modal/import-pdf-modal.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/import-pdf-modal/import-pdf-modal.component.ts" afterDir="false" />
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="pdf import fix 2">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1779037441961</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="pdf import fix 2">
+      <option name="closed" value="true" />
+      <created>1779037631213</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1779037631213</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,6 +286,7 @@
     <MESSAGE value="media backend cloudinary fix" />
     <MESSAGE value="media backend cloudinary fix 2" />
     <MESSAGE value="pdf import fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="pdf import fix" />
+    <MESSAGE value="pdf import fix 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="pdf import fix 2" />
   </component>
 </project>
