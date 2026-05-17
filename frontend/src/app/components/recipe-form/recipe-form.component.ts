@@ -11,7 +11,6 @@ import { AutocompleteComponent } from '../shared/autocomplete/autocomplete.compo
 import { forkJoin } from 'rxjs';
 import { UnitService } from '../../services/unit.service';
 import { ChangeDetectorRef } from '@angular/core';
-// ── NOVO: Import modal i servis ───────────────────────────────────────────────
 import { ImportRecipeModalComponent } from '../import-recipe-modal/import-recipe-modal.component';
 import { ImportedRecipe } from '../../services/import.service';
 import { ImportPdfModalComponent } from '../import-pdf-modal/import-pdf-modal.component';
@@ -53,10 +52,8 @@ export class RecipeFormComponent implements OnInit {
   submitting = false;
   error = '';
 
-  // ── NOVO: kontrola vidljivosti import modala ───────────────────────────────
   showImportModal = false;
 
-  // ── Mjerne jedinice — hardkodirani redoslijed ──────────────────────────────
   readonly UNITS: string[] = [
     'g', 'dag', 'kg',
     'ml', 'dcl', 'l',
@@ -64,10 +61,8 @@ export class RecipeFormComponent implements OnInit {
     'kom', 'prst', 'pak', 'koc', 'rež', 'list'
   ];
 
-  // Redoslijed mora odgovarati UNITS; imena se popunjavaju iz baze
   unitSymbolNames: { symbol: string; name: string }[] = [];
 
-  // ── Tablica konverzija — hardkodirana ─────────────────────────────────────
   readonly CONVERSIONS: { from: string; to: string }[] = [
     { from: '1000 g',  to: '1 kg'  },
     { from: '10 g',    to: '1 dag' },
@@ -78,7 +73,6 @@ export class RecipeFormComponent implements OnInit {
     { from: '1 š',     to: '240 ml'},
   ];
 
-  // Prikaz tablice konverzija (može se togglati)
   showUnitTables = false;
   showImportPdfModal = false;
 
@@ -185,8 +179,6 @@ export class RecipeFormComponent implements OnInit {
     this.recipeImageFiles = recipe.mediaList?.map(() => null) ?? [];
   }
 
-  // ── NOVO: Import modal handlers ────────────────────────────────────────────
-
   openImportModal() {
     this.showImportModal = true;
     this.cdr.detectChanges();
@@ -197,13 +189,38 @@ export class RecipeFormComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  /**
-   * Poziva se kad modal emitira uvezeni recept.
-   * Resetira formu i popunjava je podacima iz importa.
-   */
   onRecipeImported(imported: ImportedRecipe) {
     this.showImportModal = false;
+    this._fillFormFromImport(imported);
+  }
 
+  /**
+   * Prima novi format emita iz ImportPdfModalComponent:
+   * { recipe: ImportedRecipe; imageFile: File | null }
+   */
+  onRecipeImportedFromPdf(payload: { recipe: ImportedRecipe; imageFile: File | null }) {
+    this.showImportPdfModal = false;
+    this._fillFormFromImport(payload.recipe);
+
+    // FIX 5: Dodaj sliku iz PDF-a u listu slika recepta
+    if (payload.imageFile) {
+      this.recipeImageFiles.push(payload.imageFile);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.recipeImagePreviews.push(e.target?.result as string);
+        this.cdr.detectChanges();
+      };
+      reader.readAsDataURL(payload.imageFile);
+    }
+
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Zajednička logika za popunjavanje forme iz ImportedRecipe objekta.
+   * Koristi se i za URL import i za PDF import.
+   */
+  private _fillFormFromImport(imported: ImportedRecipe) {
     // Resetiraj arrays
     this.ingredientsArray.clear();
     this.stepsArray.clear();
@@ -222,8 +239,6 @@ export class RecipeFormComponent implements OnInit {
 
     // Kategorije
     this.selectedCategoryNames = (imported.categories ?? []).map(c => c.toLowerCase());
-
-    // Dodaj nove kategorije u lokalnu listu ako ne postoje
     this.selectedCategoryNames.forEach(name => {
       if (!this.categoryNames.includes(name)) {
         this.categoryNames.push(name);
@@ -231,9 +246,8 @@ export class RecipeFormComponent implements OnInit {
     });
 
     // Sastojci
-    const validUnit = (unit: string): string => {
-      return this.UNITS.includes(unit) ? unit : 'kom';
-    };
+    const validUnit = (unit: string): string =>
+        this.UNITS.includes(unit) ? unit : 'kom';
 
     imported.ingredients?.forEach(ing => {
       const nameLower = (ing.name ?? '').toLowerCase();
@@ -242,12 +256,10 @@ export class RecipeFormComponent implements OnInit {
         quantityRaw: [ing.quantity ?? '', Validators.required],
         unit: [validUnit(ing.unit ?? 'kom'), Validators.required],
       }));
-      // Dodaj novi sastojak u autocomplete listu
       if (nameLower && !this.ingredientNames.includes(nameLower)) {
         this.ingredientNames.push(nameLower);
       }
     });
-    // Dodaj prazni red za unos
     this.addIngredient();
 
     // Koraci
@@ -260,7 +272,6 @@ export class RecipeFormComponent implements OnInit {
       this.stepImageFiles.push(null);
       this.stepImagePreviews.push(null);
     });
-    // Dodaj prazni korak za unos
     this.addStep();
 
     this.cdr.detectChanges();
@@ -581,11 +592,7 @@ export class RecipeFormComponent implements OnInit {
     if (!raw) return true;
     return this.parseQuantity(raw) === null;
   }
+
   openImportPdfModal()  { this.showImportPdfModal = true;  this.cdr.detectChanges(); }
   closeImportPdfModal() { this.showImportPdfModal = false; this.cdr.detectChanges(); }
-
-  onRecipeImportedFromPdf(imported: ImportedRecipe) {
-    this.showImportPdfModal = false;
-    this.onRecipeImported(imported);
-  }
 }

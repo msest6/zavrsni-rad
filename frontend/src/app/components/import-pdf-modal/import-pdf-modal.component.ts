@@ -23,8 +23,8 @@ const UNIT_MAP: Record<string, string> = {
     'tsp': 'žč', 'teaspoon': 'žč', 'teaspoons': 'žč',
     'tbsp': 'ž',  'tablespoon': 'ž',  'tablespoons': 'ž',
     'cup': 'š', 'cups': 'š',
-    'oz': 'g',   // aproksimacija
-    'lb': 'kg',  // aproksimacija
+    'oz': 'g',
+    'lb': 'kg',
     'piece': 'kom', 'pieces': 'kom', 'pcs': 'kom',
     'clove': 'rež', 'cloves': 'rež',
     'sprig': 'kom', 'sprigs': 'kom',
@@ -46,7 +46,8 @@ function normalizeUnit(raw: string): string {
 }
 
 /**
- * Parsira minute iz teksta poput "30m", "1h 30m", "20 minutes"
+ * FIX 1: Parsira minute iz teksta — case-insensitive za M/H.
+ * Podržava: "30m", "30M", "1h 30m", "20 minutes", "60M"
  */
 function parseMinutes(text: string): number | null {
     if (!text) return null;
@@ -61,12 +62,10 @@ function parseMinutes(text: string): number | null {
 
 /**
  * Parsira jedan redak sastojka.
- * Primjeri: "4 medium eggplants", "1/4 cup tahini", "2 tablespoons lemon juice"
  */
 function parseIngredientLine(line: string): { name: string; quantity: string; unit: string } {
     const s = line.trim();
 
-    // Razlomak + jedinica + naziv: "1/4 cup tahini"
     const fracUnit = s.match(/^(\d+\/\d+)\s+([a-zA-Zž]+\.?)\s+(.+)$/i);
     if (fracUnit) {
         const unit = normalizeUnit(fracUnit[2]);
@@ -75,7 +74,6 @@ function parseIngredientLine(line: string): { name: string; quantity: string; un
         }
     }
 
-    // Broj + jedinica + naziv: "4 tablespoons lemon juice", "200 g flour"
     const numUnit = s.match(/^([\d.,\/]+)\s+([a-zA-Zž]+\.?)\s+(.+)$/i);
     if (numUnit) {
         const maybeUnit = numUnit[2].toLowerCase().replace(/\.$/, '');
@@ -85,13 +83,11 @@ function parseIngredientLine(line: string): { name: string; quantity: string; un
         }
     }
 
-    // Razlomak + naziv (bez jedinice): "1/4 fresh basil"
     const fracOnly = s.match(/^(\d+\/\d+)\s+(.+)$/);
     if (fracOnly) {
         return { quantity: fracOnly[1], unit: 'kom', name: fracOnly[2].toLowerCase() };
     }
 
-    // Broj + naziv (bez jedinice): "4 medium eggplants"
     const numOnly = s.match(/^([\d.,]+)\s+(.+)$/);
     if (numOnly) {
         return { quantity: numOnly[1], unit: 'kom', name: numOnly[2].toLowerCase() };
@@ -102,9 +98,6 @@ function parseIngredientLine(line: string): { name: string; quantity: string; un
 
 /**
  * Glavni parser — prima sav tekst izvučen iz PDF-a i vraća ImportedRecipe.
- *
- * Strategija: traži ključne odjeljke ("Ingredients", "Directions", metapodatke)
- * i parsira ih redak po redak.
  */
 function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
     const lines = rawText
@@ -119,28 +112,51 @@ function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
         l.length > 2
     ) ?? fileName.replace(/\.pdf$/i, '');
 
-    // ── Kategorije: redovi neposredno iza naslova (npr. "Other, Side") ───────
-    const categories: string[] = [];
     const titleIdx = lines.indexOf(title);
-    if (titleIdx >= 0 && titleIdx + 1 < lines.length) {
-        const catLine = lines[titleIdx + 1];
-        // Kategorijalinija ne smije biti URL ili broj
-        if (!catLine.startsWith('http') && !catLine.match(/^\d/)) {
-            catLine.split(',').forEach(c => {
+
+    // ── FIX 4: Kategorije — sve između naslova i prvog retka koji izgleda
+    //    kao ocjena ("★", "* * *"), URL, datum ili poznati odjeljak ──────────
+    const categories: string[] = [];
+    if (titleIdx >= 0) {
+        for (let i = titleIdx + 1; i < lines.length; i++) {
+            const l = lines[i];
+            // Zaustavi se na ocjeni, URL-u, datumu, ili poznatim odjeljcima
+            if (
+                l.match(/^[★✩\*]/) ||
+                l.startsWith('http') ||
+                l.match(/^\d{2}\/\d{2}\/\d{4}/) ||
+                /^(ingredients|directions|steps|method|description|nutrition|preparation|cooking|total|yield)/i.test(l)
+            ) break;
+
+            // Svaki redak može biti jedna kategorija ili više odvojenih zarezom
+            l.split(',').forEach(c => {
                 const t = c.trim().toLowerCase();
-                if (t && t.length < 40) categories.push(t);
+                if (t && t.length < 40 && !t.match(/^\d/)) {
+                    categories.push(t);
+                }
             });
         }
     }
 
-    // ── Opis: redak koji počinje s " ili koji je dugačak opis ─────────────────
+    // ── FIX 2: Opis — provjeri sve uobičajene varijante navodnika ─────────
+    // Podržani znakovi: " " « » \u201C \u201D \u00AB \u00BB i obični "
     let description = '';
     const descLine = lines.find(l =>
-        (l.startsWith('"') || l.startsWith('"')) &&
-        l.length > 20
+            l.length > 20 && (
+                l.startsWith('\u201C') || // "
+                l.startsWith('\u201E') || // „
+                l.startsWith('\u00AB') || // «
+                l.startsWith('"')         // ASCII "
+            )
     );
     if (descLine) {
-        description = descLine.replace(/^[""]|[""]$/g, '').trim();
+        description = descLine.replace(/^[\u201C\u201E\u00AB"]|[\u201D\u00BB"]$/g, '').trim();
+    } else {
+        // Fallback: redak iza "Description" labele ako postoji
+        const descIdx = lines.findIndex(l => /^description$/i.test(l));
+        if (descIdx >= 0 && descIdx + 1 < lines.length) {
+            description = lines[descIdx + 1];
+        }
     }
 
     // ── Metapodaci: Preparation time / Cooking time / Yield ──────────────────
@@ -151,17 +167,40 @@ function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
     for (let i = 0; i < lines.length; i++) {
         const l = lines[i].toLowerCase();
 
+        // FIX 1: Ako postoji samo "total time" bez prep/cook, koristi ga kao cooking_time
         if (l.includes('preparation time') || l.includes('prep time')) {
-            // Vrijednost može biti isti redak ili sljedeći
             const val = lines[i].replace(/preparation time|prep time/i, '').trim()
                 || lines[i + 1] || '';
             preparation_time = parseMinutes(val);
+            // Ako vrijednost nije na istom retku, uzmi sljedeći
+            if (!preparation_time && lines[i + 1]) {
+                preparation_time = parseMinutes(lines[i + 1]);
+            }
         }
 
         if (l.includes('cooking time') || l.includes('cook time')) {
             const val = lines[i].replace(/cooking time|cook time/i, '').trim()
                 || lines[i + 1] || '';
             cooking_time = parseMinutes(val);
+            if (!cooking_time && lines[i + 1]) {
+                cooking_time = parseMinutes(lines[i + 1]);
+            }
+        }
+
+        // FIX 1: "Total time" → spremi kao cooking_time ako prep/cook nisu pronađeni
+        if (l.includes('total time')) {
+            const val = lines[i].replace(/total time/i, '').trim()
+                || lines[i + 1] || '';
+            const totalParsed = parseMinutes(val);
+            if (!totalParsed && lines[i + 1]) {
+                const fromNext = parseMinutes(lines[i + 1]);
+                if (fromNext) {
+                    // Pohrani privremeno; primijeni poslije ako nema prep/cook
+                    if (!cooking_time) cooking_time = fromNext;
+                }
+            } else if (totalParsed && !cooking_time) {
+                cooking_time = totalParsed;
+            }
         }
 
         if (l === 'yield' || l.startsWith('yield')) {
@@ -169,30 +208,12 @@ function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
             const m = val.match(/\d+/);
             if (m) servings = parseInt(m[0]);
         }
-
-        // Alternativni format: "Preparation time\n20m" (sljedeći redak je vrijednost)
-        if (l === 'preparation time' && lines[i + 1]) {
-            preparation_time = parseMinutes(lines[i + 1]);
-        }
-        if ((l === 'cooking time') && lines[i + 1]) {
-            cooking_time = parseMinutes(lines[i + 1]);
-        }
-        if (l === 'yield' && lines[i + 1]) {
-            const m = lines[i + 1].match(/\d+/);
-            if (m) servings = parseInt(m[0]);
-        }
     }
 
     // ── Odjeljci: Ingredients i Directions ───────────────────────────────────
-    const ingredientsIdx = lines.findIndex(l =>
-        /^ingredients$/i.test(l)
-    );
-    const directionsIdx = lines.findIndex(l =>
-        /^directions$|^steps$|^method$/i.test(l)
-    );
-    const sourcesIdx = lines.findIndex(l =>
-        /^sources?$/i.test(l)
-    );
+    const ingredientsIdx = lines.findIndex(l => /^ingredients$/i.test(l));
+    const directionsIdx  = lines.findIndex(l => /^directions$|^steps$|^method$/i.test(l));
+    const sourcesIdx     = lines.findIndex(l => /^sources?$/i.test(l));
 
     // ── Sastojci ──────────────────────────────────────────────────────────────
     const ingredients: ImportedRecipe['ingredients'] = [];
@@ -200,9 +221,7 @@ function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
         const end = directionsIdx > ingredientsIdx ? directionsIdx : lines.length;
         for (let i = ingredientsIdx + 1; i < end; i++) {
             const l = lines[i];
-            // Preskoči prazne retke, URL-ove, metapodatke
             if (!l || l.startsWith('http') || /^(preparation|cooking|total|yield)/i.test(l)) continue;
-            // Preskoči retke koji izgledaju kao naslovi odjeljaka
             if (/^(directions|steps|method|sources?|nutrition)/i.test(l)) break;
             ingredients.push(parseIngredientLine(l));
         }
@@ -213,16 +232,11 @@ function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
     if (directionsIdx >= 0) {
         const end = sourcesIdx > directionsIdx ? sourcesIdx : lines.length;
         let stepNum = 1;
-        // Koraci mogu biti numerirani (1, 2, 3...) ili plain tekst
         for (let i = directionsIdx + 1; i < end; i++) {
             const l = lines[i];
             if (!l || l.startsWith('http') || /^\d{2}\/\d{2}\/\d{4}/.test(l)) continue;
             if (/^(sources?|nutrition)/i.test(l)) break;
-
-            // Preskoči same redne brojeve "1", "2" koji se pojavljuju odvojeno
             if (/^\d+$/.test(l)) continue;
-
-            // Ukloni vodeći broj ako postoji: "1 Preheat oven..."
             const cleaned = l.replace(/^\d+[\.\)]\s*/, '').trim();
             if (cleaned.length > 5) {
                 steps.push({ stepNumber: stepNum++, description: cleaned });
@@ -346,7 +360,7 @@ function parsePdfText(rawText: string, fileName: string): ImportedRecipe {
   `],
 })
 export class ImportPdfModalComponent {
-    @Output() imported = new EventEmitter<ImportedRecipe>();
+    @Output() imported = new EventEmitter<{ recipe: ImportedRecipe; imageFile: File | null }>();
     @Output() closed   = new EventEmitter<void>();
 
     selectedFile: File | null = null;
@@ -397,7 +411,14 @@ export class ImportPdfModalComponent {
         this.cdr.detectChanges();
 
         try {
-            const text = await this.extractTextFromPdf(this.selectedFile);
+            const arrayBuffer = await this.selectedFile.arrayBuffer();
+
+            // Paralelno: tekst + slika
+            const [text, imageFile] = await Promise.all([
+                this.extractTextFromPdf(arrayBuffer.slice(0)),
+                this.extractFirstImageFromPdf(arrayBuffer.slice(0)),
+            ]);
+
             const recipe = parsePdfText(text, this.selectedFile.name);
 
             if (!recipe.title || (recipe.ingredients.length === 0 && recipe.steps.length === 0)) {
@@ -409,7 +430,9 @@ export class ImportPdfModalComponent {
 
             this.loading = false;
             this.cdr.detectChanges();
-            this.imported.emit(recipe);
+
+            // FIX 5: Emitiramo i recept i sliku
+            this.imported.emit({ recipe, imageFile });
         } catch (err: any) {
             this.error = 'Greška pri čitanju PDF-a. Provjerite je li datoteka ispravna.';
             this.loading = false;
@@ -417,18 +440,12 @@ export class ImportPdfModalComponent {
         }
     }
 
-    /**
-     * Čita sve stranice PDF-a pomoću pdf.js i vraća spojeni tekst.
-     * pdf.js mora biti dostupan kao globalni skript (window.pdfjsLib).
-     */
-    private async extractTextFromPdf(file: File): Promise<string> {
-        const arrayBuffer = await file.arrayBuffer();
+    private async extractTextFromPdf(arrayBuffer: ArrayBuffer): Promise<string> {
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         const pageTexts: string[] = [];
         for (let p = 1; p <= pdf.numPages; p++) {
             const page = await pdf.getPage(p);
             const content = await page.getTextContent();
-            // Spajamo items u redove po y-koordinati
             const lines = this.groupByLine(content.items as any[]);
             pageTexts.push(lines.join('\n'));
         }
@@ -436,17 +453,107 @@ export class ImportPdfModalComponent {
     }
 
     /**
-     * Grupira tekstualne elemente pdf.js-a u logičke retke po y-koordinati.
+     * FIX 5: Izvlači prvu dovoljno veliku rastersku sliku iz PDF-a
+     * koristeći pdf.js operatore stranice. Vraća File objekt ili null.
      */
+    private async extractFirstImageFromPdf(arrayBuffer: ArrayBuffer): Promise<File | null> {
+        try {
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+            for (let p = 1; p <= pdf.numPages; p++) {
+                const page = await pdf.getPage(p);
+                // Dohvati sve resurse stranice
+                const ops = await page.getOperatorList();
+                const commonObjs = (page as any).commonObjs;
+                const objs       = (page as any).objs;
+
+                // Traži OPS za prikaz slike (paintImageXObject = 85)
+                for (let i = 0; i < ops.fnArray.length; i++) {
+                    if (ops.fnArray[i] !== pdfjsLib.OPS.paintImageXObject) continue;
+
+                    const imgName = ops.argsArray[i][0] as string;
+
+                    // Pokušaj dohvatiti iz commonObjs ili objs
+                    let imgData: any = null;
+                    try {
+                        imgData = commonObjs.get(imgName);
+                    } catch {
+                        try { imgData = objs.get(imgName); } catch { /* nema */ }
+                    }
+
+                    if (!imgData || !imgData.data) continue;
+
+                    const { width, height, data, kind } = imgData;
+
+                    // Preskoči sličice (manje od 100×100)
+                    if (!width || !height || width < 100 || height < 100) continue;
+
+                    // Pretvori u PNG putem OffscreenCanvas
+                    const file = await this.imageDataToFile(data, width, height, kind, imgName);
+                    if (file) return file;
+                }
+            }
+        } catch (err) {
+            console.warn('Ekstrakcija slike iz PDF-a nije uspjela:', err);
+        }
+        return null;
+    }
+
+    /**
+     * Pretvara sirove piksele iz pdf.js u PNG File objekt.
+     * kind: 1 = grayscale, 2 = RGB, 3 = RGBA
+     */
+    private async imageDataToFile(
+        data: Uint8ClampedArray | Uint8Array,
+        width: number,
+        height: number,
+        kind: number,
+        name: string
+    ): Promise<File | null> {
+        try {
+            let rgba: Uint8ClampedArray;
+
+            if (kind === 3) {
+                // Već RGBA
+                rgba = data instanceof Uint8ClampedArray ? data : new Uint8ClampedArray(data);
+            } else if (kind === 2) {
+                // RGB → RGBA
+                rgba = new Uint8ClampedArray(width * height * 4);
+                for (let i = 0; i < width * height; i++) {
+                    rgba[i * 4]     = data[i * 3];
+                    rgba[i * 4 + 1] = data[i * 3 + 1];
+                    rgba[i * 4 + 2] = data[i * 3 + 2];
+                    rgba[i * 4 + 3] = 255;
+                }
+            } else if (kind === 1) {
+                // Grayscale → RGBA
+                rgba = new Uint8ClampedArray(width * height * 4);
+                for (let i = 0; i < width * height; i++) {
+                    const v = data[i];
+                    rgba[i * 4] = rgba[i * 4 + 1] = rgba[i * 4 + 2] = v;
+                    rgba[i * 4 + 3] = 255;
+                }
+            } else {
+                return null;
+            }
+
+            const canvas = new OffscreenCanvas(width, height);
+            const ctx = canvas.getContext('2d')!;
+            ctx.putImageData(new ImageData(rgba, width, height), 0, 0);
+
+            const blob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
+            return new File([blob], `${name}.jpg`, { type: 'image/jpeg' });
+        } catch (err) {
+            console.warn('Pretvorba piksela u File nije uspjela:', err);
+            return null;
+        }
+    }
+
     private groupByLine(items: { str: string; transform: number[] }[]): string[] {
         if (!items.length) return [];
-
-        // Sortiraj po y (transform[5]) silazno (PDF koordinate rastu prema gore)
         const sorted = [...items].sort((a, b) => b.transform[5] - a.transform[5]);
-
         const rows: { y: number; texts: string[] }[] = [];
-        const THRESHOLD = 3; // px tolerancija za isti redak
-
+        const THRESHOLD = 3;
         for (const item of sorted) {
             const y = Math.round(item.transform[5]);
             const last = rows[rows.length - 1];
@@ -456,7 +563,6 @@ export class ImportPdfModalComponent {
                 rows.push({ y, texts: [item.str] });
             }
         }
-
         return rows.map(r => r.texts.join(' ').trim()).filter(Boolean);
     }
 }
