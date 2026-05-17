@@ -504,7 +504,7 @@ export class ImportPdfModalComponent {
                 );
                 const ctx = canvas.getContext('2d') as OffscreenCanvasRenderingContext2D;
 
-                await page.render({ canvasContext: ctx as any, viewport }).promise;
+                await page.render({ canvasContext: ctx as any, viewport, canvas: canvas as any }).promise;
 
                 // Tražimo najveći pravokutni blok koji nije bijel/siv (tj. slika, ne tekst pozadina).
                 // Jednostavniji pristup: isječemo gornji dio stranice gdje se slika tipično nalazi.
