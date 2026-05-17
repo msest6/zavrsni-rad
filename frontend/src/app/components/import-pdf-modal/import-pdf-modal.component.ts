@@ -511,14 +511,15 @@ export class ImportPdfModalComponent {
         name: string
     ): Promise<File | null> {
         try {
-            let rgba: Uint8ClampedArray;
+            // Uvijek radimo s čistim ArrayBuffer kako bi ImageData konstruktor bio zadovoljan
+            const rgbaBuffer = new ArrayBuffer(width * height * 4);
+            const rgba = new Uint8ClampedArray(rgbaBuffer);
 
             if (kind === 3) {
-                // Već RGBA
-                rgba = data instanceof Uint8ClampedArray ? data : new Uint8ClampedArray(data);
+                // Već RGBA — kopiraj
+                rgba.set(data.subarray(0, width * height * 4));
             } else if (kind === 2) {
                 // RGB → RGBA
-                rgba = new Uint8ClampedArray(width * height * 4);
                 for (let i = 0; i < width * height; i++) {
                     rgba[i * 4]     = data[i * 3];
                     rgba[i * 4 + 1] = data[i * 3 + 1];
@@ -527,7 +528,6 @@ export class ImportPdfModalComponent {
                 }
             } else if (kind === 1) {
                 // Grayscale → RGBA
-                rgba = new Uint8ClampedArray(width * height * 4);
                 for (let i = 0; i < width * height; i++) {
                     const v = data[i];
                     rgba[i * 4] = rgba[i * 4 + 1] = rgba[i * 4 + 2] = v;
@@ -539,7 +539,8 @@ export class ImportPdfModalComponent {
 
             const canvas = new OffscreenCanvas(width, height);
             const ctx = canvas.getContext('2d')!;
-            ctx.putImageData(new ImageData(rgba, width, height), 0, 0);
+            // Eksplicitni cast na Uint8ClampedArray<ArrayBuffer> koji TypeScript zahtijeva
+            ctx.putImageData(new ImageData(rgba as unknown as Uint8ClampedArray<ArrayBuffer>, width, height), 0, 0);
 
             const blob = await canvas.convertToBlob({ type: 'image/jpeg', quality: 0.85 });
             return new File([blob], `${name}.jpg`, { type: 'image/jpeg' });
