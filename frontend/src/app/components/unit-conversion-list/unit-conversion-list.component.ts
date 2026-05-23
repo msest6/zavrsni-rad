@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+    FormsModule, ReactiveFormsModule, FormBuilder, FormGroup,
+    Validators, AbstractControl, ValidationErrors
+} from '@angular/forms';
 import {
     UnitConversionService,
     UnitConversionDto,
@@ -8,6 +11,66 @@ import {
     UnitDto,
     IngredientDto,
 } from '../../services/unit-conversion.service';
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+/** Parsira "1/2", "0,5" ili "0.5" → number. Vraća NaN ako ne može. */
+function parseRatio(raw: string): number {
+    if (!raw) return NaN;
+    const s = raw.trim().replace(',', '.');
+    if (s.includes('/')) {
+        const [num, den] = s.split('/').map(Number);
+        if (!den) return NaN;
+        return num / den;
+    }
+    return parseFloat(s);
+}
+
+function gcd(a: number, b: number): number {
+    a = Math.abs(a); b = Math.abs(b);
+    while (b > 0.0001) { [a, b] = [b, a % b]; }
+    return a;
+}
+
+/** Prikazuje double kao razlomak ako je "ljepše", inače kao decimal. */
+export function toFraction(value: number, maxDen = 64): string {
+    if (!isFinite(value) || value === 0) return String(value);
+
+    const sign = value < 0 ? '-' : '';
+    const abs = Math.abs(value);
+    const whole = Math.floor(abs);
+    const frac = abs - whole;
+
+    if (frac < 0.0001) return sign + whole;
+
+    let bestNum = 1, bestDen = 1, bestErr = Infinity;
+    for (let d = 2; d <= maxDen; d++) {
+        const n = Math.round(frac * d);
+        const err = Math.abs(frac - n / d);
+        if (err < bestErr) { bestErr = err; bestNum = n; bestDen = d; }
+    }
+
+    // prihvatamo razlomak samo ako je greška mala (< 0.0005)
+    if (bestErr > 0.0005) {
+        return sign + (whole ? `${whole} ${bestNum}/${bestDen}` : `${parseFloat(value.toFixed(4))}`);
+    }
+
+    const g = gcd(bestNum, bestDen);
+    bestNum /= g; bestDen /= g;
+
+    if (whole) return `${sign}${whole} ${bestNum}/${bestDen}`;
+    return `${sign}${bestNum}/${bestDen}`;
+}
+
+// ── Validator ─────────────────────────────────────────────────────────────────
+
+function ratioValidator(control: AbstractControl): ValidationErrors | null {
+    const val = parseRatio(control.value ?? '');
+    if (isNaN(val) || val <= 0) return { invalidRatio: true };
+    return null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 @Component({
     selector: 'app-unit-conversion-list',
@@ -26,6 +89,9 @@ export class UnitConversionListComponent implements OnInit {
     form!: FormGroup;
     submitting = false;
 
+    // izloži helper templatu
+    toFraction = toFraction;
+
     constructor(
         private service: UnitConversionService,
         private fb: FormBuilder,
@@ -35,14 +101,14 @@ export class UnitConversionListComponent implements OnInit {
 
     ngOnInit() {
         this.form = this.fb.group({
-            fromUnitId: [null, Validators.required],
-            toUnitId: [null, Validators.required],
-            ratio: [null, [Validators.required, Validators.min(0.000001)]],
+            fromUnitId:   [null, Validators.required],
+            toUnitId:     [null, Validators.required],
+            ratioRaw:     ['',   [Validators.required, ratioValidator]],
             ingredientId: [null],
         });
 
-        this.service.getAllUnits().subscribe(units => (this.units = units));
-        this.service.getAllIngredients().subscribe(ingredients => (this.ingredients = ingredients));
+        this.service.getAllUnits().subscribe(u => (this.units = u));
+        this.service.getAllIngredients().subscribe(i => (this.ingredients = i));
 
         this.service.getAll().subscribe(data => {
             this.zone.run(() => {
@@ -72,9 +138,9 @@ export class UnitConversionListComponent implements OnInit {
         this.editingId = conv.id;
         this.showForm = false;
         this.form.patchValue({
-            fromUnitId: conv.fromUnit?.id ?? null,
-            toUnitId: conv.toUnit?.id ?? null,
-            ratio: conv.ratio,
+            fromUnitId:   conv.fromUnit?.id ?? null,
+            toUnitId:     conv.toUnit?.id ?? null,
+            ratioRaw:     toFraction(conv.ratio),   // prikaži kao razlomak pri uređivanju
             ingredientId: conv.ingredient?.id ?? null,
         });
     }
@@ -128,9 +194,9 @@ export class UnitConversionListComponent implements OnInit {
     private buildDTO(): UnitConversionCreateDto {
         const v = this.form.value;
         return {
-            fromUnitId: v.fromUnitId,
-            toUnitId: v.toUnitId,
-            ratio: v.ratio,
+            fromUnitId:   v.fromUnitId,
+            toUnitId:     v.toUnitId,
+            ratio:        parseRatio(v.ratioRaw),   // uvijek šaljemo broj backendu
             ingredientId: v.ingredientId || null,
         };
     }

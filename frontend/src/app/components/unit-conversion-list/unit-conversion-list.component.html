@@ -26,8 +26,16 @@
             </div>
 
             <div class="field">
-                <label>Omjer (ratio) *</label>
-                <input type="number" formControlName="ratio" placeholder="npr. 240" step="any" min="0" />
+                <label>Omjer *</label>
+                <input
+                        type="text"
+                        formControlName="ratioRaw"
+                        placeholder="npr. 240 ili 1/2 ili 0,5"
+                        [class.input-error]="form.get('ratioRaw')?.invalid && form.get('ratioRaw')?.touched"
+                />
+                <span class="field-hint" *ngIf="form.get('ratioRaw')?.invalid && form.get('ratioRaw')?.touched">
+          Unesite broj (npr. 240, 0.5, 0,5 ili 1/2)
+        </span>
             </div>
 
             <div class="field">
@@ -41,7 +49,7 @@
         </div>
         <div class="form-row-actions">
             <button type="button" class="btn btn-outline" (click)="showForm = false">Odustani</button>
-            <button type="submit" class="btn btn-primary" [disabled]="submitting">Spremi</button>
+            <button type="submit" class="btn btn-primary" [disabled]="submitting || form.invalid">Spremi</button>
         </div>
     </form>
 </div>
@@ -69,7 +77,7 @@
             <tr *ngIf="editingId !== conv.id">
                 <td>{{ getUnitLabel(conv.fromUnit) }}</td>
                 <td>{{ getUnitLabel(conv.toUnit) }}</td>
-                <td>{{ conv.ratio }}</td>
+                <td class="ratio-cell">{{ toFraction(conv.ratio) }}</td>
                 <td>{{ getIngredientLabel(conv.ingredient) }}</td>
                 <td class="actions-cell">
                     <button class="btn btn-sm btn-outline" (click)="startEdit(conv)">Uredi</button>
@@ -101,7 +109,15 @@
 
                             <div class="field">
                                 <label>Omjer *</label>
-                                <input type="number" formControlName="ratio" step="any" min="0" />
+                                <input
+                                        type="text"
+                                        formControlName="ratioRaw"
+                                        placeholder="npr. 240 ili 1/2 ili 0,5"
+                                        [class.input-error]="form.get('ratioRaw')?.invalid && form.get('ratioRaw')?.touched"
+                                />
+                                <span class="field-hint" *ngIf="form.get('ratioRaw')?.invalid && form.get('ratioRaw')?.touched">
+                    Unesite broj (npr. 240, 0.5, 0,5 ili 1/2)
+                  </span>
                             </div>
 
                             <div class="field">
@@ -115,7 +131,7 @@
                         </div>
                         <div class="form-row-actions">
                             <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Odustani</button>
-                            <button type="submit" class="btn btn-sm btn-primary" [disabled]="submitting">Spremi</button>
+                            <button type="submit" class="btn btn-sm btn-primary" [disabled]="submitting || form.invalid">Spremi</button>
                         </div>
                     </form>
                 </td>
