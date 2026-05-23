@@ -99,7 +99,7 @@ export class RecipeImportService {
         const proxyUrl = `${this.PROXY}${encodeURIComponent(url)}`;
 
         const html = await firstValueFrom(
-            this.http.get(proxyUrl, { responseType: 'text' })
+            this.http.get(proxyUrl, { responseType: 'text' as const })
         );
 
         if (!html) throw new Error('Nije moguće dohvatiti stranicu.');
@@ -144,8 +144,15 @@ export class RecipeImportService {
         return {
             title: this.stripHtml(data.name ?? ''),
             description: this.stripHtml(data.description ?? ''),
-            preparation_time: parseMinutes(data.prepTime ? this.isoDurationToText(data.prepTime) : ''),
-            cooking_time: parseMinutes(data.cookTime ? this.isoDurationToText(data.cookTime) : ''),
+            preparation_time: null,
+            cooking_time: parseMinutes(data.cookTime
+                ? this.isoDurationToText(data.cookTime)
+                : data.prepTime
+                    ? this.isoDurationToText(data.prepTime)
+                    : data.totalTime
+                        ? this.isoDurationToText(data.totalTime)
+                        : ''
+            ),
             servings: this.parseServings(data.recipeYield),
             source_url: url,
             categories,
@@ -304,5 +311,20 @@ export class RecipeImportService {
         const div = document.createElement('div');
         div.innerHTML = html;
         return div.textContent ?? div.innerText ?? '';
+    }
+    fetchImageAsFile(imageUrl: string): Observable<File | null> {
+        const proxyUrl = `${this.PROXY}${encodeURIComponent(imageUrl)}`;
+        return from(
+            this.http.get(proxyUrl, { responseType: 'blob' as const }).toPromise()
+                .then((blob) => {
+                    if (!blob) return null;
+                    const ext = blob.type.includes('png') ? 'png' : 'jpg';
+                    return new File([blob], `recipe-image.${ext}`, { type: blob.type });
+                })
+                .catch((err) => {
+                    console.warn('Nije moguće dohvatiti sliku kroz proxy:', err);
+                    return null;
+                })
+        );
     }
 }

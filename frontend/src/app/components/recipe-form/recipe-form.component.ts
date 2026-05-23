@@ -12,7 +12,7 @@ import { forkJoin } from 'rxjs';
 import { UnitService } from '../../services/unit.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { ImportRecipeModalComponent } from '../import-recipe-modal/import-recipe-modal.component';
-import { ImportedRecipe } from '../../services/import.service';
+import {ImportedRecipe, RecipeImportService} from '../../services/import.service';
 import { ImportPdfModalComponent } from '../import-pdf-modal/import-pdf-modal.component';
 
 @Component({
@@ -86,7 +86,8 @@ export class RecipeFormComponent implements OnInit {
       private categoryService: CategoryService,
       private mediaService: MediaService,
       private unitService: UnitService,
-      private cdr: ChangeDetectorRef
+      private cdr: ChangeDetectorRef,
+      private importService: RecipeImportService
   ) {}
 
   ngOnInit() {
@@ -276,11 +277,8 @@ export class RecipeFormComponent implements OnInit {
     this.addStep();
 
     if (imported.imageUrl) {
-      try {
-        const response = await fetch(imported.imageUrl);
-        const blob = await response.blob();
-        const ext = blob.type.includes('png') ? 'png' : 'jpg';
-        const file = new File([blob], `recipe-image.${ext}`, { type: blob.type });
+      this.importService.fetchImageAsFile(imported.imageUrl).subscribe(file => {
+        if (!file) return;
         this.recipeImageFiles.push(file);
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -288,9 +286,7 @@ export class RecipeFormComponent implements OnInit {
           this.cdr.detectChanges();
         };
         reader.readAsDataURL(file);
-      } catch (err) {
-        console.warn('Nije moguće dohvatiti sliku recepta:', err);
-      }
+      });
     }
 
     this.cdr.detectChanges();
