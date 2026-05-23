@@ -1,0 +1,132 @@
+<div class="page-header">
+    <h1>Konverzije jedinica</h1>
+    <button class="btn btn-primary" (click)="openCreate()">+ Nova konverzija</button>
+</div>
+
+<!-- CREATE FORM -->
+<div *ngIf="showForm" class="inline-form">
+    <h3>Nova konverzija</h3>
+    <form [formGroup]="form" (ngSubmit)="create()">
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Iz jedinice *</label>
+                <select formControlName="fromUnitId">
+                    <option [ngValue]="null" disabled>Odaberi jedinicu</option>
+                    <option *ngFor="let u of units" [ngValue]="u.id">{{ getUnitLabel(u) }}</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>U jedinicu *</label>
+                <select formControlName="toUnitId">
+                    <option [ngValue]="null" disabled>Odaberi jedinicu</option>
+                    <option *ngFor="let u of units" [ngValue]="u.id">{{ getUnitLabel(u) }}</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Omjer (ratio) *</label>
+                <input type="number" formControlName="ratio" placeholder="npr. 240" step="any" min="0" />
+            </div>
+
+            <div class="field">
+                <label>Sastojak <span class="hint">(prazno = generička)</span></label>
+                <select formControlName="ingredientId">
+                    <option [ngValue]="null">Generička konverzija</option>
+                    <option *ngFor="let i of ingredients" [ngValue]="i.id">{{ i.name }}</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="form-row-actions">
+            <button type="button" class="btn btn-outline" (click)="showForm = false">Odustani</button>
+            <button type="submit" class="btn btn-primary" [disabled]="submitting">Spremi</button>
+        </div>
+    </form>
+</div>
+
+<!-- LOADING -->
+<div *ngIf="loading" class="state-msg"><div class="spinner"></div></div>
+
+<!-- TABLE -->
+<div *ngIf="!loading" class="conv-table-wrap">
+    <table class="conv-table">
+        <thead>
+        <tr>
+            <th>Iz jedinice</th>
+            <th>U jedinicu</th>
+            <th>Omjer</th>
+            <th>Sastojak</th>
+            <th>Akcije</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let conv of conversions">
+
+            <!-- VIEW ROW -->
+            <tr *ngIf="editingId !== conv.id">
+                <td>{{ getUnitLabel(conv.fromUnit) }}</td>
+                <td>{{ getUnitLabel(conv.toUnit) }}</td>
+                <td>{{ conv.ratio }}</td>
+                <td>{{ getIngredientLabel(conv.ingredient) }}</td>
+                <td class="actions-cell">
+                    <button class="btn btn-sm btn-outline" (click)="startEdit(conv)">Uredi</button>
+                    <button class="btn btn-sm btn-danger" (click)="delete(conv.id)">Obriši</button>
+                </td>
+            </tr>
+
+            <!-- EDIT ROW -->
+            <tr *ngIf="editingId === conv.id" class="edit-row">
+                <td colspan="5">
+                    <form [formGroup]="form" (ngSubmit)="save(conv.id)" class="edit-inline-form">
+                        <div class="form-grid">
+
+                            <div class="field">
+                                <label>Iz jedinice *</label>
+                                <select formControlName="fromUnitId">
+                                    <option [ngValue]="null" disabled>Odaberi jedinicu</option>
+                                    <option *ngFor="let u of units" [ngValue]="u.id">{{ getUnitLabel(u) }}</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label>U jedinicu *</label>
+                                <select formControlName="toUnitId">
+                                    <option [ngValue]="null" disabled>Odaberi jedinicu</option>
+                                    <option *ngFor="let u of units" [ngValue]="u.id">{{ getUnitLabel(u) }}</option>
+                                </select>
+                            </div>
+
+                            <div class="field">
+                                <label>Omjer *</label>
+                                <input type="number" formControlName="ratio" step="any" min="0" />
+                            </div>
+
+                            <div class="field">
+                                <label>Sastojak</label>
+                                <select formControlName="ingredientId">
+                                    <option [ngValue]="null">Generička konverzija</option>
+                                    <option *ngFor="let i of ingredients" [ngValue]="i.id">{{ i.name }}</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-row-actions">
+                            <button type="button" class="btn btn-sm btn-outline" (click)="cancelEdit()">Odustani</button>
+                            <button type="submit" class="btn btn-sm btn-primary" [disabled]="submitting">Spremi</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+
+        </ng-container>
+
+        <tr *ngIf="conversions.length === 0">
+            <td colspan="5" class="empty-row">Nema konverzija.</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
