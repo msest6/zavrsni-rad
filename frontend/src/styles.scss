@@ -1346,3 +1346,98 @@ body {
 .unit-tables--stacked {
   grid-template-columns: 1fr;
 }
+
+/* ── Konverzije jedinica ─────────────────────────────────────────────────── */
+
+.conv-table-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.conv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.conv-table thead tr {
+  background: var(--cream-dark);
+}
+
+.conv-table th {
+  text-align: left;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+}
+
+.conv-table td {
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.conv-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.conv-table tbody tr:hover {
+  background: var(--cream);
+}
+
+.conv-table .ratio-cell {
+  font-weight: 600;
+  font-family: 'DM Sans', monospace;
+  color: var(--brown);
+}
+
+.conv-table .actions-cell {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  white-space: nowrap;
+}
+
+.conv-table .empty-row {
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 2rem;
+}
+
+/* Edit row unutar tablice */
+.conv-table .edit-row td {
+  background: var(--cream);
+  padding: 1rem 1.25rem;
+}
+
+.edit-inline-form .form-grid {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Validacija ratio polja */
+.input-error {
+  border-color: var(--red) !important;
+}
+
+.field-hint {
+  font-size: 0.78rem;
+  color: var(--red);
+  margin-top: 0.15rem;
+}
+
+@media (max-width: 768px) {
+  .conv-table th:nth-child(4),
+  .conv-table td:nth-child(4) { display: none; } /* sakrij Sastojak */
+
+  .edit-inline-form .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
