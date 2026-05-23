@@ -1,14 +1,15 @@
 <nav class="navbar">
-  <a routerLink="/" class="navbar-brand">
-    <span class="brand-icon">&#x2767;</span>
-    <span class="brand-name">Recepti</span>
-  </a>
-  <button class="menu-toggle" (click)="toggleMenu()" [class.open]="menuOpen">
-    <span></span><span></span><span></span>
-  </button>
-  <div class="navbar-links" [class.open]="menuOpen">
-    <a routerLink="/recipes" routerLinkActive="active" (click)="menuOpen=false">Recepti</a>
-    <a routerLink="/ingredients" routerLinkActive="active" (click)="menuOpen=false">Sastojci</a>
-    <a routerLink="/categories" routerLinkActive="active" (click)="menuOpen=false">Kategorije</a>
-  </div>
+    <a routerLink="/" class="navbar-brand">
+        <span class="brand-icon">&#x2767;</span>
+        <span class="brand-name">Recepti</span>
+    </a>
+    <button class="menu-toggle" (click)="toggleMenu()" [class.open]="menuOpen">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="navbar-links" [class.open]="menuOpen">
+        <a routerLink="/recipes" routerLinkActive="active" (click)="menuOpen=false">Recepti</a>
+        <a routerLink="/ingredients" routerLinkActive="active" (click)="menuOpen=false">Sastojci</a>
+        <a routerLink="/categories" routerLinkActive="active" (click)="menuOpen=false">Kategorije</a>
+        <a routerLink="/unit-conversions" routerLinkActive="active" (click)="menuOpen=false">Konverzije</a>
+    </div>
 </nav>
