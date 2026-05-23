@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="pdf import fix 3">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="unit conversion implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/shared/navbar/navbar.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/unit-conversion.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/unit-conversion.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +119,7 @@
       <workItem from="1778752792652" duration="407000" />
       <workItem from="1778753209685" duration="649000" />
       <workItem from="1778753867946" duration="2967000" />
-      <workItem from="1779539500525" duration="2428000" />
+      <workItem from="1779539500525" duration="2667000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -273,7 +271,14 @@
       <option name="project" value="LOCAL" />
       <updated>1779038270281</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL−00022" summary="unit conversion implementation">
+      <option name="closed" value="true" />
+      <created>1779543201596</created>
+      <option name="number" value="LOCAL−00022" />
+      <option name="presentableId" value="LOCAL−00022" />
+      <updated>1779543201596</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -300,6 +305,7 @@
     <MESSAGE value="pdf import fix" />
     <MESSAGE value="pdf import fix 2" />
     <MESSAGE value="pdf import fix 3" />
-    <option name="LAST_COMMIT_MESSAGE" value="pdf import fix 3" />
+    <MESSAGE value="unit conversion implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="unit conversion implementation" />
   </component>
 </project>

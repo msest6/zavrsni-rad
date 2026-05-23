@@ -72,4 +72,7 @@ public class UnitConversionService {
         return conversionRepo.findByFromUnit_IdAndIngredientIsNullOrFromUnit_IdAndIngredient_Id(
                 fromUnitId, fromUnitId, ingredientId);
     }
+    public List<UnitConversion> findAll() {
+        return conversionRepo.findAll();
+    }
 }
