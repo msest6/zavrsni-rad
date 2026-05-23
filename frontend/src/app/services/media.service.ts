@@ -31,7 +31,7 @@ export class MediaService {
   uploadToRecipeFromUrl(imageUrl: string, recipeId: number): Observable<any> {
     const query = `imageUrl=${encodeURIComponent(imageUrl)}&recipeId=${recipeId}`;
     return this.http.post<any>(
-        `${this.url}/media/upload/recipe/from-url?${query}`,
+        `${this.url}/upload/recipe/from-url?${query}`,
         {}
     );
   }
