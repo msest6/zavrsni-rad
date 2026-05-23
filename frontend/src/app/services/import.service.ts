@@ -20,6 +20,7 @@ export interface ImportedRecipe {
         stepNumber: number;
         description: string;
     }[];
+    imageUrl?: string | null;
 }
 
 // Mapiranje Coolinarika jedinica na vaše simbole
@@ -150,7 +151,24 @@ export class RecipeImportService {
             categories,
             ingredients,
             steps,
+            imageUrl: this.extractImageUrl(data), // NOVO
         };
+    }
+
+    private extractImageUrl(data: any): string | null {
+        const img = data.image;
+        if (!img) return null;
+
+        // image može biti string, objekt ili array
+        if (typeof img === 'string') return img;
+        if (Array.isArray(img)) {
+            const first = img[0];
+            if (typeof first === 'string') return first;
+            if (first?.url) return first.url;
+        }
+        if (img.url) return img.url;
+
+        return null;
     }
 
     /**
@@ -258,7 +276,10 @@ export class RecipeImportService {
         const title = doc.querySelector('h1')?.textContent?.trim() ?? '';
         const description =
             doc.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-
+        const imageUrl =
+            doc.querySelector('meta[property="og:image"]')?.getAttribute('content') ??
+            doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content') ??
+            null;
         const ingredients: { name: string; quantity: string; unit: string }[] = [];
         doc.querySelectorAll('[class*="ingredient"]').forEach(el => {
             const text = el.textContent?.trim() ?? '';
@@ -275,7 +296,7 @@ export class RecipeImportService {
         return {
             title, description,
             preparation_time: null, cooking_time: null, servings: null,
-            source_url: url, categories: [], ingredients, steps,
+            source_url: url, categories: [], ingredients, steps, imageUrl,
         };
     }
 

@@ -221,7 +221,7 @@ export class RecipeFormComponent implements OnInit {
    * Zajednička logika za popunjavanje forme iz ImportedRecipe objekta.
    * Koristi se i za URL import i za PDF import.
    */
-  private _fillFormFromImport(imported: ImportedRecipe) {
+  private async _fillFormFromImport(imported: ImportedRecipe) {
     // Resetiraj arrays
     this.ingredientsArray.clear();
     this.stepsArray.clear();
@@ -274,6 +274,24 @@ export class RecipeFormComponent implements OnInit {
       this.stepImagePreviews.push(null);
     });
     this.addStep();
+
+    if (imported.imageUrl) {
+      try {
+        const response = await fetch(imported.imageUrl);
+        const blob = await response.blob();
+        const ext = blob.type.includes('png') ? 'png' : 'jpg';
+        const file = new File([blob], `recipe-image.${ext}`, { type: blob.type });
+        this.recipeImageFiles.push(file);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.recipeImagePreviews.push(e.target?.result as string);
+          this.cdr.detectChanges();
+        };
+        reader.readAsDataURL(file);
+      } catch (err) {
+        console.warn('Nije moguće dohvatiti sliku recepta:', err);
+      }
+    }
 
     this.cdr.detectChanges();
   }

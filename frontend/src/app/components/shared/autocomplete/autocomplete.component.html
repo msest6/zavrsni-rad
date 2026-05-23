@@ -19,14 +19,6 @@
       (keydown)="onKeydown($event)"
       autocomplete="off"
     />
-    <button
-      type="button"
-      class="ac-add-btn"
-      *ngIf="inputText.trim() && isNew()"
-      (click)="addNew()"
-      title="Dodaj novi unos">
-      + Dodaj "{{ inputText.trim() }}"
-    </button>
   </div>
 
   <!-- Dropdown -->

@@ -1,9 +1,23 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import jsPDF from 'jspdf';
 import { Recipe } from '../models/models';
+import { environment } from '../../environments/environment';
+
+interface UnitConversionDto {
+    id: number;
+    fromUnit: { id: number; name: string; symbol: string };
+    toUnit:   { id: number; name: string; symbol: string };
+    ratio: number;
+    ingredient?: { id: number; name: string } | null;
+}
 
 @Injectable({ providedIn: 'root' })
 export class PdfExportService {
+
+    constructor(private http: HttpClient) {}
+
     private readonly UNITS_INFO = [
         { symbol: 'g',    name: 'gram' },
         { symbol: 'dag',  name: 'dekagram' },
@@ -64,10 +78,61 @@ export class PdfExportService {
         doc.addFont('Roboto-Italic.ttf', 'Roboto', 'italic');
     }
 
+    // ── Dohvati konverzije specifične za sastojke u receptu ───────────────────
+
+    private async fetchIngredientConversions(recipe: Recipe): Promise<UnitConversionDto[]> {
+        // Skupi unique ingredientId-ove iz recepta
+        const ingredientIds = [
+            ...new Set(
+                (recipe.ingredients ?? [])
+                    .map(ri => ri.ingredient?.id)
+                    .filter((id): id is number => id != null)
+            )
+        ];
+
+        if (!ingredientIds.length) return [];
+
+        // Pozovi backend za svaki sastojak i skupi rezultate
+        const results = await Promise.all(
+            ingredientIds.map(ingredientId =>
+                firstValueFrom(
+                    this.http.get<UnitConversionDto[]>(
+                        `${environment.apiUrl}/unit-conversions?ingredientId=${ingredientId}`
+                    )
+                )
+            )
+        );
+
+        // Spoji sve, dedupliciraj po id-u, zadrži samo one s ingredient-om
+        const seen = new Set<number>();
+        return results
+            .flat()
+            .filter(c => c.ingredient != null)
+            .filter(c => {
+                if (seen.has(c.id)) return false;
+                seen.add(c.id);
+                return true;
+            });
+    }
+
+    private formatConversionRow(conv: UnitConversionDto): { from: string; to: string; label?: string } {
+        const ratio = parseFloat(conv.ratio.toFixed(4));
+        return {
+            from: `1 ${conv.fromUnit.symbol}`,
+            to:   `${ratio} ${conv.toUnit.symbol}`,
+            label: conv.ingredient?.name,
+        };
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+
     async exportRecipe(recipe: Recipe): Promise<void> {
         const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
         await this.loadFont(doc);
+
+        // Dohvati ingredient-specifične konverzije prije generiranja PDF-a
+        const ingredientConversions = await this.fetchIngredientConversions(recipe);
 
         const pageW = 210;
         const pageH = 297;
@@ -78,7 +143,6 @@ export class PdfExportService {
         const checkPage = (neededHeight: number) => {
             if (y + neededHeight > pageH - margin) {
                 doc.addPage();
-                // Re-apply background on new page
                 doc.setFillColor(252, 250, 247);
                 doc.rect(0, 0, pageW, pageH, 'F');
                 y = margin;
@@ -119,8 +183,8 @@ export class PdfExportService {
         doc.setTextColor(100, 100, 100);
         const metaParts: string[] = [];
         if (recipe.preparation_time) metaParts.push(`Priprema: ${recipe.preparation_time} min`);
-        if (recipe.cooking_time) metaParts.push(`Kuhanje: ${recipe.cooking_time} min`);
-        if (recipe.servings) metaParts.push(`Obroci: ${recipe.servings}`);
+        if (recipe.cooking_time)     metaParts.push(`Kuhanje: ${recipe.cooking_time} min`);
+        if (recipe.servings)         metaParts.push(`Obroci: ${recipe.servings}`);
         if (metaParts.length) {
             doc.text(metaParts.join('    '), margin, y);
             y += 8;
@@ -137,7 +201,8 @@ export class PdfExportService {
             y += descLines.length * 5 + 8;
         }
 
-        // Ingredients heading
+        // ── Sastojci ──────────────────────────────────────────────────────────
+
         checkPage(20);
         doc.setFont('Roboto', 'bold');
         doc.setFontSize(13);
@@ -161,13 +226,83 @@ export class PdfExportService {
                 doc.setTextColor(30, 30, 30);
                 doc.text(ri.ingredient?.name ?? '', margin + 3, y);
                 doc.setTextColor(100, 100, 100);
-                doc.text(`${this.formatQuantity(ri.quantity)} ${ri.unit?.symbol ?? ''}`, pageW - margin - 3, y, { align: 'right' });
+                doc.text(
+                    `${this.formatQuantity(ri.quantity)} ${ri.unit?.symbol ?? ''}`,
+                    pageW - margin - 3, y, { align: 'right' }
+                );
                 y += 6.5;
             });
         }
         y += 6;
-        // Unit tables heading
+
+        // ── Koraci pripreme ───────────────────────────────────────────────────
+
         checkPage(20);
+        doc.setFont('Roboto', 'bold');
+        doc.setFontSize(13);
+        doc.setTextColor(30, 30, 30);
+        doc.text('Priprema', margin, y);
+        y += 5;
+        doc.setDrawColor(220, 215, 205);
+        doc.setLineWidth(0.3);
+        doc.line(margin, y, pageW - margin, y);
+        y += 7;
+
+        const sorted = recipe.steps
+            ? [...recipe.steps].sort((a, b) => a.stepNumber - b.stepNumber)
+            : [];
+
+        sorted.forEach((step) => {
+            const descLines = doc.splitTextToSize(step.description, contentW - 14);
+            checkPage(descLines.length * 5.5 + 14);
+
+            doc.setFillColor(180, 120, 60);
+            doc.circle(margin + 4, y - 1, 4, 'F');
+            doc.setFont('Roboto', 'bold');
+            doc.setFontSize(9);
+            doc.setTextColor(255, 255, 255);
+            doc.text(String(step.stepNumber), margin + 4, y - 0.5, { align: 'center' });
+
+            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(10);
+            doc.setTextColor(30, 30, 30);
+            doc.text(descLines, margin + 12, y);
+            y += descLines.length * 5.5 + 8;
+
+            if (step.ingredients?.length) {
+                doc.setFont('Roboto', 'italic');
+                doc.setFontSize(9);
+                doc.setTextColor(100, 100, 100);
+                const ingNames = step.ingredients.map(i => i.name).join(', ');
+                const ingLines = doc.splitTextToSize(`Koristi: ${ingNames}`, contentW - 14);
+                checkPage(ingLines.length * 4.5 + 4);
+                doc.text(ingLines, margin + 12, y);
+                y += ingLines.length * 4.5 + 4;
+            }
+        });
+
+        // Footer (source URL)
+        if (recipe.source_url) {
+            checkPage(12);
+            doc.setDrawColor(220, 215, 205);
+            doc.setLineWidth(0.3);
+            doc.line(margin, y, pageW - margin, y);
+            y += 5;
+            doc.setFont('Roboto', 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Izvor: ${recipe.source_url}`, margin, y);
+            y += 10;
+        }
+
+        // ── Mjerne jedinice i konverzije (na dnu, nakon svega ostalog) ────────
+
+        checkPage(20);
+        doc.setDrawColor(180, 120, 60);
+        doc.setLineWidth(0.5);
+        doc.line(margin, y, pageW - margin, y);
+        y += 6;
+
         doc.setFont('Roboto', 'bold');
         doc.setFontSize(11);
         doc.setTextColor(30, 30, 30);
@@ -178,24 +313,36 @@ export class PdfExportService {
         doc.line(margin, y, pageW - margin, y);
         y += 5;
 
-// Dvije tablice jedna pokraj druge
-        const colMid = margin + contentW / 2 + 4;
+        // Pripremi sve konverzije za prikaz:
+        // generičke + ingredient-specific (grupirane po sastojku)
+        const genericConvRows = this.CONVERSIONS_INFO;
 
-// — lijevo: konverzije —
+        const ingredientConvRows = ingredientConversions.map(c => this.formatConversionRow(c));
+
+        // Grupiraj po imenu sastojka
+        const byIngredient = new Map<string, typeof ingredientConvRows>();
+        for (const row of ingredientConvRows) {
+            const key = row.label ?? 'Ostalo';
+            if (!byIngredient.has(key)) byIngredient.set(key, []);
+            byIngredient.get(key)!.push(row);
+        }
+
+        const colMid = margin + contentW / 2 + 4;
+        const rowH   = 5.5;
+
+        // Zaglavlja stupaca
         doc.setFont('Roboto', 'bold');
         doc.setFontSize(8.5);
         doc.setTextColor(120, 100, 80);
         doc.text('KONVERZIJE', margin, y);
-
-// — desno: mjerne jedinice —
         doc.text('MJERNE JEDINICE', colMid, y);
         y += 4;
 
-        const rowH = 5.5;
-        const maxRows = Math.max(this.CONVERSIONS_INFO.length, this.UNITS_INFO.length);
-        checkPage(maxRows * rowH + 8);
+        // Generičke konverzije (lijevo) + mjerne jedinice (desno) — paralelno
+        const maxGenericRows = Math.max(genericConvRows.length, this.UNITS_INFO.length);
+        checkPage(maxGenericRows * rowH + 8);
 
-        this.CONVERSIONS_INFO.forEach((c, i) => {
+        genericConvRows.forEach((c, i) => {
             const rowY = y + i * rowH;
             if (i % 2 === 0) {
                 doc.setFillColor(245, 242, 237);
@@ -227,72 +374,46 @@ export class PdfExportService {
             doc.text(u.name, colMid + 14, rowY);
         });
 
-        y += maxRows * rowH + 8;
+        y += maxGenericRows * rowH + 6;
 
-        // Steps heading
-        checkPage(20);
-        doc.setFont('Roboto', 'bold');
-        doc.setFontSize(13);
-        doc.setTextColor(30, 30, 30);
-        doc.text('Priprema', margin, y);
-        y += 5;
-        doc.setDrawColor(220, 215, 205);
-        doc.setLineWidth(0.3);
-        doc.line(margin, y, pageW - margin, y);
-        y += 7;
+        // ── Konverzije specifične za sastojke (ispod, po grupama) ─────────────
 
-        const sorted = recipe.steps
-            ? [...recipe.steps].sort((a, b) => a.stepNumber - b.stepNumber)
-            : [];
+        if (byIngredient.size > 0) {
+            for (const [ingredientName, rows] of byIngredient) {
+                checkPage(rows.length * rowH + 14);
 
-        sorted.forEach((step) => {
-            const descLines = doc.splitTextToSize(step.description, contentW - 14);
-            checkPage(descLines.length * 5.5 + 14);
+                // Podnaslov grupe
+                doc.setFont('Roboto', 'bold');
+                doc.setFontSize(8.5);
+                doc.setTextColor(120, 100, 80);
+                doc.text(`KONVERZIJE — ${ingredientName.toUpperCase()}`, margin, y);
+                y += 4;
 
-            // Step circle badge
-            doc.setFillColor(180, 120, 60);
-            doc.circle(margin + 4, y - 1, 4, 'F');
-            doc.setFont('Roboto', 'bold');
-            doc.setFontSize(9);
-            doc.setTextColor(255, 255, 255);
-            doc.text(String(step.stepNumber), margin + 4, y - 0.5, { align: 'center' });
+                rows.forEach((c, i) => {
+                    const rowY = y + i * rowH;
+                    if (i % 2 === 0) {
+                        doc.setFillColor(245, 242, 237);
+                        doc.rect(margin, rowY - 3.5, contentW / 2 - 4, rowH, 'F');
+                    }
+                    doc.setFont('Roboto', 'bold');
+                    doc.setFontSize(9);
+                    doc.setTextColor(30, 30, 30);
+                    doc.text(c.from, margin + 2, rowY);
+                    doc.setFont('Roboto', 'normal');
+                    doc.setTextColor(120, 100, 80);
+                    doc.text('→', margin + 22, rowY);
+                    doc.setTextColor(30, 30, 30);
+                    doc.text(c.to, margin + 28, rowY);
+                });
 
-            // Step text
-            doc.setFont('Roboto', 'normal');
-            doc.setFontSize(10);
-            doc.setTextColor(30, 30, 30);
-            doc.text(descLines, margin + 12, y);
-            y += descLines.length * 5.5 + 8;
-
-            // Step ingredients
-            if (step.ingredients?.length) {
-                doc.setFont('Roboto', 'italic');
-                doc.setFontSize(9);
-                doc.setTextColor(100, 100, 100);
-                const ingNames = step.ingredients.map(i => i.name).join(', ');
-                const ingLines = doc.splitTextToSize(`Koristi: ${ingNames}`, contentW - 14);
-                checkPage(ingLines.length * 4.5 + 4);
-                doc.text(ingLines, margin + 12, y);
-                y += ingLines.length * 4.5 + 4;
+                y += rows.length * rowH + 5;
             }
-        });
-
-        // Footer
-        if (recipe.source_url) {
-            checkPage(12);
-            doc.setDrawColor(220, 215, 205);
-            doc.setLineWidth(0.3);
-            doc.line(margin, y, pageW - margin, y);
-            y += 5;
-            doc.setFont('Roboto', 'normal');
-            doc.setFontSize(8);
-            doc.setTextColor(100, 100, 100);
-            doc.text(`Izvor: ${recipe.source_url}`, margin, y);
         }
 
         const filename = recipe.title.toLowerCase().replace(/\s+/g, '-') + '.pdf';
         doc.save(filename);
     }
+
     private formatQuantity(value: number): string {
         const fractions: { decimal: number; label: string }[] = [
             { decimal: 1/8,  label: '1/8' },

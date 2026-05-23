@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="unit conversion implementation 7">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="import fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/shared/autocomplete/autocomplete.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/shared/autocomplete/autocomplete.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/pdf-export.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/pdf-export.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +123,7 @@
       <workItem from="1778753209685" duration="649000" />
       <workItem from="1778753867946" duration="2967000" />
       <workItem from="1779539500525" duration="3905000" />
-      <workItem from="1779545704596" duration="4954000" />
+      <workItem from="1779545704596" duration="6176000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -323,14 +324,20 @@
       <option name="presentableId" value="LOCAL−00028" />
       <updated>1779556988805</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL−00029" summary="import fix">
+      <option name="closed" value="true" />
+      <created>1779558591893</created>
+      <option name="number" value="LOCAL−00029" />
+      <option name="presentableId" value="LOCAL−00029" />
+      <updated>1779558591893</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="db update in application prod properties" />
     <MESSAGE value="frontend budget extension" />
     <MESSAGE value="frontend deploy fix" />
     <MESSAGE value="frontend to backend url fix" />
@@ -355,6 +362,7 @@
     <MESSAGE value="unit conversion implementation 5" />
     <MESSAGE value="unit conversion implementation 6" />
     <MESSAGE value="unit conversion implementation 7" />
-    <option name="LAST_COMMIT_MESSAGE" value="unit conversion implementation 7" />
+    <MESSAGE value="import fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="import fix" />
   </component>
 </project>
