@@ -81,38 +81,27 @@ export class PdfExportService {
     // ── Dohvati konverzije specifične za sastojke u receptu ───────────────────
 
     private async fetchIngredientConversions(recipe: Recipe): Promise<UnitConversionDto[]> {
-        // Skupi unique ingredientId-ove iz recepta
-        const ingredientIds = [
-            ...new Set(
-                (recipe.ingredients ?? [])
-                    .map(ri => ri.ingredient?.id)
-                    .filter((id): id is number => id != null)
-            )
-        ];
-
-        if (!ingredientIds.length) return [];
-
-        // Pozovi backend za svaki sastojak i skupi rezultate
-        const results = await Promise.all(
-            ingredientIds.map(ingredientId =>
-                firstValueFrom(
-                    this.http.get<UnitConversionDto[]>(
-                        `${environment.apiUrl}/unit-conversions?ingredientId=${ingredientId}`
-                    )
-                )
-            )
+        const ingredientIds = new Set(
+            (recipe.ingredients ?? [])
+                .map(ri => ri.ingredient?.id)
+                .filter((id): id is number => id != null)
         );
 
-        // Spoji sve, dedupliciraj po id-u, zadrži samo one s ingredient-om
+        if (!ingredientIds.size) return [];
+
+        // Dohvati sve konverzije
+        const all = await firstValueFrom(
+            this.http.get<UnitConversionDto[]>(`${environment.apiUrl}/unit-conversions`)
+        );
+
+        // Zadrži samo one specifične za sastojke koji su u receptu
         const seen = new Set<number>();
-        return results
-            .flat()
-            .filter(c => c.ingredient != null)
-            .filter(c => {
-                if (seen.has(c.id)) return false;
-                seen.add(c.id);
-                return true;
-            });
+        return all.filter(c => {
+            if (!c.ingredient || !ingredientIds.has(c.ingredient.id)) return false;
+            if (seen.has(c.id)) return false;
+            seen.add(c.id);
+            return true;
+        });
     }
 
     private formatConversionRow(conv: UnitConversionDto): { from: string; to: string; label?: string } {
