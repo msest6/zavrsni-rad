@@ -32,8 +32,10 @@ function gcd(a: number, b: number): number {
     return a;
 }
 
-/** Prikazuje double kao razlomak ako je "ljepše", inače kao decimal. */
-export function toFraction(value: number, maxDen = 64): string {
+const ALLOWED_DENS = [2, 3, 4, 5, 8];
+
+/** Prikazuje double kao razlomak (nazivnik samo 2,3,4,5,8), inače 4 decimale. */
+export function toFraction(value: number): string {
     if (!isFinite(value) || value === 0) return String(value);
 
     const sign = value < 0 ? '-' : '';
@@ -43,16 +45,17 @@ export function toFraction(value: number, maxDen = 64): string {
 
     if (frac < 0.0001) return sign + whole;
 
-    let bestNum = 1, bestDen = 1, bestErr = Infinity;
-    for (let d = 2; d <= maxDen; d++) {
+    let bestNum = 0, bestDen = 1, bestErr = Infinity;
+    for (const d of ALLOWED_DENS) {
         const n = Math.round(frac * d);
         const err = Math.abs(frac - n / d);
         if (err < bestErr) { bestErr = err; bestNum = n; bestDen = d; }
     }
 
-    // prihvatamo razlomak samo ako je greška mala (< 0.0005)
-    if (bestErr > 0.0005) {
-        return sign + (whole ? `${whole} ${bestNum}/${bestDen}` : `${parseFloat(value.toFixed(4))}`);
+    // prihvatamo razlomak samo ako je greška < 0.005 (0.5%)
+    if (bestErr > 0.005 || bestNum === 0) {
+        const decimal = parseFloat(abs.toFixed(4));
+        return sign + decimal;
     }
 
     const g = gcd(bestNum, bestDen);
@@ -89,7 +92,6 @@ export class UnitConversionListComponent implements OnInit {
     form!: FormGroup;
     submitting = false;
 
-    // izloži helper templatu
     toFraction = toFraction;
 
     constructor(
@@ -140,7 +142,7 @@ export class UnitConversionListComponent implements OnInit {
         this.form.patchValue({
             fromUnitId:   conv.fromUnit?.id ?? null,
             toUnitId:     conv.toUnit?.id ?? null,
-            ratioRaw:     toFraction(conv.ratio),   // prikaži kao razlomak pri uređivanju
+            ratioRaw:     toFraction(conv.ratio),
             ingredientId: conv.ingredient?.id ?? null,
         });
     }
@@ -196,7 +198,7 @@ export class UnitConversionListComponent implements OnInit {
         return {
             fromUnitId:   v.fromUnitId,
             toUnitId:     v.toUnitId,
-            ratio:        parseRatio(v.ratioRaw),   // uvijek šaljemo broj backendu
+            ratio:        parseRatio(v.ratioRaw),
             ingredientId: v.ingredientId || null,
         };
     }
