@@ -76,6 +76,7 @@ export class RecipeFormComponent implements OnInit {
   showUnitTables = false;
   showImportPdfModal = false;
   savingIngredient: Set<number> = new Set();
+  private pendingImageUrl: string | null = null;
 
   constructor(
       private fb: FormBuilder,
@@ -276,18 +277,7 @@ export class RecipeFormComponent implements OnInit {
     });
     this.addStep();
 
-    if (imported.imageUrl) {
-      this.importService.fetchImageAsFile(imported.imageUrl).subscribe(file => {
-        if (!file) return;
-        this.recipeImageFiles.push(file);
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.recipeImagePreviews.push(e.target?.result as string);
-          this.cdr.detectChanges();
-        };
-        reader.readAsDataURL(file);
-      });
-    }
+    this.pendingImageUrl = imported.imageUrl ?? null;
 
     this.cdr.detectChanges();
   }
@@ -597,6 +587,18 @@ export class RecipeFormComponent implements OnInit {
         await this.mediaService.uploadToRecipe(file, savedRecipe.id).toPromise();
       } catch (err) {
         console.error('Greška pri uploadu slike recepta:', err);
+      }
+    }
+    if (this.pendingImageUrl) {
+      try {
+        await this.mediaService.uploadToRecipeFromUrl(
+            this.pendingImageUrl,
+            savedRecipe.id
+        ).toPromise();
+      } catch (err) {
+        console.error('Greška pri uploadu slike s URL-a:', err);
+      } finally {
+        this.pendingImageUrl = null;
       }
     }
   }

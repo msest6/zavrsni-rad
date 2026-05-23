@@ -37,4 +37,11 @@ public class MediaController {
             @RequestParam("recipeId") Long recipeId) throws IOException {
         return ResponseEntity.ok(mediaService.uploadToRecipe(file, recipeId));
     }
+
+    @PostMapping("/upload/recipe/from-url")
+    public ResponseEntity<Media> uploadToRecipeFromUrl(
+            @RequestParam("imageUrl") String imageUrl,
+            @RequestParam("recipeId") Long recipeId) throws IOException {
+        return ResponseEntity.ok(mediaService.uploadToRecipeFromUrl(imageUrl, recipeId));
+    }
 }

@@ -129,4 +129,40 @@ public class MediaService {
 
         return mediaRepository.save(media);
     }
+
+    public Media uploadToRecipeFromUrl(String imageUrl, Long recipeId) throws IOException {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Recipe not found: " + recipeId));
+
+        // Preuzmi sliku s URL-a
+        java.net.URL url = new java.net.URL(imageUrl);
+        java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0");
+        connection.setConnectTimeout(10000);
+        connection.setReadTimeout(10000);
+
+        byte[] imageBytes;
+        try (java.io.InputStream is = connection.getInputStream()) {
+            imageBytes = is.readAllBytes();
+        }
+
+        String contentType = connection.getContentType();
+        String mediaType = (contentType != null && contentType.startsWith("video")) ? "video" : "image";
+
+        Map uploadResult = cloudinary.uploader().upload(
+                imageBytes,
+                ObjectUtils.asMap(
+                        "folder", "recepti/recepti",
+                        "resource_type", mediaType
+                )
+        );
+
+        Media media = new Media();
+        media.setUrl((String) uploadResult.get("secure_url"));
+        media.setPublicId((String) uploadResult.get("public_id"));
+        media.setType(mediaType);
+        media.setRecipe(recipe);
+
+        return mediaRepository.save(media);
+    }
 }

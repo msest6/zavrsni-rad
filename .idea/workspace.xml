@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="import fix 2">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="import fix 3">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/MediaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/controller/MediaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/MediaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/MediaService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/import.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/services/media.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +123,7 @@
       <workItem from="1778753209685" duration="649000" />
       <workItem from="1778753867946" duration="2967000" />
       <workItem from="1779539500525" duration="3905000" />
-      <workItem from="1779545704596" duration="7024000" />
+      <workItem from="1779545704596" duration="7924000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -336,14 +338,20 @@
       <option name="presentableId" value="LOCAL−00030" />
       <updated>1779559805615</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL−00031" summary="import fix 3">
+      <option name="closed" value="true" />
+      <created>1779560698442</created>
+      <option name="number" value="LOCAL−00031" />
+      <option name="presentableId" value="LOCAL−00031" />
+      <updated>1779560698442</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="frontend deploy fix" />
     <MESSAGE value="frontend to backend url fix" />
     <MESSAGE value="frontend env files" />
     <MESSAGE value="frontend angular.json production fix" />
@@ -368,6 +376,7 @@
     <MESSAGE value="unit conversion implementation 7" />
     <MESSAGE value="import fix" />
     <MESSAGE value="import fix 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="import fix 2" />
+    <MESSAGE value="import fix 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="import fix 3" />
   </component>
 </project>

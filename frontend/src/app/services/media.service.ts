@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Media } from '../models/models';
 import {environment} from "../../environments/environment";
@@ -26,5 +26,13 @@ export class MediaService {
     formData.append('file', file);
     formData.append('recipeId', recipeId.toString());
     return this.http.post(`${this.url}/upload/recipe`, formData);
+  }
+
+  uploadToRecipeFromUrl(imageUrl: string, recipeId: number): Observable<any> {
+    const query = `imageUrl=${encodeURIComponent(imageUrl)}&recipeId=${recipeId}`;
+    return this.http.post<any>(
+        `${this.url}/media/upload/recipe/from-url?${query}`,
+        {}
+    );
   }
 }
