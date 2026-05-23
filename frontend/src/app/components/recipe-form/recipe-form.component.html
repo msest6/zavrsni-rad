@@ -103,8 +103,11 @@
         <h2>Sastojci *</h2>
         <div formArrayName="ingredients" class="ingredient-rows">
             <div *ngFor="let ctrl of ingredientsArray.controls; let i = index"
-                 [formGroupName]="i" class="ingredient-row">
-
+                 [formGroupName]="i" class="ingredient-row" [class.ingredient-row--parse-warn]="isIngredientParseFallback(i)">
+                <span *ngIf="isIngredientParseFallback(i)"
+                      class="parse-warn-badge"
+                      title="Parsiranje količine nije uspjelo — provjerite i ispravite ručno"> ⚠️
+                </span>
                 <div class="flex-2">
                     <app-autocomplete
                             [options]="ingredientNames"
@@ -128,7 +131,16 @@
                 <select formControlName="unit" class="flex-1 ing-input">
                     <option *ngFor="let u of UNITS" [value]="u">{{ u }}</option>
                 </select>
-
+                <button
+                        *ngIf="isIngredientNew(i) && i < ingredientsArray.length - 1"
+                        type="button"
+                        class="btn-save-ingredient"
+                        [disabled]="savingIngredient.has(i)"
+                        (click)="saveIngredientToDb(i)"
+                        title="Spremi '{{ asGroup(ctrl).get('ingredientName')?.value }}' u bazu sastojaka">
+                    {{ savingIngredient.has(i) ? '...' : '💾' }}
+                </button>
+                <div *ngIf="!isIngredientNew(i) || i === ingredientsArray.length - 1" class="btn-save-placeholder"></div>
                 <button *ngIf="i < ingredientsArray.length - 1"
                         type="button" class="btn-remove" (click)="removeIngredient(i)">&#x2715;</button>
                 <div *ngIf="i === ingredientsArray.length - 1" class="btn-remove-placeholder"></div>
@@ -226,9 +238,15 @@
     <section class="form-section">
         <h2>Izvor (neobavezno)</h2>
         <div class="form-grid">
-            <div class="field">
+            <div class="field full">
                 <label>URL</label>
-                <input type="url" formControlName="source_url" placeholder="https://..." />
+                <textarea
+                        formControlName="source_url"
+                        rows="1"
+                        placeholder="https://..."
+                        class="url-textarea"
+                        (input)="autoGrow($event)">
+            </textarea>
             </div>
         </div>
     </section>

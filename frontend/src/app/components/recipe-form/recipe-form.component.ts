@@ -75,6 +75,7 @@ export class RecipeFormComponent implements OnInit {
 
   showUnitTables = false;
   showImportPdfModal = false;
+  savingIngredient: Set<number> = new Set();
 
   constructor(
       private fb: FormBuilder,
@@ -413,8 +414,8 @@ export class RecipeFormComponent implements OnInit {
           .map((preview, i) => {
             if (this.recipeImageFiles[i] === null && preview) {
               const previewUrl: string = preview;
-              const found = this.originalRecipe?.mediaList?.find(
-                  m => m.url === previewUrl
+              const found = (this.originalRecipe?.mediaList ?? []).find(
+                  (m: Media) => m.url === previewUrl
               );
               return found ?? null;
             }
@@ -502,10 +503,11 @@ export class RecipeFormComponent implements OnInit {
       if (existing) {
         ids.push(existing.id);
       } else {
+        // Auto-create (za step sastojke koji nemaju UI gumb, i za submit)
         const created = await this.ingredientService.create({ name: lower }).toPromise();
         if (created) {
           this.allIngredients.push(created);
-          this.ingredientNames.push(lower);
+          this.ingredientNames = [...this.ingredientNames, lower];
           ids.push(created.id);
         }
       }
@@ -595,4 +597,41 @@ export class RecipeFormComponent implements OnInit {
 
   openImportPdfModal()  { this.showImportPdfModal = true;  this.cdr.detectChanges(); }
   closeImportPdfModal() { this.showImportPdfModal = false; this.cdr.detectChanges(); }
+  isIngredientParseFallback(i: number): boolean {
+    const ctrl = this.ingredientsArray.at(i);
+    const name = String(ctrl.get('ingredientName')?.value ?? '').trim();
+    const qty  = String(ctrl.get('quantityRaw')?.value ?? '').trim();
+    const unit = String(ctrl.get('unit')?.value ?? '').trim();
+    return !!name && qty === '1' && unit === 'kom';
+  }
+
+  isIngredientNew(i: number): boolean {
+    const name = String(
+        this.ingredientsArray.at(i).get('ingredientName')?.value ?? ''
+    ).toLowerCase().trim();
+    if (!name) return false;
+    return !this.allIngredients.some(ing => ing.name.toLowerCase() === name);
+  }
+
+  async saveIngredientToDb(i: number) {
+    if (this.savingIngredient.has(i)) return;
+    const name = String(
+        this.ingredientsArray.at(i).get('ingredientName')?.value ?? ''
+    ).toLowerCase().trim();
+    if (!name) return;
+
+    this.savingIngredient.add(i);
+    this.cdr.detectChanges();
+
+    try {
+      const created = await this.ingredientService.create({ name }).toPromise();
+      if (created) {
+        this.allIngredients.push(created);
+        this.ingredientNames = [...this.ingredientNames, name];
+      }
+    } finally {
+      this.savingIngredient.delete(i);
+      this.cdr.detectChanges();
+    }
+  }
 }

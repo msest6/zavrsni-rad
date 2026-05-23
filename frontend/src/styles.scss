@@ -1441,3 +1441,55 @@ body {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+.url-textarea {
+  resize: none;
+  overflow: hidden;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  min-height: 2.4rem;
+  line-height: 1.5;
+}
+
+.ingredient-row--parse-warn {
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.4rem;
+}
+
+.parse-warn-badge {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  cursor: help;
+  align-self: center;
+}
+
+.btn-save-ingredient {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.btn-save-ingredient:hover:not(:disabled) {
+  background: #dbeafe;
+  border-color: #1d4ed8;
+}
+
+.btn-save-ingredient:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.btn-save-placeholder {
+  width: 28px; /* ista širina kao gumb da layout ne skače */
+  flex-shrink: 0;
+}

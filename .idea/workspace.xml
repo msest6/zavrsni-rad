@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="unit conversion implementation 6">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="unit conversion implementation 7">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/unit-conversion-list/unit-conversion-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/unit-conversion-list/unit-conversion-list.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-form/recipe-form.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.scss" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +122,7 @@
       <workItem from="1778753209685" duration="649000" />
       <workItem from="1778753867946" duration="2967000" />
       <workItem from="1779539500525" duration="3905000" />
-      <workItem from="1779545704596" duration="3377000" />
+      <workItem from="1779545704596" duration="4954000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -314,14 +316,20 @@
       <option name="presentableId" value="LOCAL−00027" />
       <updated>1779556324025</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL−00028" summary="unit conversion implementation 7">
+      <option name="closed" value="true" />
+      <created>1779556988805</created>
+      <option name="number" value="LOCAL−00028" />
+      <option name="presentableId" value="LOCAL−00028" />
+      <updated>1779556988805</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="application properties added" />
     <MESSAGE value="db update in application prod properties" />
     <MESSAGE value="frontend budget extension" />
     <MESSAGE value="frontend deploy fix" />
@@ -346,6 +354,7 @@
     <MESSAGE value="unit conversion implementation 4" />
     <MESSAGE value="unit conversion implementation 5" />
     <MESSAGE value="unit conversion implementation 6" />
-    <option name="LAST_COMMIT_MESSAGE" value="unit conversion implementation 6" />
+    <MESSAGE value="unit conversion implementation 7" />
+    <option name="LAST_COMMIT_MESSAGE" value="unit conversion implementation 7" />
   </component>
 </project>
