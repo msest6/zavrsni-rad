@@ -155,6 +155,27 @@ public class RecipeService {
         recipe.setCooking_time(dto.getCooking_time());
         recipe.setServings(dto.getServings());
 
+        recipe.getIngredients().clear();
+
+        Set<RecipeIngredient> newIngredients = dto.getIngredients().stream()
+                .map(i -> {
+                    Ingredient ingredient = ingredientRepository.findById(i.getIngredientId())
+                            .orElseThrow(() -> new RuntimeException("Ingredient not found: " + i.getIngredientId()));
+
+                    Unit unit = unitRepository.findBySymbol(i.getUnit())
+                            .orElseThrow(() -> new RuntimeException("Unit not found: " + i.getUnit()));
+
+                    RecipeIngredient ri = new RecipeIngredient();
+                    ri.setRecipe(recipe);
+                    ri.setIngredient(ingredient);
+                    ri.setQuantity(i.getQuantity());
+                    ri.setUnit(unit);
+                    return ri;
+                })
+                .collect(Collectors.toCollection(HashSet::new));
+
+        recipe.getIngredients().addAll(newIngredients);
+
         // Build lookup of existing steps by stepNumber
         Map<Integer, Step> existingStepsByNumber = new HashMap<>();
         for (Step step : recipe.getSteps()) {
