@@ -39,9 +39,9 @@ export class RecipeService {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
 
-  search(q: string, page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/search`, {
-      params: { q, page, size }
-    });
+  search(q: string, page = 0, size = 20): Observable<Page<Recipe>> {
+    return this.http.get<Page<Recipe>>(
+        `${this.url}/search?q=${encodeURIComponent(q)}&page=${page}&size=${size}`
+    );
   }
 }
