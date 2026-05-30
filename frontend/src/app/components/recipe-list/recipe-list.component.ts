@@ -84,7 +84,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
         this.searchSubject.pipe(
             debounceTime(300),
             distinctUntilChanged()
-        ).subscribe(() => this.applyFilters())
+        ).subscribe(() => this.loadRecipes(true))
     );
   }
 
@@ -104,9 +104,11 @@ export class RecipeListComponent implements OnInit, OnDestroy {
     }
 
     const categoryIds = [...this.selectedCategories];
-    const request$ = categoryIds.length > 0
-        ? this.recipeService.getByCategories(categoryIds, this.currentPage, this.pageSize)
-        : this.recipeService.getAll(this.currentPage, this.pageSize);
+    const request$ = this.searchTerm.trim()
+        ? this.recipeService.search(this.searchTerm.trim(), this.currentPage, this.pageSize)
+        : categoryIds.length > 0
+            ? this.recipeService.getByCategories(categoryIds, this.currentPage, this.pageSize)
+            : this.recipeService.getAll(this.currentPage, this.pageSize);
 
     this.subs.add(
         request$.subscribe({
@@ -140,11 +142,7 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   // ── Filtering ───────────────────────────────────────────────────────────────
 
   applyFilters() {
-    this.filtered = this.recipes.filter(r => {
-      const matchSearch = !this.searchTerm ||
-          r.title.toLowerCase().includes(this.searchTerm.toLowerCase());
-      return matchSearch;
-    });
+    this.filtered = [...this.recipes];
   }
 
   onSearch() {

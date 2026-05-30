@@ -261,4 +261,10 @@ public class RecipeService {
         recipe.setIs_deleted(true);
         repository.save(recipe);
     }
+
+    @Transactional
+    public Page<Recipe> search(String q, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        return repository.search(q, pageable);
+    }
 }

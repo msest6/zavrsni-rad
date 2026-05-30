@@ -53,4 +53,12 @@ public class RecipeController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+    @Transactional
+    @GetMapping("/search")
+    public ResponseEntity<Page<Recipe>> search(
+            @RequestParam String q,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(service.search(q, page, size));
+    }
 }

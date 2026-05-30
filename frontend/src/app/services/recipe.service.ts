@@ -38,4 +38,10 @@ export class RecipeService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
   }
+
+  search(q: string, page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/search`, {
+      params: { q, page, size }
+    });
+  }
 }
