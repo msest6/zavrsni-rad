@@ -7,6 +7,7 @@ import { PdfExportService } from '../../services/pdf-export.service';
 import { UnitConversionService, UnitConversionDto } from '../../services/unit-conversion.service';
 import { Recipe } from '../../models/models';
 import { UnitService } from '../../services/unit.service';
+
 interface IngredientDisplayState {
   // Originalne vrijednosti – nikad se ne mijenjaju
   originalQuantity: number;
@@ -32,6 +33,15 @@ export class RecipeDetailComponent implements OnInit {
 
   // Mapa: index sastojka → trenutno stanje prikaza
   ingredientStates: Map<number, IngredientDisplayState> = new Map();
+
+  // ── Skaliranje porcija ────────────────────────────────────────────────────
+  /** Originalni broj porcija iz recepta – nikad se ne mijenja */
+  originalServings = 1;
+  /** Trenutni korisnički unos porcija */
+  customServings = 1;
+
+  /** Oznaka za mjernu jedinicu koja se ne skalira ispod 1x */
+  readonly PINCH_SYMBOL = 'prst';
 
   // ── NOVO: kontrola vidljivosti import modala ───────────────────────────────
   showImportModal = false;
@@ -75,41 +85,46 @@ export class RecipeDetailComponent implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     setTimeout(() => {
-    this.recipeService.getById(id).subscribe({
-      next: (r) => {
-        this.zone.run(() => {
-          this.recipe = r;
-          this.loading = false;
-          r.ingredients?.forEach((ri, idx) => {
-            this.ingredientStates.set(idx, {
-              originalQuantity: ri.quantity,
-              originalUnit: ri.unit,
-              displayQuantity: ri.quantity,
-              displayUnit: ri.unit,
-              conversions: [],
-              loadingConversions: false,
+      this.recipeService.getById(id).subscribe({
+        next: (r) => {
+          this.zone.run(() => {
+            this.recipe = r;
+            this.loading = false;
+
+            // Spremi originalni broj porcija i postavi customServings na isti
+            this.originalServings = r.servings ?? 1;
+            this.customServings = this.originalServings;
+
+            r.ingredients?.forEach((ri, idx) => {
+              this.ingredientStates.set(idx, {
+                originalQuantity: ri.quantity,
+                originalUnit: ri.unit,
+                displayQuantity: ri.quantity,
+                displayUnit: ri.unit,
+                conversions: [],
+                loadingConversions: false,
+              });
+              // Fetch samo jednom – iz originalne jedinice
+              this.loadConversions(idx, ri.unit.id, ri.ingredient.id);
             });
-            // Fetch samo jednom – iz originalne jedinice
-            this.loadConversions(idx, ri.unit.id, ri.ingredient.id);
+            this.cdr.detectChanges();
           });
-          this.cdr.detectChanges();
-        });
-        this.unitService.getAll().subscribe(units => {
-          this.unitSymbolNames = this.UNITS.map(symbol => {
-            const found = units.find((u: any) => u.symbol === symbol);
-            return {symbol, name: found?.name ?? symbol};
+          this.unitService.getAll().subscribe(units => {
+            this.unitSymbolNames = this.UNITS.map(symbol => {
+              const found = units.find((u: any) => u.symbol === symbol);
+              return {symbol, name: found?.name ?? symbol};
+            });
+            this.cdr.detectChanges();
           });
-          this.cdr.detectChanges();
-        });
-      },
-      error: () => {
-        this.zone.run(() => {
-          this.error = 'Recept nije pronađen.';
-          this.loading = false;
-          this.cdr.detectChanges();
-        });
-      }
-    });
+        },
+        error: () => {
+          this.zone.run(() => {
+            this.error = 'Recept nije pronađen.';
+            this.loading = false;
+            this.cdr.detectChanges();
+          });
+        }
+      });
     }, 500);
   }
 
@@ -137,10 +152,11 @@ export class RecipeDetailComponent implements OnInit {
   /** Poziva se kada korisnik odabere novu mjernu jedinicu */
   onUnitChange(idx: number, selectedSymbol: string) {
     const state = this.ingredientStates.get(idx)!;
+    const multiplier = this.servingsMultiplier;
 
-    // Vrati na original
+    // Vrati na original (uz skaliranje)
     if (selectedSymbol === state.originalUnit.symbol) {
-      state.displayQuantity = state.originalQuantity;
+      state.displayQuantity = this.scaleQuantity(state.originalQuantity, multiplier, state.originalUnit.symbol);
       state.displayUnit = state.originalUnit;
       return;
     }
@@ -149,13 +165,104 @@ export class RecipeDetailComponent implements OnInit {
     const conversion = state.conversions.find(c => c.toUnit.symbol === selectedSymbol);
     if (!conversion) return;
 
-    state.displayQuantity = Math.round(state.originalQuantity * conversion.ratio * 10000) / 10000;
+    const scaledOriginal = state.originalQuantity * multiplier;
+    state.displayQuantity = Math.round(scaledOriginal * conversion.ratio * 10000) / 10000;
     state.displayUnit = conversion.toUnit;
-    // Nema novog fetcha – konverzije ostaju iste (sve iz originalne jedinice)
   }
 
   getState(idx: number): IngredientDisplayState | undefined {
     return this.ingredientStates.get(idx);
+  }
+
+  // ── Skaliranje porcija ────────────────────────────────────────────────────
+
+  /** Omjer skaliranja na temelju korisnikova unosa */
+  get servingsMultiplier(): number {
+    if (!this.originalServings || this.originalServings === 0) return 1;
+    return this.customServings / this.originalServings;
+  }
+
+  /**
+   * Vraća skaliranu količinu za prikaz.
+   * Ako je jedinica "prst" i faktor < 1, vraća null (ne prikazuje se skaliranje).
+   */
+  scaledQuantity(idx: number): number | null {
+    const state = this.ingredientStates.get(idx);
+    if (!state) return null;
+
+    const multiplier = this.servingsMultiplier;
+    const symbol = state.displayUnit.symbol;
+
+    // Prstohvat se ne skalira ispod 1x
+    if (symbol === this.PINCH_SYMBOL && multiplier < 1) {
+      return null;
+    }
+
+    // Ako je odabrana ne-originalna jedinica, konvertiraj iz originalnog pa skaliraj
+    if (state.displayUnit.symbol !== state.originalUnit.symbol) {
+      const conversion = state.conversions.find(c => c.toUnit.symbol === state.displayUnit.symbol);
+      if (conversion) {
+        return Math.round(state.originalQuantity * multiplier * conversion.ratio * 10000) / 10000;
+      }
+    }
+
+    return this.scaleQuantity(state.originalQuantity, multiplier, symbol);
+  }
+
+  /**
+   * Provjerava treba li prikazati napomenu za prstohvat
+   * (originalna jedinica je prst, a množimo s < 1)
+   */
+  isPinchSkipped(idx: number): boolean {
+    const state = this.ingredientStates.get(idx);
+    if (!state) return false;
+    return state.displayUnit.symbol === this.PINCH_SYMBOL && this.servingsMultiplier < 1;
+  }
+
+  /** Skalira količinu i zaokružuje */
+  private scaleQuantity(original: number, multiplier: number, _unitSymbol: string): number {
+    return Math.round(original * multiplier * 10000) / 10000;
+  }
+
+  /**
+   * Validacija unosa porcija – dozvoljeni su samo prirodni brojevi (≥ 1).
+   * Poziva se na svaku promjenu u inputu.
+   */
+  onServingsInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    // Ukloni sve što nije znamenka
+    let raw = input.value.replace(/[^0-9]/g, '');
+    // Ukloni vodeće nule
+    raw = raw.replace(/^0+/, '') || '';
+
+    const parsed = parseInt(raw, 10);
+
+    if (!raw || isNaN(parsed) || parsed < 1) {
+      // Ostavi prazan string dok korisnik tipka, ali multiplier koristimo 1
+      this.customServings = this.originalServings; // fallback za računanje
+      input.value = raw; // prikaz (može biti '')
+    } else {
+      this.customServings = parsed;
+      input.value = String(parsed);
+    }
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Kad korisnik napusti polje (blur) i ono je prazno, resetiraj na original
+   */
+  onServingsBlur(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.value || parseInt(input.value, 10) < 1) {
+      this.customServings = this.originalServings;
+      input.value = String(this.originalServings);
+      this.cdr.detectChanges();
+    }
+  }
+
+  /** Resetiraj porcije na original */
+  resetServings() {
+    this.customServings = this.originalServings;
   }
 
   delete() {
@@ -178,6 +285,7 @@ export class RecipeDetailComponent implements OnInit {
       this.pdfExportService.exportRecipe(this.recipe);
     }
   }
+
   /** Pretvara decimalni broj u razlomak (ako postoji), inače zaokružuje na 3 decimale */
   formatQuantity(value: number): string {
     // Poznati razlomci – od najpreciznijeg prema manje preciznom
@@ -209,5 +317,13 @@ export class RecipeDetailComponent implements OnInit {
 
     // Fallback: zaokruži na 3 decimale, ukloni nepotrebne nule
     return parseFloat(value.toFixed(3)).toString();
+  }
+
+  protected readonly String = String;
+  decrementServings() {
+    if (this.customServings > 1) {
+      this.customServings -= 1;
+      this.cdr.detectChanges();
+    }
   }
 }

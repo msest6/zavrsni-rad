@@ -1493,3 +1493,9 @@ body {
   width: 28px; /* ista širina kao gumb da layout ne skače */
   flex-shrink: 0;
 }
+
+.servings-scaler { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+.servings-input  { width: 3.5rem; text-align: center; }
+.servings-btn    { width: 2rem; padding: 0; }
+.servings-multiplier { font-size: 0.8rem; color: var(--color-accent); font-weight: 600; }
+.pinch-badge     { font-size: 0.7rem; opacity: 0.6; margin-left: 0.25rem; }

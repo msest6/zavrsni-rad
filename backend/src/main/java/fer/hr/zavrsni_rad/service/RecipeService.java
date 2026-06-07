@@ -45,6 +45,11 @@ public class RecipeService {
         this.mediaService = mediaService;
     }
 
+    @Transactional
+    public Recipe getById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+    }
     public Recipe create(RecipeDTO dto) {
         Recipe recipe = new Recipe();
         recipe.setTitle(dto.getTitle());
@@ -138,11 +143,7 @@ public class RecipeService {
         return repository.findByCategoryIds(categoryIds, pageable);
     }
 
-    @Transactional
-    public Recipe getById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Recipe not found"));
-    }
+
 
     @Transactional
     public Recipe update(Long id, RecipeDTO dto) {

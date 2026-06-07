@@ -2,65 +2,65 @@
 <div *ngIf="error" class="state-msg error">{{ error }}</div>
 
 <article *ngIf="recipe && !loading" class="recipe-detail">
-  <div class="detail-header">
-    <div class="detail-header-top">
-      <a routerLink="/recipes" class="back-link">&#x2190; Svi recepti</a>
-      <div class="detail-actions">
-        <a [routerLink]="['/recipes', recipe.id, 'edit']" class="btn btn-outline">Uredi</a>
-        <button class="btn btn-danger" (click)="delete()">Obriši</button>
-      </div>
-    </div>
+    <div class="detail-header">
+        <div class="detail-header-top">
+            <a routerLink="/recipes" class="back-link">&#x2190; Svi recepti</a>
+            <div class="detail-actions">
+                <a [routerLink]="['/recipes', recipe.id, 'edit']" class="btn btn-outline">Uredi</a>
+                <button class="btn btn-danger" (click)="delete()">Obriši</button>
+            </div>
+        </div>
 
-    <div class="detail-categories">
-      <span *ngFor="let cat of recipe.categories" class="tag">{{ cat.name }}</span>
-    </div>
+        <div class="detail-categories">
+            <span *ngFor="let cat of recipe.categories" class="tag">{{ cat.name }}</span>
+        </div>
 
-    <h1>{{ recipe.title }}</h1>
-    <p *ngIf="recipe.description" class="detail-desc">{{ recipe.description }}</p>
+        <h1>{{ recipe.title }}</h1>
+        <p *ngIf="recipe.description" class="detail-desc">{{ recipe.description }}</p>
 
-    <button class="btn btn-outline" (click)="exportPdf()">
-        &#x21E9; Izvezi PDF
-    </button>
-    <div class="detail-meta-bar">
-      <div class="meta-item" *ngIf="recipe.preparation_time">
-        <span class="meta-icon">&#x23F1;</span>
-        <div>
-          <small>Priprema</small>
-          <strong>{{ recipe.preparation_time }} min</strong>
+        <button class="btn btn-outline" (click)="exportPdf()">
+            &#x21E9; Izvezi PDF
+        </button>
+        <div class="detail-meta-bar">
+            <div class="meta-item" *ngIf="recipe.preparation_time">
+                <span class="meta-icon">&#x23F1;</span>
+                <div>
+                    <small>Priprema</small>
+                    <strong>{{ recipe.preparation_time }} min</strong>
+                </div>
+            </div>
+            <div class="meta-item" *ngIf="recipe.cooking_time">
+                <span class="meta-icon">&#x23F1;</span>
+                <div>
+                    <small>Kuhanje</small>
+                    <strong>{{ recipe.cooking_time }} min</strong>
+                </div>
+            </div>
+            <div class="meta-item">
+                <span class="meta-icon">&#x1F374;</span>
+                <div>
+                    <small>Obroci</small>
+                    <strong>{{ recipe.servings }}</strong>
+                </div>
+            </div>
+            <div class="meta-item">
+                <span class="meta-icon">&#x1F9EA;</span>
+                <div>
+                    <small>Sastojci</small>
+                    <strong>{{ recipe.ingredients?.length || 0 }}</strong>
+                </div>
+            </div>
+            <div class="meta-item">
+                <span class="meta-icon">&#x1F4D6;</span>
+                <div>
+                    <small>Izvor</small>
+                    <strong>
+                        <a *ngIf="recipe.source_url" [href]="recipe.source_url" target="_blank">{{ recipe.source_url }}</a>
+                    </strong>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="meta-item" *ngIf="recipe.cooking_time">
-          <span class="meta-icon">&#x23F1;</span>
-          <div>
-              <small>Kuhanje</small>
-              <strong>{{ recipe.cooking_time }} min</strong>
-          </div>
-      </div>
-      <div class="meta-item">
-        <span class="meta-icon">&#x1F374;</span>
-        <div>
-          <small>Obroci</small>
-          <strong>{{ recipe.servings }}</strong>
-        </div>
-      </div>
-      <div class="meta-item">
-        <span class="meta-icon">&#x1F9EA;</span>
-        <div>
-          <small>Sastojci</small>
-          <strong>{{ recipe.ingredients?.length || 0 }}</strong>
-        </div>
-      </div>
-      <div class="meta-item">
-        <span class="meta-icon">&#x1F4D6;</span>
-        <div>
-          <small>Izvor</small>
-          <strong>
-            <a *ngIf="recipe.source_url" [href]="recipe.source_url" target="_blank">{{ recipe.source_url }}</a>
-          </strong>
-        </div>
-      </div>
     </div>
-  </div>
     <div *ngIf="recipe.mediaList && recipe.mediaList.length > 0" class="recipe-gallery">
         <img
                 *ngFor="let media of recipe.mediaList"
@@ -68,100 +68,175 @@
                 [alt]="recipe.title"
                 class="recipe-gallery-img" />
     </div>
-  <div class="detail-body">
-    <section class="ingredients-section">
-      <h2>Sastojci</h2>
-        <ul class="ingredient-list">
-            <li *ngFor="let ri of recipe.ingredients; let idx = index" class="ingredient-item">
-                <span class="ing-name">{{ ri.ingredient.name }}</span>
+    <div class="detail-body">
+        <section class="ingredients-section">
+            <h2>Sastojci</h2>
 
-                <span class="ing-amount">
-      <ng-container *ngIf="getState(idx) as state">
-        {{ formatQuantity(state.displayQuantity) }}
-
-          <select
-                  class="unit-select"
-                  (change)="onUnitChange(idx, $any($event.target).value)"
-                  [disabled]="state.loadingConversions">
-
-            <option
-                [value]="state.originalUnit.symbol"
-                [selected]="state.displayUnit.symbol === state.originalUnit.symbol">
-                {{ state.originalUnit.symbol }}
-            </option>
-
-            <ng-container *ngFor="let conv of state.conversions">
-            <option
-                *ngIf="conv.toUnit.symbol !== state.originalUnit.symbol"
-                [value]="conv.toUnit.symbol"
-                [selected]="state.displayUnit.symbol === conv.toUnit.symbol">
-                {{ conv.toUnit.symbol }}
-            </option>
-            </ng-container>
-          </select>
-      </ng-container>
-    </span>
-            </li>
-        </ul>
-        <div class="unit-tables-toggle">
-            <button type="button" class="btn btn-sm btn-ghost" (click)="showUnitTables = !showUnitTables">
-                {{ showUnitTables ? '▲ Sakrij' : '▼ Tablica mjernih jedinica i konverzija' }}
-            </button>
-        </div>
-
-        <div class="unit-tables unit-tables--stacked" *ngIf="showUnitTables">
-            <div class="unit-table-card">
-                <h4>Konverzije</h4>
-                <table class="unit-table">
-                    <thead>
-                    <tr><th>Iznos</th><th></th><th>Ekvivalent</th></tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let c of CONVERSIONS">
-                        <td class="unit-cell-from">{{ c.from }}</td>
-                        <td class="unit-cell-arrow">→</td>
-                        <td class="unit-cell-to">{{ c.to }}</td>
-                    </tr>
-                    </tbody>
-                </table>
+            <!-- ── Skaliranje porcija ─────────────────────────────────────────── -->
+            <div class="servings-scaler">
+                <label class="servings-label" for="servingsInput">Broj porcija:</label>
+                <div class="servings-controls">
+                    <button
+                            type="button"
+                            class="btn btn-sm btn-outline servings-btn"
+                            [disabled]="customServings <= 1"
+                            (click)="decrementServings()">
+                        −
+                    </button>
+                    <input
+                            id="servingsInput"
+                            type="text"
+                            inputmode="numeric"
+                            pattern="[1-9][0-9]*"
+                            class="servings-input"
+                            [value]="customServings"
+                            (input)="onServingsInput($event)"
+                            (blur)="onServingsBlur($event)" />
+                    <button
+                            type="button"
+                            class="btn btn-sm btn-outline servings-btn"
+                            (click)="customServings = customServings + 1">
+                        +
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-sm btn-ghost servings-reset"
+                            *ngIf="customServings !== originalServings"
+                            (click)="resetServings()">
+                        Resetiraj ({{ originalServings }})
+                    </button>
+                </div>
+                <span class="servings-multiplier" *ngIf="customServings !== originalServings">
+          <ng-container *ngIf="servingsMultiplier > 1">
+            ×{{ servingsMultiplier % 1 === 0 ? servingsMultiplier : (servingsMultiplier | number:'1.0-2') }}
+          </ng-container>
+          <ng-container *ngIf="servingsMultiplier < 1">
+            ÷{{ (1 / servingsMultiplier) % 1 === 0 ? (1 / servingsMultiplier) : ((1 / servingsMultiplier) | number:'1.0-2') }}
+          </ng-container>
+        </span>
             </div>
-            <div class="unit-table-card">
-                <h4>Mjerne jedinice</h4>
-                <table class="unit-table">
-                    <thead>
-                    <tr><th>Simbol</th><th>Naziv</th></tr>
-                    </thead>
-                    <tbody>
-                    <tr *ngFor="let u of unitSymbolNames">
-                        <td class="unit-symbol">{{ u.symbol }}</td>
-                        <td class="unit-name">{{ u.name }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+            <!-- ────────────────────────────────────────────────────────────────── -->
 
-    <section class="steps-section">
-      <h2>Postupak</h2>
-      <ol class="step-list">
-        <li *ngFor="let step of sortedSteps()" class="step-item">
-          <div class="step-number">{{ step.stepNumber }}</div>
-          <div class="step-content">
-            <p>{{ step.description }}</p>
-            <div *ngIf="step.ingredients && step.ingredients.length > 0" class="step-ingredients">
-              <span *ngFor="let ing of step.ingredients" class="tag tag-sm">{{ ing.name }}</span>
+            <ul class="ingredient-list">
+                <li *ngFor="let ri of recipe.ingredients; let idx = index" class="ingredient-item">
+                    <span class="ing-name">{{ ri.ingredient.name }}</span>
+
+                    <span class="ing-amount">
+                  <ng-container *ngIf="getState(idx) as state">
+
+                    <!-- Prstohvat pri redukciji: prikaži napomenu umjesto 0 -->
+                    <ng-container *ngIf="isPinchSkipped(idx); else normalAmount">
+                      <span class="pinch-note" title="Prstohvat se ne skalira ispod originalnog iznosa">
+                        {{ formatQuantity(state.originalQuantity) }}
+                          <select
+                                  class="unit-select"
+                                  (change)="onUnitChange(idx, $any($event.target).value)"
+                                  [disabled]="state.loadingConversions">
+                          <option
+                                  [value]="state.originalUnit.symbol"
+                                  [selected]="state.displayUnit.symbol === state.originalUnit.symbol">
+                            {{ state.originalUnit.symbol }}
+                          </option>
+                          <ng-container *ngFor="let conv of state.conversions">
+                            <option
+                                    *ngIf="conv.toUnit.symbol !== state.originalUnit.symbol"
+                                    [value]="conv.toUnit.symbol"
+                                    [selected]="state.displayUnit.symbol === conv.toUnit.symbol">
+                              {{ conv.toUnit.symbol }}
+                            </option>
+                          </ng-container>
+                        </select>
+                        <span class="pinch-badge" title="Prstohvat – nije promijenjeno">prst.</span>
+                      </span>
+                    </ng-container>
+
+                      <!-- Normalni prikaz s (eventualnim) skaliranjem -->
+                    <ng-template #normalAmount>
+                      {{ formatQuantity(scaledQuantity(idx) ?? state.displayQuantity) }}
+
+                        <select
+                                class="unit-select"
+                                (change)="onUnitChange(idx, $any($event.target).value)"
+                                [disabled]="state.loadingConversions">
+                        <option
+                                [value]="state.originalUnit.symbol"
+                                [selected]="state.displayUnit.symbol === state.originalUnit.symbol">
+                          {{ state.originalUnit.symbol }}
+                        </option>
+                        <ng-container *ngFor="let conv of state.conversions">
+                          <option
+                                  *ngIf="conv.toUnit.symbol !== state.originalUnit.symbol"
+                                  [value]="conv.toUnit.symbol"
+                                  [selected]="state.displayUnit.symbol === conv.toUnit.symbol">
+                            {{ conv.toUnit.symbol }}
+                          </option>
+                        </ng-container>
+                      </select>
+                    </ng-template>
+
+                  </ng-container>
+                </span>
+                </li>
+            </ul>
+            <div class="unit-tables-toggle">
+                <button type="button" class="btn btn-sm btn-ghost" (click)="showUnitTables = !showUnitTables">
+                    {{ showUnitTables ? '▲ Sakrij' : '▼ Tablica mjernih jedinica i konverzija' }}
+                </button>
             </div>
-            <div *ngIf="step.mediaList && step.mediaList.length > 0" class="step-media">
-              <img
-                *ngFor="let media of step.mediaList"
-                [src]="media.url"
-                [alt]="'Slika koraka ' + step.stepNumber"
-                class="step-img" />
+
+            <div class="unit-tables unit-tables--stacked" *ngIf="showUnitTables">
+                <div class="unit-table-card">
+                    <h4>Konverzije</h4>
+                    <table class="unit-table">
+                        <thead>
+                        <tr><th>Iznos</th><th></th><th>Ekvivalent</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let c of CONVERSIONS">
+                            <td class="unit-cell-from">{{ c.from }}</td>
+                            <td class="unit-cell-arrow">→</td>
+                            <td class="unit-cell-to">{{ c.to }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="unit-table-card">
+                    <h4>Mjerne jedinice</h4>
+                    <table class="unit-table">
+                        <thead>
+                        <tr><th>Simbol</th><th>Naziv</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let u of unitSymbolNames">
+                            <td class="unit-symbol">{{ u.symbol }}</td>
+                            <td class="unit-name">{{ u.name }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
-        </li>
-      </ol>
-    </section>
-  </div>
+        </section>
+
+        <section class="steps-section">
+            <h2>Postupak</h2>
+            <ol class="step-list">
+                <li *ngFor="let step of sortedSteps()" class="step-item">
+                    <div class="step-number">{{ step.stepNumber }}</div>
+                    <div class="step-content">
+                        <p>{{ step.description }}</p>
+                        <div *ngIf="step.ingredients && step.ingredients.length > 0" class="step-ingredients">
+                            <span *ngFor="let ing of step.ingredients" class="tag tag-sm">{{ ing.name }}</span>
+                        </div>
+                        <div *ngIf="step.mediaList && step.mediaList.length > 0" class="step-media">
+                            <img
+                                    *ngFor="let media of step.mediaList"
+                                    [src]="media.url"
+                                    [alt]="'Slika koraka ' + step.stepNumber"
+                                    class="step-img" />
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </section>
+    </div>
 </article>
