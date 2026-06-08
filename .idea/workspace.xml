@@ -4,36 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="search fix">
+    <list default="true" id="a21a9f4e-629f-47ef-b691-762f88d6883e" name="Changes" comment="skaliranje obroka">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/RecipeDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/dto/RecipeDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/RecipeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/CategoryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/CategoryController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/IngredientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/IngredientController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/MediaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/MediaController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/RecipeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/controller/RecipeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/RecipeDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/RecipeDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/StepDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/dto/StepDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Category.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Ingredient.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Ingredient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Media.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Media.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Recipe.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Recipe.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/RecipeIngredient.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/RecipeIngredient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Step.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Step.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Unit.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/Unit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/UnitConversion.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/model/UnitConversion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/CategoryRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/CategoryRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/IngredientRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/IngredientRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/RecipeRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/RecipeRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitConversionRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitConversionRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/repository/UnitRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/MediaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/MediaService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/RecipeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/RecipeService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/UnitConversionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/fer/hr/zavrsni_rad/service/UnitConversionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/components/recipe-detail/recipe-detail.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/config/DataSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/config/DataSeeder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Step.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/model/Step.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/CategoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/CategoryRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/UnitConversionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/repository/UnitConversionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/CategoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/fer/hr/zavrsni_rad/service/UnitConversionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,6 +130,8 @@
       <workItem from="1780136985047" duration="4493000" />
       <workItem from="1780232118403" duration="12065000" />
       <workItem from="1780832084406" duration="1133000" />
+      <workItem from="1780833227588" duration="1149000" />
+      <workItem from="1780852818223" duration="18905000" />
     </task>
     <task id="LOCAL−00001" summary="massive update">
       <option name="closed" value="true" />
@@ -415,14 +395,20 @@
       <option name="presentableId" value="LOCAL−00037" />
       <updated>1780141881897</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL−00038" summary="skaliranje obroka">
+      <option name="closed" value="true" />
+      <created>1780833518583</created>
+      <option name="number" value="LOCAL−00038" />
+      <option name="presentableId" value="LOCAL−00038" />
+      <updated>1780833518583</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="backend context path fix" />
     <MESSAGE value="backend requestMapping fixed" />
     <MESSAGE value="frontend recipe media fix" />
     <MESSAGE value="media cloudinary debug" />
@@ -447,6 +433,7 @@
     <MESSAGE value="pdf export fix" />
     <MESSAGE value="update fix" />
     <MESSAGE value="search fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="search fix" />
+    <MESSAGE value="skaliranje obroka" />
+    <option name="LAST_COMMIT_MESSAGE" value="skaliranje obroka" />
   </component>
 </project>

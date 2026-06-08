@@ -24,11 +24,6 @@ public class Step {
 
     public Step() {}
 
-    public Step(StepDTO dto, Recipe recipe) {
-        this.stepNumber = dto.getStepNumber();
-        this.description = dto.getDescription();
-        this.recipe = recipe;
-    }
     @JsonBackReference("recipe-steps")
     @ManyToOne
     @JoinColumn(name = "recipe_id",

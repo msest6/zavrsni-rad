@@ -14,97 +14,57 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UnitConversionService {
 
-    private final UnitConversionRepository conversionRepo;
-    private final UnitRepository unitRepo;
-    private final IngredientRepository ingredientRepo;
-
-    // ── Stara logika ──────────────────────────────────────────────────────────
-
-    public Double convert(Ingredient ingredient, Double quantity,
-                          Unit fromUnit, Unit toUnit) {
-
-        if (fromUnit.getSymbol().equals(toUnit.getSymbol())) {
-            return quantity;
-        }
-
-        Optional<UnitConversion> conv = conversionRepo
-                .findByIngredientAndFromUnitAndToUnit(ingredient, fromUnit, toUnit);
-
-        if (conv.isEmpty()) {
-            conv = conversionRepo
-                    .findByIngredientIsNullAndFromUnitAndToUnit(fromUnit, toUnit);
-        }
-
-        if (conv.isEmpty()) {
-            Optional<UnitConversion> inverse = conversionRepo
-                    .findByIngredientAndFromUnitAndToUnit(ingredient, toUnit, fromUnit);
-            if (inverse.isEmpty()) {
-                inverse = conversionRepo
-                        .findByIngredientIsNullAndFromUnitAndToUnit(toUnit, fromUnit);
-            }
-            if (inverse.isPresent()) {
-                double ratio = 1 / inverse.get().getRatio();
-                return quantity * ratio;
-            }
-        }
-
-        if (conv.isPresent()) {
-            return quantity * conv.get().getRatio();
-        }
-
-        throw new IllegalArgumentException(
-                "Nema konverzije: " + fromUnit.getSymbol() + " → " + toUnit.getSymbol()
-                        + " za sastojak: " + (ingredient != null ? ingredient.getName() : "generički")
-        );
-    }
+    private final UnitConversionRepository conversionRepository;
+    private final UnitRepository unitRepository;
+    private final IngredientRepository ingredientRepository;
 
     public List<UnitConversion> findAvailableConversions(Long fromUnitId, Long ingredientId) {
-        return conversionRepo.findByFromUnit_IdAndIngredientIsNullOrFromUnit_IdAndIngredient_Id(
+        return conversionRepository.findByFromUnit_IdAndIngredientIsNullOrFromUnit_IdAndIngredient_Id(
                 fromUnitId, fromUnitId, ingredientId);
     }
 
     // ── CRUD ──────────────────────────────────────────────────────────────────
 
     public List<UnitConversion> findAll() {
-        return conversionRepo.findAll();
+        return conversionRepository.findAll();
     }
 
     public UnitConversion getById(Long id) {
-        return conversionRepo.findById(id)
+        return conversionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("UnitConversion not found: " + id));
     }
 
     public UnitConversion create(Long fromUnitId, Long toUnitId, Double ratio, Long ingredientId) {
         UnitConversion uc = new UnitConversion();
-        uc.setFromUnit(unitRepo.findById(fromUnitId)
+        uc.setFromUnit(unitRepository.findById(fromUnitId)
                 .orElseThrow(() -> new RuntimeException("Unit not found: " + fromUnitId)));
-        uc.setToUnit(unitRepo.findById(toUnitId)
+        uc.setToUnit(unitRepository.findById(toUnitId)
                 .orElseThrow(() -> new RuntimeException("Unit not found: " + toUnitId)));
         uc.setRatio(ratio);
         if (ingredientId != null) {
-            uc.setIngredient(ingredientRepo.findById(ingredientId)
+            uc.setIngredient(ingredientRepository.findById(ingredientId)
                     .orElseThrow(() -> new RuntimeException("Ingredient not found: " + ingredientId)));
         }
-        return conversionRepo.save(uc);
+        return conversionRepository.save(uc);
     }
 
     public UnitConversion update(Long id, Long fromUnitId, Long toUnitId, Double ratio, Long ingredientId) {
         UnitConversion uc = getById(id);
-        uc.setFromUnit(unitRepo.findById(fromUnitId)
+        uc.setFromUnit(unitRepository.findById(fromUnitId)
                 .orElseThrow(() -> new RuntimeException("Unit not found: " + fromUnitId)));
-        uc.setToUnit(unitRepo.findById(toUnitId)
+        uc.setToUnit(unitRepository.findById(toUnitId)
                 .orElseThrow(() -> new RuntimeException("Unit not found: " + toUnitId)));
         uc.setRatio(ratio);
         uc.setIngredient(ingredientId != null
-                ? ingredientRepo.findById(ingredientId)
+                ? ingredientRepository.findById(ingredientId)
                 .orElseThrow(() -> new RuntimeException("Ingredient not found: " + ingredientId))
                 : null);
-        return conversionRepo.save(uc);
+        return conversionRepository.save(uc);
     }
 
     public void delete(Long id) {
-        conversionRepo.findById(id)
+        conversionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("UnitConversion not found: " + id));
-        conversionRepo.deleteById(id);
+        conversionRepository.deleteById(id);
     }
 }

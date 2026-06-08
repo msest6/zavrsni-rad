@@ -30,10 +30,8 @@ public class DataSeeder implements CommandLineRunner {
         seedConversions();
         seedCategories();
     }
-
     private void seedUnits() {
         if (unitRepository.count() > 0) return;
-
         List<Unit> units = List.of(
                 unit("gram",        "g",    "masa"),
                 unit("kilogram",    "kg",   "masa"),
@@ -51,7 +49,6 @@ public class DataSeeder implements CommandLineRunner {
                 unit("režanj", "rež", "količina"),
                 unit("list", "list", "količina")
         );
-
         unitRepository.saveAll(units);
         System.out.println("✅ Units seeded.");
     }
